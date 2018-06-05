@@ -1,0 +1,25 @@
+memory: 2048
+cpus: 1
+provider: virtualbox
+authorize: ~/.ssh/id_rsa.pub
+mariadb: true
+elasticsearch: 6
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: ~/Development/sourcekin
+        to: /home/vagrant/code
+        type: "nfs"
+        options:
+            nfs_version: 4
+            nfs_udp: false
+sites:
+    -
+        map: sourcekin.box
+        to: /home/vagrant/code/public
+        type: "symfony4"
+databases:
+    - homestead
+name: sourcekin
+hostname: sourcekin
