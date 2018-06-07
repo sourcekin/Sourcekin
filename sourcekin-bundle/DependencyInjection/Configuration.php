@@ -2,7 +2,7 @@
 /**
  * This file is part of the "sourcekin" Project.
  *
- * Created by avanzu on 05.06.18
+ * Created by avanzu on 07.06.18
  *
  */
 
@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        ($treeBuilder = new TreeBuilder())->root('sourcekin');
+        $children = ($treeBuilder = new TreeBuilder())->root(Extension::ALIAS)->children();
         return $treeBuilder;
     }
 }

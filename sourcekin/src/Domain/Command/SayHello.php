@@ -6,4 +6,9 @@
  *
  */
 
-namespace SourcekinBundle\Command;
+namespace Sourcekin\Domain\Command;
+
+class SayHello
+{
+
+}

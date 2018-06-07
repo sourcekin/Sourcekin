@@ -2,18 +2,15 @@
 /**
  * This file is part of the "sourcekin" Project.
  *
- * Created by avanzu on 05.06.18
+ * Created by avanzu on 06.06.18
  *
  */
 namespace Sourcekin\Domain\Message;
 
-interface BusInterface
+interface MessageBusInterface
 {
     /**
-     * @param $message
-     *
-     * @return mixed
-     * @throws \Exception
+     * @param object $message
      */
     public function dispatch($message);
 }

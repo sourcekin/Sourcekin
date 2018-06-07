@@ -10,10 +10,6 @@ folders:
     -
         map: ~/Development/sourcekin
         to: /home/vagrant/code
-        type: "nfs"
-        options:
-            nfs_version: 4
-            nfs_udp: false
 sites:
     -
         map: sourcekin.box

@@ -8,7 +8,7 @@
 
 namespace SourcekinBundle;
 
-use Sourcekin\Integration\DependencyInjection\Compiler\InitializeDomainPass;
+use Sourcekin\Infrastructure\DependencyInjection\Compiler\InitializeDomainPass;
 use SourcekinBundle\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,4 +25,6 @@ class SourcekinBundle extends Bundle
     {
         return new Extension();
     }
+
+
 }
