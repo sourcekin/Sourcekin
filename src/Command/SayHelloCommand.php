@@ -2,18 +2,15 @@
 /**
  * This file is part of the "sourcekin" Project.
  *
- * Created by avanzu on 06.06.18
+ * Created by avanzu on 07.06.18
  *
  */
 
 namespace App\Command;
 
-
-use Sourcekin\Domain\Command\HelloCommand;
 use Sourcekin\Domain\Command\SayHello;
-use Sourcekin\Domain\Message\BusInterface;
-use Sourcekin\Domain\Message\MessageBusInterface;
-use Sourcekin\Infrastructure\Messenger\MessageReceivingInterface;
+use Sourcekin\Domain\Message\DomainBusInterface;
+use Sourcekin\Domain\Message\MessageReceivingInterface;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,21 +21,23 @@ class SayHelloCommand extends Command implements MessageReceivingInterface
 {
 
     /**
-     * @var BusInterface
+     * @var DomainBusInterface
      */
     protected $bus;
 
-    /** @var ConsoleStyle */
+    /**
+     * @var ConsoleStyle
+     */
     protected $io;
 
     /**
      * SayHelloCommand constructor.
      *
-     * @param MessageBusInterface $bus
+     * @param DomainBusInterface $bus
      */
-    public function __construct(MessageBusInterface $bus) {
-        parent::__construct();
+    public function __construct(DomainBusInterface $bus) {
         $this->bus = $bus;
+        parent::__construct();
     }
 
     protected function configure()
@@ -54,8 +53,6 @@ class SayHelloCommand extends Command implements MessageReceivingInterface
 
     public function onMessageReceived($message)
     {
-        $this->io->success('Received: ' . get_class($message));
+        $this->io->success(get_class($message));
     }
-
-
 }

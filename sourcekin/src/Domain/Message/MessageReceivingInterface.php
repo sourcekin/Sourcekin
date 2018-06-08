@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sourcekin\Infrastructure\Messenger;
+namespace Sourcekin\Domain\Message;
 
 interface MessageReceivingInterface
 {

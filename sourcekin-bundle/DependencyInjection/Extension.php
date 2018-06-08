@@ -8,8 +8,10 @@
 
 namespace SourcekinBundle\DependencyInjection;
 
+use Sourcekin\Domain\Message\DomainBusInterface;
 use Sourcekin\Infrastructure\Console\MessageReceiver;
 use Sourcekin\Infrastructure\DependencyInjection\ConfigurationHelper;
+use Sourcekin\Infrastructure\Messenger\DomainBus;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,9 +32,13 @@ class Extension extends SymfonyExtension
     {
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
-        $loader->load('messages.php');
+        $loader->load('services.php');
 
-        $this->configureMessageReceiver($container);
+        if( class_exists(ConsoleEvents::class)) {
+            $loader->load('console.php');
+        }
+
+        ConfigurationHelper::configureEventMessages($container, [], array_map(function($file){ return 'Sourcekin\\Domain\\Event\\' . basename($file, '.php'); }, glob(ConfigurationHelper::getPackagePath('/Domain/Event/*.php'))) );
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container)
@@ -40,15 +46,5 @@ class Extension extends SymfonyExtension
         return new Configuration();
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    protected function configureMessageReceiver(ContainerBuilder $container): void
-    {
-        $container->register(MessageReceiver::class)
-                  ->setPublic(false)
-                  ->addTag('kernel.event_listener', ['event' => ConsoleEvents::COMMAND, 'method' => 'onCommand'])
-                  ->addTag('kernel.event_listener', ['event' => ConsoleEvents::TERMINATE, 'method' => 'onTerminate'])
-        ;
-    }
+
 }

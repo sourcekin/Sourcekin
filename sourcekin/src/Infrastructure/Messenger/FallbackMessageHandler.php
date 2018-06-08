@@ -8,21 +8,22 @@
 
 namespace Sourcekin\Infrastructure\Messenger;
 
-use Sourcekin\Domain\Message\MessageBusInterface;
+use Sourcekin\Domain\Message\DomainBusInterface;
 
-class FallbackHandler
+class FallbackMessageHandler
 {
-    /**
-     * @var MessageBusInterface
-     */
-    protected $bus;
 
     /**
-     * FallbackHandler constructor.
-     *
-     * @param MessageBusInterface $bus
+     * @var DomainBusInterface
      */
-    public function __construct(MessageBusInterface $bus = null) { $this->bus = $bus; }
+    private $bus;
+
+    /**
+     * FallbackMessageHandler constructor.
+     *
+     * @param DomainBusInterface $bus
+     */
+    public function __construct(DomainBusInterface $bus = null) { $this->bus = $bus; }
 
 
     public function __invoke($message)

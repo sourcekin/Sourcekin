@@ -8,13 +8,13 @@
 
 namespace Sourcekin\Infrastructure\Console;
 
-use Sourcekin\Infrastructure\Messenger\MessageReceivingInterface;
+use Sourcekin\Domain\Message\MessageReceivingInterface;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 
 class MessageReceiver
 {
-    /** @var MessageReceivingInterface */
-    protected $receiver;
+    /** @var MessageReceivingInterface|null */
+    private $receiver;
 
     public function receive($message): void
     {

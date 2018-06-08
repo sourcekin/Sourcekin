@@ -6,9 +6,14 @@
  *
  */
 
+use Sourcekin\Infrastructure\Console\MessageReceiver;
+use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return function(ContainerConfigurator $container) {
-    $container->services()->defaults()->autowire()->autoconfigure()->private()
-    ->load("Sourcekin\\");
+return function(ContainerConfigurator $configurator){
+    $configurator->services()->defaults()->autowire()->autoconfigure()->private()
+        ->set(MessageReceiver::class)
+        ->tag('kernel.event_listener', ['event' => ConsoleEvents::COMMAND, 'method' => 'onCommand'])
+        ->tag('kernel.event_listener', ['event' => ConsoleEvents::TERMINATE, 'method' => 'onTerminate'])
+        ;
 };
