@@ -8,18 +8,15 @@
 
 namespace SourcekinBundle\DependencyInjection;
 
-use Sourcekin\Domain\Message\DomainBusInterface;
-use Sourcekin\Infrastructure\Console\MessageReceiver;
-use Sourcekin\Infrastructure\DependencyInjection\ConfigurationHelper;
-use Sourcekin\Infrastructure\Messenger\DomainBus;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension as SymfonyExtension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-class Extension extends SymfonyExtension
-{
+class Extension extends SymfonyExtension implements PrependExtensionInterface {
     const ALIAS = 'sourcekin';
 
     /**
@@ -27,24 +24,44 @@ class Extension extends SymfonyExtension
      *
      * @param array            $configs
      * @param ContainerBuilder $container
+     *
+     * @throws \Exception
      */
-    public function load(array $configs, ContainerBuilder $container)
-    {
+    public function load(array $configs, ContainerBuilder $container) {
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+
         $loader->load('services.php');
+        $loader->load('messages.php');
+        $loader->load('console.php');
+        $loader->load('command-handlers.php');
+        $loader->load('event-handlers.php');
 
-        if( class_exists(ConsoleEvents::class)) {
-            $loader->load('console.php');
-        }
-
-        ConfigurationHelper::configureEventMessages($container, [], array_map(function($file){ return 'Sourcekin\\Domain\\Event\\' . basename($file, '.php'); }, glob(ConfigurationHelper::getPackagePath('/Domain/Event/*.php'))) );
     }
 
-    public function getConfiguration(array $config, ContainerBuilder $container)
-    {
+    public function getConfiguration(array $config, ContainerBuilder $container) {
         return new Configuration();
     }
 
 
+    /**
+     * Allow an extension to prepend the extension configurations.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function prepend(ContainerBuilder $container) {
+
+        $container->prependExtensionConfig(
+            'framework',
+            [
+                'messenger' => [
+                    'default_bus' => 'messenger.bus.command',
+                    'buses'       => [
+                        'messenger.bus.command' => NULL,
+                        'messenger.bus.event'   => NULL,
+                    ],
+                ],
+            ]
+        );
+    }
 }
