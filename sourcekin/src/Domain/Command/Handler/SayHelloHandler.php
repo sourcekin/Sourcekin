@@ -9,6 +9,7 @@ namespace Sourcekin\Domain\Command\Handler;
 
 use Sourcekin\Domain\Command\SayHello;
 use Sourcekin\Domain\Event\SaidHello;
+use Sourcekin\Domain\Message\EventBus;
 use Sourcekin\Domain\Message\MessageBusInterface;
 
 class SayHelloHandler {
@@ -21,9 +22,9 @@ class SayHelloHandler {
     /**
      * SayHelloHandler constructor.
      *
-     * @param MessageBusInterface $eventBus
+     * @param EventBus $eventBus
      */
-    public function __construct(MessageBusInterface $eventBus) {
+    public function __construct(EventBus $eventBus) {
         $this->eventBus = $eventBus;
     }
 

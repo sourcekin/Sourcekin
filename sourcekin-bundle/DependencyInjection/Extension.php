@@ -31,11 +31,21 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
-        $loader->load('services.php');
-        $loader->load('messages.php');
-        $loader->load('console.php');
-        $loader->load('command-handlers.php');
-        $loader->load('event-handlers.php');
+        if( $config['bus'] === 'messenger') {
+            $loader->load('messenger/services.php');
+            $loader->load('messenger/messages.php');
+            $loader->load('messenger/console.php');
+            $loader->load('messenger/command-handlers.php');
+            $loader->load('messenger/event-handlers.php');
+        }
+
+
+        if( $config['bus'] === 'simplebus') {
+            $loader->load('simplebus/services.php');
+            $loader->load('simplebus/command-handlers.php');
+            $loader->load('simplebus/console.php');
+        }
+
 
     }
 

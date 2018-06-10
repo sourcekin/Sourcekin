@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $children = ($treeBuilder = new TreeBuilder())->root(Extension::ALIAS)->children();
+        $children->scalarNode('bus')->defaultValue('simplebus');
         return $treeBuilder;
     }
 }

@@ -8,6 +8,7 @@ namespace App\Command;
 
 
 use Sourcekin\Domain\Command\SayHello;
+use Sourcekin\Domain\Message\CommandBus;
 use Sourcekin\Domain\Message\MessageBusInterface;
 use Sourcekin\Domain\Message\MessageReceivingInterface;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
@@ -23,16 +24,16 @@ class SayHelloCommand extends Command implements MessageReceivingInterface  {
      */
     protected $io;
     /**
-     * @var MessageBusInterface
+     * @var CommandBus
      */
     protected $commandBus;
 
     /**
      * SayHelloCommand constructor.
      *
-     * @param MessageBusInterface $commandBus
+     * @param CommandBus $commandBus
      */
-    public function __construct(MessageBusInterface $commandBus) {
+    public function __construct(CommandBus $commandBus) {
         $this->commandBus = $commandBus;
         parent::__construct();
     }
