@@ -18,6 +18,13 @@ class DomainObjectFactory
     protected $factories = [];
 
     /**
+     * DomainObjectFactory constructor.
+     *
+     * @param FactoryInterface[] $factories
+     */
+    public function __construct(array $factories) { $this->factories = $factories; }
+
+    /**
      * @param       $name
      * @param array $context
      * @return object

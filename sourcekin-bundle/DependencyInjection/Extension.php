@@ -31,6 +31,9 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
+        $loader->load('domain-factory.php');
+        $loader->load('persistence.php');
+
         if( $config['bus'] === 'messenger') {
             $loader->load('messenger/services.php');
             $loader->load('messenger/messages.php');
@@ -45,7 +48,6 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
             $loader->load('simplebus/command-handlers.php');
             $loader->load('simplebus/console.php');
         }
-
 
     }
 

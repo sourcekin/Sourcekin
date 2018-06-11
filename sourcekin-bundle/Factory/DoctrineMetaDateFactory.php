@@ -9,16 +9,31 @@
 namespace SourcekinBundle\Factory;
 
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use ReflectionClass;
+use Sourcekin\Domain\Factory\ArgumentValue;
+use Sourcekin\Domain\Factory\DefaultArgumentValue;
 use Sourcekin\Domain\Factory\DomainObjectFactory;
 use Sourcekin\Domain\Factory\FactoryInterface;
+use Sourcekin\Domain\Factory\GivenArgumentValue;
+use Sourcekin\Domain\Factory\ArgumentMetaData;
+use Sourcekin\Domain\Factory\MethodResolver;
+use Sourcekin\Domain\Factory\ReflectionFactory;
 
-class DoctrineMetaDateFactory implements FactoryInterface
+class DoctrineMetaDateFactory extends ReflectionFactory
 {
 
     /**
      * @var ClassMetadataFactory
      */
     protected $metadataFactory;
+
+    /**
+     * DoctrineMetaDateFactory constructor.
+     *
+     * @param ClassMetadataFactory $metadataFactory
+     */
+    public function __construct(ClassMetadataFactory $metadataFactory) { $this->metadataFactory = $metadataFactory; }
+
 
     /**
      * @param $class
@@ -31,28 +46,16 @@ class DoctrineMetaDateFactory implements FactoryInterface
     }
 
     /**
-     * @param                     $class
-     * @param DomainObjectFactory $factory
-     * @param array               $context
+     * @param $class
      *
-     * @return object
+     * @return ReflectionClass
      * @throws \Doctrine\Common\Persistence\Mapping\MappingException
      * @throws \ReflectionException
      */
-    public function make($class, DomainObjectFactory $factory, array $context = [])
+    protected function getReflectionClass($class)
     {
-        $metaData   = $this->metadataFactory->getMetadataFor($class);
-        $reflection = $metaData->getReflectionClass();
-        $args       = [];
-        foreach($reflection->getConstructor()->getParameters() as $parameter) {
-            $args[$parameter->getName()] = $context[$parameter->getName()] ?? null;
-
-
-            if( $subclass = $parameter->getClass()->getName()) {
-                $context[$parameter->getName()] = $factory->make($subclass);
-            }
-        }
-
-        return $metaData->getReflectionClass()->newInstance($context);
+        return $this->metadataFactory->getMetadataFor($class)->getReflectionClass();
     }
+
+
 }
