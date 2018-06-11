@@ -8,5 +8,19 @@ namespace Sourcekin\Domain\Command;
 
 
 class SayHello {
+    
+    protected $name;
+
+    /**
+     * SayHello constructor.
+     *
+     * @param $name
+     */
+    public function __construct($name) { $this->name = $name; }
+
+    public function name()
+    {
+        return $this->name;
+    }
 
 }

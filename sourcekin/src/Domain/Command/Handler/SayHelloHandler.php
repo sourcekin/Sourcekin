@@ -10,25 +10,27 @@ namespace Sourcekin\Domain\Command\Handler;
 use Sourcekin\Domain\Command\SayHello;
 use Sourcekin\Domain\Event\SaidHello;
 use Sourcekin\Domain\Message\EventBus;
+use Sourcekin\Domain\Message\EventRecorder;
 use Sourcekin\Domain\Message\MessageBusInterface;
 
 class SayHelloHandler {
 
+
     /**
-     * @var MessageBusInterface
+     * @var EventRecorder
      */
-    protected $eventBus;
+    private $recorder;
 
     /**
      * SayHelloHandler constructor.
      *
-     * @param EventBus $eventBus
+     * @param EventRecorder $recorder
      */
-    public function __construct(EventBus $eventBus) {
-        $this->eventBus = $eventBus;
+    public function __construct(EventRecorder $recorder) {
+        $this->recorder = $recorder;
     }
 
     public function __invoke(SayHello $hello) {
-        $this->eventBus->dispatch(new SaidHello());
+        $this->recorder->record(new SaidHello($hello->name()));
     }
 }

@@ -8,6 +8,7 @@ namespace App\Command;
 
 
 use Sourcekin\Domain\Command\SayHello;
+use Sourcekin\Domain\Event\SaidHello;
 use Sourcekin\Domain\Message\CommandBus;
 use Sourcekin\Domain\Message\MessageBusInterface;
 use Sourcekin\Domain\Message\MessageReceivingInterface;
@@ -44,10 +45,12 @@ class SayHelloCommand extends Command implements MessageReceivingInterface  {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $this->io = new SymfonyStyle($input, $output);
-        $this->commandBus->dispatch(new SayHello());
+        $this->commandBus->dispatch(new SayHello($this->io->ask('name?')));
     }
 
     public function onMessageReceived($message) {
-        $this->io->writeln(get_class($message));
+        if( $message instanceof SaidHello ) {
+            $this->io->success(sprintf('Said hello to %s.', $message->name()));
+        }
     }
 }

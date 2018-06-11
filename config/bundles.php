@@ -16,6 +16,6 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class                        => ['dev' => true],
     \SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle::class            => ['all' => true],
     \SimpleBus\SymfonyBridge\SimpleBusEventBusBundle::class              => ['all' => true],
-    // \SimpleBus\SymfonyBridge\DoctrineOrmBridgeBundle::class              => ['all' => true],
+    \SimpleBus\SymfonyBridge\DoctrineOrmBridgeBundle::class              => ['all' => true],
     SourcekinBundle\SourcekinBundle::class                               => ['all' => true],
 ];
