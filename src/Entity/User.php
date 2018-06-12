@@ -8,11 +8,24 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Sourcekin\Domain\Entity\User as SourcekinUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class User
+ * @ORM\Entity()
+ */
 class User extends SourcekinUser implements UserInterface
 {
+
+    /**
+     * @var
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column()
+     */
+    protected $id;
 
     /**
      * @var string[]

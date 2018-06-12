@@ -14,4 +14,19 @@ class RegisterUser
     public $password;
     public $email;
 
+    /**
+     * RegisterUser constructor.
+     *
+     * @param $username
+     * @param $password
+     * @param $email
+     */
+    public function __construct($username, $password, $email)
+    {
+        $this->username = $username;
+        $this->password = $password;
+        $this->email    = $email;
+    }
+
+
 }

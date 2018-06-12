@@ -27,12 +27,15 @@ class DoctrineMetaDateFactory extends ReflectionFactory
      */
     protected $metadataFactory;
 
+
     /**
      * DoctrineMetaDateFactory constructor.
      *
      * @param ClassMetadataFactory $metadataFactory
      */
-    public function __construct(ClassMetadataFactory $metadataFactory) { $this->metadataFactory = $metadataFactory; }
+    public function __construct(ClassMetadataFactory $metadataFactory) {
+        $this->metadataFactory = $metadataFactory;
+    }
 
 
     /**
@@ -42,7 +45,14 @@ class DoctrineMetaDateFactory extends ReflectionFactory
      */
     public function isSupported($class)
     {
-        return $this->metadataFactory->hasMetadataFor($class);
+        try {
+            $metaData = $this->metadataFactory->getMetadataFor($class);
+            return true;
+
+        } catch(\Exception $exception){
+            return false;
+        }
+
     }
 
     /**

@@ -27,7 +27,11 @@ class Configuration implements ConfigurationInterface
     {
         $children = ($treeBuilder = new TreeBuilder())->root(Extension::ALIAS)->children();
         $children->scalarNode('bus')->defaultValue('simplebus')->end();
-        $children->arrayNode('class_mapping')->prototype('scalar')->defaultValue(static::DEFAULT_CLASS_MAPPING)->end();
+        $classMap = $children->arrayNode('class_mapping');
+        foreach (static::DEFAULT_CLASS_MAPPING as $source => $target) {
+            $classMap->children()->scalarNode($source)->defaultValue($target)->end();
+        };
+        $classMap->addDefaultsIfNotSet()->end();
 
         return $treeBuilder;
     }

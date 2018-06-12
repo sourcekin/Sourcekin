@@ -11,7 +11,7 @@ namespace Sourcekin\Domain\Entity;
 use Sourcekin\Domain\Command\RegisterUser;
 use Sourcekin\Domain\Message\EventRecorder;
 
-class User
+abstract class User
 {
     /**
      * @var string

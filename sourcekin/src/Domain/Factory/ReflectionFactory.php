@@ -12,11 +12,14 @@ use ReflectionClass;
 
 class ReflectionFactory implements FactoryInterface
 {
+
+
+
+
     public function isSupported($class)
     {
         return (interface_exists($class) || class_exists($class));
     }
-
 
     /**
      * @param                     $class
@@ -34,7 +37,7 @@ class ReflectionFactory implements FactoryInterface
             $args[] = $value->given() ? $value->value() : $this->resolveValue($value, $argument, $factory);
         };
 
-        return $reflection->newInstance($args??[]);
+        return new $class(...$args??[]);
     }
 
     /**

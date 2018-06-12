@@ -16,7 +16,7 @@ class SourcekinBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
-
+        parent::build($container);
     }
 
     public function getContainerExtension()
