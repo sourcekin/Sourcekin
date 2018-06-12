@@ -9,9 +9,9 @@
  * @var \Symfony\Component\DependencyInjection\ContainerBuilder $container
  */
 
-use Sourcekin\Domain\Message\CommandBus;
-use Sourcekin\Domain\Message\EventBus;
-use Sourcekin\Domain\Message\EventRecorder;
+use Sourcekin\EventHandling\CommandBus;
+use Sourcekin\EventHandling\EventBus;
+use Sourcekin\EventHandling\EventRecorder;
 use SourcekinBundle\SimpleBus\BusAdapterSimpleBus;
 use SourcekinBundle\SimpleBus\EventRecorderAdapter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -41,5 +41,5 @@ return function (ContainerConfigurator $configurator) {
 
     ;
 
-    //$configurator->services()->set(\Sourcekin\Domain\Message\CommandBus::class)
+    //$configurator->services()->set(\Sourcekin\EventHandling\CommandBus::class)
 };

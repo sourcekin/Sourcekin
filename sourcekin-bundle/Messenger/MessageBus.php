@@ -5,7 +5,7 @@
  */
 
 namespace SourcekinBundle\Messenger;
-use Sourcekin\Domain\Message\MessageBusInterface as DomainBusInterface;
+use Sourcekin\EventHandling\MessageBusInterface as DomainBusInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class MessageBus implements DomainBusInterface {

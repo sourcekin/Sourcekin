@@ -13,8 +13,8 @@ return function (ContainerConfigurator $configurator) {
     $configurator->services()->defaults()->autowire()->autoconfigure()
         ->bind('$eventBus', new Reference('sourcekin.event_bus'))
         ->load(
-            App::ns('Sourcekin.Domain.Command.Handler.'),
-            App::path('/Domain/Command/Handler/*Handler.php')
+            App::ns('Sourcekin.Command.Handler.'),
+            App::path('/Command/Handler/*Handler.php')
         )
         ->tag('messenger.message_handler', ['bus' => 'messenger.bus.command']);
 };

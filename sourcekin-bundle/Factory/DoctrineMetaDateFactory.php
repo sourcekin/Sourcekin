@@ -10,14 +10,7 @@ namespace SourcekinBundle\Factory;
 
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use ReflectionClass;
-use Sourcekin\Domain\Factory\ArgumentValue;
-use Sourcekin\Domain\Factory\DefaultArgumentValue;
-use Sourcekin\Domain\Factory\DomainObjectFactory;
-use Sourcekin\Domain\Factory\FactoryInterface;
-use Sourcekin\Domain\Factory\GivenArgumentValue;
-use Sourcekin\Domain\Factory\ArgumentMetaData;
-use Sourcekin\Domain\Factory\MethodResolver;
-use Sourcekin\Domain\Factory\ReflectionFactory;
+use Sourcekin\Factory\ReflectionFactory;
 
 class DoctrineMetaDateFactory extends ReflectionFactory
 {

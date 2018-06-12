@@ -8,11 +8,9 @@
 
 namespace App\Command;
 
-use Sourcekin\Domain\Command\RegisterUser;
-use Sourcekin\Domain\Event\UserRegistered;
-use Sourcekin\Domain\Message\MessageReceivingInterface;
+use Sourcekin\Command\RegisterUser;
+use Sourcekin\Event\UserRegistered;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;

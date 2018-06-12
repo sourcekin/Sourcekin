@@ -10,7 +10,7 @@ namespace SourcekinBundle\SimpleBus;
 
 use SimpleBus\Message\Recorder\PublicMessageRecorder;
 use SimpleBus\Message\Recorder\RecordsMessages;
-use Sourcekin\Domain\Message\EventRecorder;
+use Sourcekin\EventHandling\EventRecorder;
 
 class EventRecorderAdapter  implements EventRecorder
 {

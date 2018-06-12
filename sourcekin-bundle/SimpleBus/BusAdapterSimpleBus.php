@@ -9,7 +9,7 @@
 namespace SourcekinBundle\SimpleBus;
 
 use SimpleBus\Message\Bus\MessageBus;
-use Sourcekin\Domain\Message\MessageBusInterface;
+use Sourcekin\EventHandling\MessageBusInterface;
 
 class BusAdapterSimpleBus implements MessageBusInterface
 {

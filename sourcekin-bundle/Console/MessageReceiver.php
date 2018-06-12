@@ -7,7 +7,7 @@
 namespace SourcekinBundle\Console;
 
 
-use Sourcekin\Domain\Message\MessageReceivingInterface;
+use Sourcekin\EventHandling\MessageReceivingInterface;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 
 class MessageReceiver {

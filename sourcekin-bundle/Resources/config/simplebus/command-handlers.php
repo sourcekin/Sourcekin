@@ -13,8 +13,8 @@ use Symfony\Component\DependencyInjection\Reference;
 return function (ContainerConfigurator $configurator) {
     $configurator->services()->defaults()->autowire()->autoconfigure()
                  ->load(
-                     App::ns('Sourcekin.Domain.Command.Handler.'),
-                     App::path('/Domain/Command/Handler/*Handler.php')
+                     App::ns('Sourcekin.Command.Handler.'),
+                     App::path('/Command/Handler/*Handler.php')
                  )
                  ->tag('command_handler');
 };

@@ -19,9 +19,9 @@ return function (ContainerConfigurator $configurator) {
 
     $events = array_map(
         function($file) {
-            return App::ns(sprintf('Sourcekin.Domain.Event.%s', basename($file, '.php')));
+            return App::ns(sprintf('Sourcekin.Event.%s', basename($file, '.php')));
             },
-        glob(App::path('/Domain/Event/*.php'))
+        glob(App::path('/Event/*.php'))
     );
 
     foreach ($events as $event) {

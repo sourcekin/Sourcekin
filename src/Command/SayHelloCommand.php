@@ -7,11 +7,10 @@
 namespace App\Command;
 
 
-use Sourcekin\Domain\Command\SayHello;
-use Sourcekin\Domain\Event\SaidHello;
-use Sourcekin\Domain\Message\CommandBus;
-use Sourcekin\Domain\Message\MessageBusInterface;
-use Sourcekin\Domain\Message\MessageReceivingInterface;
+use Sourcekin\Command\SayHello;
+use Sourcekin\Event\SaidHello;
+use Sourcekin\EventHandling\CommandBus;
+use Sourcekin\EventHandling\MessageReceivingInterface;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

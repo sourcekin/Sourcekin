@@ -6,8 +6,8 @@
  *
  */
 
-use Sourcekin\Domain\Factory\DomainObjectFactory;
-use Sourcekin\Domain\Factory\ReflectionFactory;
+use Sourcekin\Factory\DomainObjectFactory;
+use Sourcekin\Factory\ReflectionFactory;
 use SourcekinBundle\Factory\DoctrineMetaDateFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Parameter;

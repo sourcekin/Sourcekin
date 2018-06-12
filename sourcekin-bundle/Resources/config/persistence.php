@@ -6,7 +6,7 @@
  *
  */
 
-use Sourcekin\Domain\Persistence\ObjectStore;
+use Sourcekin\Persistence\ObjectStore;
 use SourcekinBundle\Persistence\DoctrineObjectStore;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;

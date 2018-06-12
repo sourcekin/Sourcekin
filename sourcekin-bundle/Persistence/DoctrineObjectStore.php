@@ -9,7 +9,7 @@
 namespace SourcekinBundle\Persistence;
 
 use Doctrine\ORM\EntityManager;
-use Sourcekin\Domain\Persistence\ObjectStore;
+use Sourcekin\Persistence\ObjectStore;
 
 class DoctrineObjectStore implements ObjectStore
 {

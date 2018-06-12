@@ -3,7 +3,8 @@
  * This file is part of the "sourcekin" Project.
  * Created by {avanzu} on 09.06.18.
  */
-use Sourcekin\Domain\Message\MessageBusInterface;
+
+use Sourcekin\EventHandling\MessageBusInterface;
 use SourcekinBundle\Messenger\MessageBus;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;

@@ -8,9 +8,8 @@
 
 namespace App\Command;
 
-use Sourcekin\Domain\Message\CommandBus;
-use Sourcekin\Domain\Message\EventRecorder;
-use Sourcekin\Domain\Message\MessageReceivingInterface;
+use Sourcekin\EventHandling\CommandBus;
+use Sourcekin\EventHandling\MessageReceivingInterface;
 use Symfony\Component\Console\Command\Command;
 
 abstract  class MessageReceivingCommand extends Command implements MessageReceivingInterface
