@@ -8,6 +8,7 @@
 
 namespace SourcekinBundle;
 
+use SourcekinBundle\DependencyInjection\Compiler\CommandHandlerDecoratorPass;
 use SourcekinBundle\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -16,7 +17,7 @@ class SourcekinBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
-        parent::build($container);
+        $container->addCompilerPass(new CommandHandlerDecoratorPass());
     }
 
     public function getContainerExtension()

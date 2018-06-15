@@ -8,6 +8,7 @@ namespace Sourcekin;
 
 
 class Application {
+
     public static function path($relative) {
         return __DIR__.$relative;
     }

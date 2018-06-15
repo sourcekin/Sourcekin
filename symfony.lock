@@ -2,6 +2,30 @@
     "beberlei/assert": {
         "version": "v2.9.5"
     },
+    "broadway/broadway": {
+        "version": "2.0.1"
+    },
+    "broadway/broadway-bundle": {
+        "version": "0.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.4",
+            "ref": "a4ded8381c60e594474584599659eef9d931c872"
+        }
+    },
+    "broadway/event-store-dbal": {
+        "version": "0.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.2",
+            "ref": "a8e44b60058a2798f65be93037aa1562f4de60eb"
+        }
+    },
+    "broadway/uuid-generator": {
+        "version": "0.4.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -121,15 +145,6 @@
             "version": "4.0",
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
         }
-    },
-    "simple-bus/doctrine-orm-bridge": {
-        "version": "v5.0.0"
-    },
-    "simple-bus/message-bus": {
-        "version": "v3.0.1"
-    },
-    "simple-bus/symfony-bridge": {
-        "version": "v5.1.2"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.0.2"
@@ -300,9 +315,6 @@
         "version": "v4.1.0"
     },
     "symfony/property-info": {
-        "version": "v4.1.0"
-    },
-    "symfony/proxy-manager-bridge": {
         "version": "v4.1.0"
     },
     "symfony/routing": {

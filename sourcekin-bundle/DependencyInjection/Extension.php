@@ -36,23 +36,8 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $container->setParameter('sourcekin.classmap' , $config['class_mapping']);
 
         $loader->load('domain-factory.php');
-        $loader->load('persistence.php');
-
-        if( $config['bus'] === 'messenger') {
-            $loader->load('messenger/services.php');
-            $loader->load('messenger/messages.php');
-            $loader->load('messenger/console.php');
-            $loader->load('messenger/command-handlers.php');
-            $loader->load('messenger/event-handlers.php');
-        }
-
-
-        if( $config['bus'] === 'simplebus') {
-            $loader->load('simplebus/services.php');
-            $loader->load('simplebus/command-handlers.php');
-            $loader->load('simplebus/console.php');
-        }
-
+        $loader->load('broadway/services.php');
+        $loader->load('broadway/command-handler.php');
 
     }
 

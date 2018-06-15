@@ -1,36 +1,19 @@
 <?php
 /**
  * This file is part of the "sourcekin" Project.
- *
- * Created by avanzu on 10.06.18
- *
+ * Created by {avanzu} on 09.06.18.
  */
 
 namespace Sourcekin\EventHandling;
 
-class EventBus implements MessageBusInterface
-{
+
+interface EventBus {
 
     /**
-     * @var MessageBusInterface
-     */
-    protected $messageBus;
-
-    /**
-     * EventBus constructor.
-     *
-     * @param MessageBusInterface $messageBus
-     */
-    public function __construct(MessageBusInterface $messageBus) { $this->messageBus = $messageBus; }
-
-
-    /**
-     * @param object $message
-     *
+     * @param EventStream $stream
      * @return mixed
      */
-    public function dispatch($message)
-    {
-        return $this->messageBus->dispatch($message);
-    }
+    public function dispatch( EventStream $stream );
+
+    public function subscribe(EventListener $eventListener);
 }
