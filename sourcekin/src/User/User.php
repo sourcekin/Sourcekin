@@ -8,6 +8,8 @@ namespace Sourcekin\User;
 
 
 use Broadway\EventSourcing\EventSourcedAggregateRoot;
+use Sourcekin\User\Event\UserSignedUp;
+use Sourcekin\User\Event\UserWasEnabled;
 
 class User extends EventSourcedAggregateRoot {
 
@@ -19,6 +21,11 @@ class User extends EventSourcedAggregateRoot {
 
     private $password;
 
+    /**
+     * @var bool
+     */
+    private $enabled = false;
+
 
     /**
      * @return string
@@ -27,18 +34,71 @@ class User extends EventSourcedAggregateRoot {
         return $this->id;
     }
 
-    public static function register($id, $username, $email, $password) {
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public static function signUp($id, $username, $email, $password) {
         $user = new static();
-        $user->apply(new UserWasRegistered($id, $username, $email, $password));
+        $user->apply(new UserSignedUp($id, $username, $email, $password));
         return $user;
     }
 
-    public function applyUserWasRegistered(UserWasRegistered $event) {
+    public function enable()
+    {
+        if( $this->isEnabled()) return;
+        $this->apply(new UserWasEnabled($this->id));
+    }
+
+    public function applyUserSignedUp(UserSignedUp $event) {
 
         $this->id       = $event->getId();
         $this->username = $event->getUsername();
         $this->email    = $event->getEmail();
         $this->password = $event->getPassword();
 
+    }
+
+    public function applyUserWasEnabled(UserWasEnabled $enabled)
+    {
+        if( $enabled->getId() === $this->getId()) {
+            $this->enabled = $enabled;
+        }
     }
 }

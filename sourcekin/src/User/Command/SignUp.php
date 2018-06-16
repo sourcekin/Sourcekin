@@ -4,17 +4,18 @@
  * Created by {avanzu} on 15.06.18.
  */
 
-namespace Sourcekin\User;
+namespace Sourcekin\User\Command;
 
 
-class UserWasRegistered {
+class SignUp {
+
     protected $id;
     protected $username;
     protected $email;
     protected $password;
 
     /**
-     * UserWasRegistered constructor.
+     * UserSignedUp constructor.
      *
      * @param $id
      * @param $username
@@ -55,5 +56,4 @@ class UserWasRegistered {
     public function getPassword() {
         return $this->password;
     }
-
 }
