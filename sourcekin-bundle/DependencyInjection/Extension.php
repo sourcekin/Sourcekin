@@ -33,11 +33,8 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
-        $container->setParameter('sourcekin.classmap' , $config['class_mapping']);
+        $loader->load('domain/user.php');
 
-        $loader->load('domain-factory.php');
-        $loader->load('broadway/services.php');
-        $loader->load('broadway/command-handler.php');
 
     }
 
@@ -46,24 +43,7 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
     }
 
     public function configureDoctrineTargetEntities(ContainerBuilder $container, $classMapping) {
-        if (!class_exists(DoctrineOrmVersion::class) || !$this->hasBundle($container, DoctrineBundle::class)) {
-            return;
-        }
 
-        $container->prependExtensionConfig('doctrine', [
-            'orm' => [
-                'resolve_target_entities' => $classMapping,
-                'mappings' => [
-                    'sourcekin' => [
-                        'dir'       => Application::path('/Resources/doctrine/orm'),
-                        'type'      => 'xml',
-                        'prefix'    => 'Sourcekin\Domain',
-                        'is_bundle' => false,
-                        'alias'     => 'Sourcekin'
-                    ]
-                ]
-            ],
-        ]);
     }
 
     /**
@@ -73,22 +53,6 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
      */
     public function prepend(ContainerBuilder $container) {
 
-        $config = $this->processConfiguration($this->getConfiguration($configs = $container->getExtensionConfig($this->getAlias()), $container), $configs);
-
-        $container->prependExtensionConfig(
-            'framework',
-            [
-                'messenger' => [
-                    'default_bus' => 'messenger.bus.command',
-                    'buses'       => [
-                        'messenger.bus.command' => NULL,
-                        'messenger.bus.event'   => NULL,
-                    ],
-                ],
-            ]
-        );
-
-        $this->configureDoctrineTargetEntities($container, $config['class_mapping']);
 
     }
 

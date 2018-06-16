@@ -9,7 +9,7 @@
 namespace SourcekinBundle\DependencyInjection;
 
 use App\Entity\User;
-use Sourcekin\Domain\Entity\User as SourcekinUser;
+use Sourcekin\Components\Domain\Entity\User as SourcekinUser;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

@@ -17,7 +17,6 @@ class SourcekinBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new CommandHandlerDecoratorPass());
     }
 
     public function getContainerExtension()
