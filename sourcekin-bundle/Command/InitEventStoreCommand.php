@@ -9,6 +9,7 @@
 namespace SourcekinBundle\Command;
 
 use Broadway\EventStore\Dbal\DBALEventStore;
+use Broadway\EventStore\EventStore;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Comparator;
 use Symfony\Component\Console\Command\Command;
@@ -33,7 +34,7 @@ class InitEventStoreCommand extends Command
      *
      * @param DBALEventStore $store
      */
-    public function __construct(DBALEventStore $store, Connection $connection)
+    public function __construct(EventStore $store, Connection $connection)
     {
         $this->store      = $store;
         $this->connection = $connection;

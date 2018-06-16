@@ -6,7 +6,7 @@
  *
  */
 
-use Broadway\EventStore\Dbal\DBALEventStore;
+use Broadway\EventStore\EventStore;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -14,7 +14,7 @@ return function(ContainerConfigurator $configurator) {
     $configurator->services()->defaults()->autowire()->autoconfigure()
         ->load('SourcekinBundle\\Command\\', dirname(dirname(__DIR__)).'/Command/*Command.php')
         ->tag('console.command')
-        ->bind(DBALEventStore::class, new Reference('broadway.event_store.dbal'))
+        ->bind(EventStore::class, new Reference('broadway.event_store'))
     ;
 
 };

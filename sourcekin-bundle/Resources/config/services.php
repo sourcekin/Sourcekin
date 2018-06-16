@@ -18,6 +18,6 @@ return function(ContainerConfigurator $container) {
         ->alias(CommandBus::class, new Reference('broadway.command_handling.event_dispatching_command_bus'))
         ->alias(EventBus::class, new Reference('broadway.event_handling.event_bus'))
         ->alias(UuidGeneratorInterface::class, new Reference('broadway.uuid.generator'))
-        ->alias(EventStore::class, new Reference('broadway.event_store.dbal'))
+        ->alias(EventStore::class, new Reference('broadway.event_store'))
         ;
 };
