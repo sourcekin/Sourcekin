@@ -14,6 +14,10 @@ class SignUp {
     protected $email;
     protected $password;
 
+    private   $firstName;
+
+    private   $lastName;
+
     /**
      * UserSignedUp constructor.
      *
@@ -21,12 +25,16 @@ class SignUp {
      * @param $username
      * @param $email
      * @param $password
+     * @param $firstName
+     * @param $lastName
      */
-    public function __construct($id, $username, $email, $password) {
+    public function __construct($id, $username, $email, $password, $firstName, $lastName) {
         $this->id       = $id;
         $this->username = $username;
         $this->email    = $email;
         $this->password = $password;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 
     /**
@@ -56,4 +64,21 @@ class SignUp {
     public function getPassword() {
         return $this->password;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
 }

@@ -20,6 +20,10 @@ class UserSignedUp implements Serializable
 
     protected $password;
 
+    protected   $firstName;
+
+    protected   $lastName;
+
     /**
      * UserSignedUp constructor.
      *
@@ -27,13 +31,17 @@ class UserSignedUp implements Serializable
      * @param $username
      * @param $email
      * @param $password
+     * @param $firstName
+     * @param $lastName
      */
-    public function __construct($id, $username, $email, $password)
+    public function __construct($id, $username, $email, $password, $firstName, $lastName)
     {
         $this->id       = $id;
         $this->username = $username;
         $this->email    = $email;
         $this->password = $password;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 
     /**
@@ -68,20 +76,39 @@ class UserSignedUp implements Serializable
         return $this->password;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+
 
     public static function deserialize(array $data)
     {
         $data = (object)$data;
-        return new static($data->id, $data->username, $data->email, $data->password);
+        return new static($data->id, $data->username, $data->email, $data->password, $data->firstName, $data->lastName);
     }
 
     public function serialize(): array
     {
         return [
-            'id'       => $this->id,
-            'username' => $this->username,
-            'password' => $this->password,
-            'email'    => $this->email,
+            'id'        => $this->id,
+            'username'  => $this->username,
+            'password'  => $this->password,
+            'email'     => $this->email,
+            'firstName' => $this->firstName,
+            'lastName'  => $this->lastName,
         ];
     }
 

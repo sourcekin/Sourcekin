@@ -2,7 +2,7 @@
 /**
  * This file is part of the "sourcekin" Project.
  *
- * Created by avanzu on 16.06.18
+ * Created by avanzu on 17.06.18
  *
  */
 
@@ -11,9 +11,8 @@ namespace Sourcekin\User\ReadModel;
 use Broadway\ReadModel\Projector;
 use Broadway\ReadModel\Repository;
 use Sourcekin\User\Event\UserSignedUp;
-use Sourcekin\User\Event\UserWasEnabled;
 
-abstract class LoginUserProjector extends Projector
+class ScreenUserProjector extends Projector
 {
     /**
      * @var Repository
@@ -32,24 +31,16 @@ abstract class LoginUserProjector extends Projector
     public function applyUserSignedUp(UserSignedUp $signedUp)
     {
         $model = $this->getReadModel($signedUp->getId());
-        $model->assignCredentials($signedUp->getUsername(), $signedUp->getPassword());
+        $model->applySignedUp($signedUp);
 
         $this->repository->save($model);
     }
 
-    public function applyUserWasEnabled(UserWasEnabled $event)
+    protected function getReadModel($id)
     {
-        $model = $this->getReadModel($event->getId());
-        $model->enable();
-        $this->repository->save($model);
+        if( ! $model = $this->repository->find($id)) {
+            $model = new ScreenUser($id);
+        }
+        return $model;
     }
-
-    /**
-     * @param $id
-     *
-     * @return \Broadway\ReadModel\Identifiable|null|LoginUser
-     */
-    abstract protected function getReadModel($id);
-
-
 }

@@ -11,7 +11,7 @@ namespace Sourcekin\User\ReadModel;
 use Broadway\ReadModel\Identifiable;
 use Broadway\Serializer\Serializable;
 
-class LoginUser implements Identifiable, Serializable
+abstract class LoginUser implements Identifiable, Serializable
 {
     protected $id;
 

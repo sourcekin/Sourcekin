@@ -26,6 +26,15 @@ class User extends EventSourcedAggregateRoot {
      */
     private $enabled = false;
 
+    /**
+     * @var string
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     */
+    private $lastName;
 
     /**
      * @return string
@@ -74,9 +83,26 @@ class User extends EventSourcedAggregateRoot {
         return $this->enabled;
     }
 
-    public static function signUp($id, $username, $email, $password) {
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+
+    public static function signUp($id, $username, $email, $password, $firstName, $lastName) {
         $user = new static();
-        $user->apply(new UserSignedUp($id, $username, $email, $password));
+        $user->apply(new UserSignedUp($id, $username, $email, $password, $firstName, $lastName));
         return $user;
     }
 

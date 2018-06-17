@@ -43,7 +43,9 @@ class UserCommandHandler extends SimpleCommandHandler {
             $command->getId(),
             $command->getUsername(),
             $command->getEmail(),
-            $this->passwordEncoder->encode($command->getPassword())
+            $this->passwordEncoder->encode($command->getPassword()),
+            $command->getFirstName(),
+            $command->getLastName()
         );
 
         $this->repository->save($user);

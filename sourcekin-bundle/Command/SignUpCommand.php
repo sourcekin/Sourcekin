@@ -52,6 +52,8 @@ class SignUpCommand extends Command
              ->addArgument('username', InputArgument::REQUIRED)
              ->addArgument('email', InputArgument::REQUIRED)
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL)
+            ->addOption('first-name', 'fn', InputOption::VALUE_OPTIONAL)
+            ->addOption('last-name', 'ln', InputOption::VALUE_OPTIONAL)
             ->addOption('enable', null, InputOption::VALUE_OPTIONAL)
         ;
     }
@@ -64,7 +66,9 @@ class SignUpCommand extends Command
             $id,
             $input->getArgument('username'),
             $input->getArgument('email'),
-            $input->getOption('password') ?: $io->askHidden('password')
+            $input->getOption('password') ?: $io->askHidden('password?'),
+            $input->getOption('first-name') ?: $io->ask('first name?'),
+            $input->getOption('last-name') ?: $io->ask('last name?')
         );
 
         $this->bus->dispatch($command);
