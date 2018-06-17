@@ -13,6 +13,6 @@ class Application {
     }
 
     public static function ns($namespace) {
-        return  str_replace('.', '\\', $namespace);
+        return str_replace('.', '\\', $namespace);
     }
 }

@@ -12,15 +12,12 @@ use SourcekinBundle\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class SourcekinBundle extends Bundle
-{
-    public function build(ContainerBuilder $container)
-    {
+class SourcekinBundle extends Bundle {
+    public function build(ContainerBuilder $container) {
         parent::build($container);
     }
 
-    public function getContainerExtension()
-    {
+    public function getContainerExtension() {
         return new Extension();
     }
 

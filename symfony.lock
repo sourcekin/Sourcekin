@@ -80,6 +80,9 @@
     "laravel/homestead": {
         "version": "v7.7.0"
     },
+    "marc-mabe/php-enum": {
+        "version": "v3.0.1"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
     },
@@ -97,6 +100,39 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "prooph/common": {
+        "version": "v4.2.2"
+    },
+    "prooph/event-sourcing": {
+        "version": "v5.5.0"
+    },
+    "prooph/event-store": {
+        "version": "v7.3.7"
+    },
+    "prooph/event-store-bus-bridge": {
+        "version": "v3.2.0"
+    },
+    "prooph/event-store-symfony-bundle": {
+        "version": "v0.5.0"
+    },
+    "prooph/pdo-event-store": {
+        "version": "v1.8.4"
+    },
+    "prooph/pdo-snapshot-store": {
+        "version": "v1.5.1"
+    },
+    "prooph/service-bus": {
+        "version": "v6.2.2"
+    },
+    "prooph/service-bus-symfony-bundle": {
+        "version": "v0.7.0"
+    },
+    "prooph/snapshot-store": {
+        "version": "v1.3.0"
+    },
+    "prooph/snapshotter": {
+        "version": "v2.1.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -121,15 +157,6 @@
             "version": "4.0",
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
         }
-    },
-    "simple-bus/doctrine-orm-bridge": {
-        "version": "v5.0.0"
-    },
-    "simple-bus/message-bus": {
-        "version": "v3.0.1"
-    },
-    "simple-bus/symfony-bridge": {
-        "version": "v5.1.2"
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.0.2"
@@ -300,9 +327,6 @@
         "version": "v4.1.0"
     },
     "symfony/property-info": {
-        "version": "v4.1.0"
-    },
-    "symfony/proxy-manager-bridge": {
         "version": "v4.1.0"
     },
     "symfony/routing": {
