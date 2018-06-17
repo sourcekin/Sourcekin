@@ -31,6 +31,7 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
+        $loader->load('services.php');
 
     }
 
