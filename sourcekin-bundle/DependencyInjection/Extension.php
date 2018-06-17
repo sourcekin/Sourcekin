@@ -8,9 +8,6 @@
 
 namespace SourcekinBundle\DependencyInjection;
 
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Doctrine\ORM\Version as DoctrineOrmVersion;
-use Sourcekin\Application;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension as SymfonyExtension;
@@ -39,6 +36,7 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $loader->load('read-model/user.php');
 
 
+
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container) {
@@ -46,7 +44,19 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
     }
 
     public function configureDoctrineTargetEntities(ContainerBuilder $container, $classMapping) {
-
+        $container->prependExtensionConfig('doctrine', [
+            'orm' => [
+                'mappings' => [
+                    'SourcekinBundle' => [
+                        'type'      => 'xml',
+                        'dir'       => dirname(__DIR__).'/Resources/config/doctrine/orm',
+                        'alias'     => 'SourcekinBundle',
+                        'prefix'    => 'SourcekinBundle\\ReadModel',
+                        'is_bundle' => false,
+                    ]
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -55,7 +65,7 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
      * @param ContainerBuilder $container
      */
     public function prepend(ContainerBuilder $container) {
-
+        $this->configureDoctrineTargetEntities($container, []);
 
     }
 
