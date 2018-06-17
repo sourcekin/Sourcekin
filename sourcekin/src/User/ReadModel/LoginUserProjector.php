@@ -6,7 +6,7 @@
  *
  */
 
-namespace SourcekinBundle\ReadModel\User;
+namespace Sourcekin\User\ReadModel;
 
 use Broadway\ReadModel\Projector;
 use Broadway\ReadModel\Repository;

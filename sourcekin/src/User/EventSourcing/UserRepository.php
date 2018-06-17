@@ -4,13 +4,14 @@
  * Created by {avanzu} on 15.06.18.
  */
 
-namespace Sourcekin\User;
+namespace Sourcekin\User\EventSourcing;
 
 
 use Broadway\EventHandling\EventBus;
 use Broadway\EventSourcing\AggregateFactory\PublicConstructorAggregateFactory;
 use Broadway\EventSourcing\EventSourcingRepository;
 use Broadway\EventStore\EventStore;
+use Sourcekin\User\User;
 
 class UserRepository extends EventSourcingRepository {
     public function __construct(

@@ -5,7 +5,7 @@
  */
 
 use Sourcekin\User\Command\Handler\UserCommandHandler;
-use Sourcekin\User\UserRepository;
+use Sourcekin\User\EventSourcing\UserRepository;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return function(ContainerConfigurator $container){

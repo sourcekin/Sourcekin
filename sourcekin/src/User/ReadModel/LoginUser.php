@@ -6,7 +6,7 @@
  *
  */
 
-namespace SourcekinBundle\ReadModel\User;
+namespace Sourcekin\User\ReadModel;
 
 use Broadway\ReadModel\Identifiable;
 use Broadway\Serializer\Serializable;
@@ -82,4 +82,30 @@ class LoginUser implements Identifiable, Serializable
             'enabled'  => $this->enabled,
         ];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+
 }

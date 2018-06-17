@@ -8,29 +8,44 @@ namespace Sourcekin\User\Command\Handler;
 
 
 use Broadway\CommandHandling\SimpleCommandHandler;
+use Sourcekin\Components\PasswordEncoder;
 use Sourcekin\User\Command\Enable;
 use Sourcekin\User\Command\SignUp;
+use Sourcekin\User\EventSourcing\UserRepository;
 use Sourcekin\User\User;
-use Sourcekin\User\UserRepository;
 
 class UserCommandHandler extends SimpleCommandHandler {
 
     /**
-     * @var UserRepository
+     * @var \Sourcekin\User\EventSourcing\UserRepository
      */
     protected $repository;
 
     /**
+     * @var PasswordEncoder
+     */
+    protected $passwordEncoder;
+
+    /**
      * UserCommandHandler constructor.
      *
-     * @param UserRepository $repository
+     * @param \Sourcekin\User\EventSourcing\UserRepository $repository
+     * @param PasswordEncoder                              $passwordEncoder
      */
-    public function __construct(UserRepository $repository) {
-        $this->repository = $repository;
+    public function __construct(UserRepository $repository, PasswordEncoder $passwordEncoder) {
+        $this->repository      = $repository;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function handleSignUp(SignUp $command) {
-        $user = User::signUp($command->getId(), $command->getUsername(), $command->getEmail(), $command->getPassword());
+
+        $user = User::signUp(
+            $command->getId(),
+            $command->getUsername(),
+            $command->getEmail(),
+            $this->passwordEncoder->encode($command->getPassword())
+        );
+
         $this->repository->save($user);
     }
 

@@ -8,6 +8,10 @@
 
 namespace SourcekinBundle\DependencyInjection;
 
+use Sourcekin\User\ReadModel\LoginUser;
+use SourcekinBundle\ReadModel\Doctrine\ORM\SecurityUserRepository;
+use SourcekinBundle\ReadModel\User\SecurityUser;
+use SourcekinBundle\Security\UserProvider;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension as SymfonyExtension;
@@ -31,6 +35,7 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $loader->load('services.php');
+        $loader->load('security.php');
         $loader->load('console.php');
         $loader->load('domain/user.php');
         $loader->load('read-model/user.php');
@@ -47,11 +52,18 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $container->prependExtensionConfig('doctrine', [
             'orm' => [
                 'mappings' => [
+                    'Sourcekin' => [
+                        'type'      => 'xml',
+                        'dir'       => dirname(__DIR__).'/Resources/config/doctrine/orm',
+                        'alias'     => 'Sourcekin',
+                        'prefix'    => 'Sourcekin',
+                        'is_bundle' => false,
+                    ],
                     'SourcekinBundle' => [
                         'type'      => 'xml',
                         'dir'       => dirname(__DIR__).'/Resources/config/doctrine/orm',
                         'alias'     => 'SourcekinBundle',
-                        'prefix'    => 'SourcekinBundle\\ReadModel',
+                        'prefix'    => 'SourcekinBundle',
                         'is_bundle' => false,
                     ]
                 ]
@@ -66,10 +78,27 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
      */
     public function prepend(ContainerBuilder $container) {
         $this->configureDoctrineTargetEntities($container, []);
+        $this->configureSecurity($container);
 
     }
 
     protected function hasBundle($container, $class) {
         return in_array($class, $container->getParameter('kernel.bundles'), true);
+    }
+
+    private function configureSecurity(ContainerBuilder $container) {
+        $container->prependExtensionConfig('security', [
+            'encoders' => [
+                SecurityUser::class => [
+                    'algorithm' => 'bcrypt',
+                    'cost'      => 12
+                ]
+            ],
+            'providers' => [
+                'security_user' => [
+                    'id' => UserProvider::class
+                ]
+            ]
+        ]);
     }
 }
