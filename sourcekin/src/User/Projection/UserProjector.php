@@ -8,54 +8,42 @@ namespace Sourcekin\User\Projection;
 
 
 use Doctrine\DBAL\Connection;
+use Prooph\Bundle\EventStore\Projection\Projection;
+use Prooph\Bundle\EventStore\Projection\ReadModelProjection;
+use Prooph\EventStore\Projection\ReadModelProjector;
 use Sourcekin\User\Model\Event\EmailChanged;
 use Sourcekin\User\Model\Event\UserRegistered;
 
-class UserProjector {
+/**
+ * Class UserProjector
+ * @method UserReadModel readModel()
+ */
+class UserProjector implements ReadModelProjection {
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    public function project(ReadModelProjector $projector): ReadModelProjector
+    {
+        $projector
+            ->fromStream('event_stream')
+            ->when([
+                UserRegistered::class => function($state, UserRegistered $event){
+                    $model = $this->readModel();
+                    $model->stack('insert', [
+                        'email'    => $event->email(),
+                        'password' => $event->password(),
+                        'username' => $event->username(),
+                        'id'       => $event->aggregateId(),
+                    ]);
+                },
+                EmailChanged::class => function($state, EmailChanged $event ){
+                    $model = $this->readModel();
+                    $model->stack('changeEmail', [
+                        'email' => $event->email(),
+                        'id' => $event->aggregateId()
+                    ]);
+                }
+            ]);
 
-    /**
-     * UserProjector constructor.
-     *
-     * @param Connection $connection
-     */
-    public function __construct(Connection $connection) {
-        $this->connection = $connection;
+        return $projector;
     }
-
-    /**
-     * @param UserRegistered $event
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function onUserRegistered(UserRegistered $event) {
-        $this->connection->insert(
-            'read_user',
-            [
-                'email'    => $event->email(),
-                'password' => $event->password(),
-                'username' => $event->username(),
-                'id'       => $event->aggregateId(),
-            ]
-        );
-    }
-
-    /**
-     * @param EmailChanged $event
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function onEmailChanged(EmailChanged $event) {
-        $this->connection->update(
-            'read_user',
-            ['email' => $event->email()],
-            ['id' => $event->aggregateId()]
-        );
-    }
-
 
 }

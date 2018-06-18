@@ -9,7 +9,7 @@ parameters:
     app.connection.type: '%env(DB_TYPE)%'
     app.connection.pass: '%env(DB_PASS)%'
     app.connection.dsn: '%app.connection.type%:dbname=%app.connection.name%;host=%app.connection.host%'
-
+    app.vendor_dir    : '%kernel.project_dir%/vendor'
 
 services:
     # default configuration for services in *this* file

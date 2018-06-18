@@ -4,31 +4,38 @@
  * Created by {avanzu} on 17.06.18.
  */
 
-use Prooph\Common\Event\ActionEventEmitter;
-use Prooph\Common\Event\ProophActionEventEmitter;
-use Prooph\Common\Messaging\FQCNMessageFactory;
-use Prooph\EventStore\ActionEventEmitterEventStore;
+use Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStore\Pdo\MySqlEventStore;
 use Prooph\EventStore\Pdo\PersistenceStrategy;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
-return function(ContainerConfigurator $container){
+return function (ContainerConfigurator $container) {
     $container
         ->services()->defaults()->autowire()->autoconfigure()->private()
-        ->set('sourcekin.connection', PDO::class)
-        ->args([new Parameter('app.connection.dsn'), new Parameter('app.connection.user'), new Parameter('app.connection.name')])
-        ->set(FQCNMessageFactory::class)
-        ->set(PersistenceStrategy::class, PersistenceStrategy\MySqlAggregateStreamStrategy::class)
 
-        ->set(EventStore::class, MySqlEventStore::class)
-        ->arg('$connection', new Reference('sourcekin.connection'))
+        ->set('doctrine.pdo.connection', PDO::class)
+        ->factory([new Reference('database_connection'), 'getWrappedConnection'])
 
-        ->set(ActionEventEmitter::class, ProophActionEventEmitter::class)
-        ->set(ActionEventEmitterEventStore::class)
+        ->alias(\Prooph\ServiceBus\EventBus::class, new Reference('prooph_service_bus.sourcekin_event_bus'))
+        ->set(AggregateTranslator::class)
+        ->set(PersistenceStrategy::class,PersistenceStrategy\MariaDbSingleStreamStrategy::class)
 
-        ;
+        ->set(\Prooph\EventStore\Pdo\MariaDbEventStore::class)
+        ->args([
+            new Reference('prooph_event_store.message_factory'),
+            new Reference('doctrine.pdo.connection')
+        ])
+        ->alias(EventStore::class, \Prooph\EventStore\Pdo\MariaDbEventStore::class)
+
+        ->set(\Prooph\SnapshotStore\Pdo\PdoSnapshotStore::class)
+        ->arg('$connection', new Reference('doctrine.pdo.connection'))
+        ->alias(\Prooph\SnapshotStore\SnapshotStore::class, \Prooph\SnapshotStore\Pdo\PdoSnapshotStore::class)
+
+        ->set(\Prooph\EventStoreBusBridge\EventPublisher::class)
+        ->tag('prooph_event_store.sourcekin_store.plugin')
+
+    ;
 
 };

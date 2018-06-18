@@ -32,6 +32,8 @@ class Extension extends SymfonyExtension implements PrependExtensionInterface {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
         $loader->load('services.php');
+        $loader->load('console.php');
+        $loader->load('user.php');
 
     }
 
