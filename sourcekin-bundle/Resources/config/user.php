@@ -9,6 +9,8 @@ use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
 use Prooph\SnapshotStore\SnapshotStore;
 use Sourcekin\Application;
 use Sourcekin\User\Model\UserRepository;
+use Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager;
+use Sourcekin\User\Projection\UserFinder;
 use Sourcekin\User\Projection\UserProjector;
 use Sourcekin\User\Projection\UserReadModel;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -18,9 +20,9 @@ return function(ContainerConfigurator $container){
     $container
         ->services()->defaults()->autowire()->autoconfigure()
 
-
         ->bind(Connection::class, new Reference('database_connection'))
         ->bind(SnapshotStore::class, new Reference(PdoSnapshotStore::class))
+        ->bind(\Prooph\ServiceBus\CommandBus::class, new Reference('prooph_service_bus.sourcekin_command_bus'))
         ->set(UserRepository::class, \Sourcekin\User\Infrastructure\UserRepository::class)
         ->load(
             Application::ns('Sourcekin.User.Model.Command.'),
@@ -29,14 +31,18 @@ return function(ContainerConfigurator $container){
         ->tag('prooph_service_bus.sourcekin_command_bus.route_target', ['message_detection' => true])
         ->set(UserProjector::class)
         ->set(UserReadModel::class)
+        ->set(UserFinder::class)
 
         // snapshot
 
         ->set(\Sourcekin\User\Projection\UserSnapshotModel::class, \Prooph\Snapshotter\SnapshotReadModel::class)
         ->arg('$aggregateRepository', new Reference(UserRepository::class))
         ->arg('$aggregateTypes', [\Sourcekin\User\Model\User::class])
-
         ->set(\Sourcekin\User\Projection\UserSnapshotProjector::class)
+
+        // process manager
+        ->set(SendRegistrationConfirmationProcessManager::class)
+
         ;
 
 };

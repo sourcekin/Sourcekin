@@ -9,7 +9,9 @@
 namespace Sourcekin\User;
 
 use Sourcekin\User\Infrastructure\UserRepository;
+use Sourcekin\User\Model\Event\UserRegistered;
 use Sourcekin\User\Model\User;
+use Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager;
 use Sourcekin\User\Projection\UserProjector;
 use Sourcekin\User\Projection\UserReadModel;
 use Sourcekin\User\Projection\UserSnapshotModel;
@@ -44,6 +46,14 @@ class UserModule
             'user_snapshot' => [
                 'read_model' => UserSnapshotModel::class,
                 'projection' => UserSnapshotProjector::class
+            ]
+        ];
+    }
+
+    public static function eventRoutes() {
+        return [
+            UserRegistered::class => [
+                SendRegistrationConfirmationProcessManager::class
             ]
         ];
     }

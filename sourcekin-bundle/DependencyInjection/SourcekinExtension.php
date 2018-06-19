@@ -34,7 +34,7 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
     public function load(array $configs, ContainerBuilder $container) {
 
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
         $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
         $this->defineParameters($container);
@@ -42,11 +42,7 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         $loader->load('console.php');
         $loader->load('user.php');
 
-
-
     }
-
-
 
 
     /**
@@ -67,11 +63,19 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
     /**
      * @param ContainerBuilder $container
      */
-    protected function prependServiceBusConfig(ContainerBuilder $container): void
-    {
+    protected function prependServiceBusConfig(ContainerBuilder $container): void {
+        $routes = $this->listEventRoutes(Application::modules());
         $config = [
-            'command_buses' => ['sourcekin_command_bus' => null],
-            'event_buses'   => ['sourcekin_event_bus' => null],
+            'command_buses' => [
+                'sourcekin_command_bus' => NULL,
+            ],
+            'event_buses'   => [
+                'sourcekin_event_bus' => [
+                    'router' => [
+                        'routes' => $routes,
+                    ],
+                ],
+            ],
         ];
 
         $container->prependExtensionConfig('prooph_service_bus', $config);
@@ -98,16 +102,16 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
             'stores'              => [
                 'sourcekin_store' => [
                     'event_store'  => EventStore::class,
-                    'repositories' => $repositories
-                ]
+                    'repositories' => $repositories,
+                ],
             ],
             'projection_managers' => [
                 'sourcekin_projection_manager' => [
                     'event_store' => EventStore::class,
                     'connection'  => 'doctrine.pdo.connection',
-                    'projections' => $projections
-                ]
-            ]
+                    'projections' => $projections,
+                ],
+            ],
         ];
 
         $container->prependExtensionConfig('prooph_event_store', $config);
@@ -117,12 +121,15 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
      * @param ContainerBuilder $container
      */
     protected function defineParameters(ContainerBuilder $container): void {
-        $modules = Application::modules();
-        $streams = array_filter(array_map(function ($class) { return $class::streamName(); }, $modules));
+        $modules     = Application::modules();
+        $streams     = array_filter(array_map(function ($class) { return $class::streamName(); }, $modules));
         $projections = $this->listProjections($modules);
+        $eventRoutes = $this->listEventRoutes($modules);
+
         $container->setParameter('sourcekin.modules', $modules);
         $container->setParameter('sourcekin.stream_names', $streams);
         $container->setParameter('sourcekin.projections', $projections);
+        $container->setParameter('sourcekin.event_routes', $eventRoutes);
 
     }
 
@@ -138,5 +145,19 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         }
 
         return $projections;
+    }
+
+    /**
+     * @param $modules
+     *
+     * @return array
+     */
+    protected function listEventRoutes($modules): array {
+        $eventRoutes = [];
+        foreach ($modules as $module) {
+            $eventRoutes = array_merge($eventRoutes, $module::eventRoutes());
+        }
+
+        return $eventRoutes;
 }
 }
