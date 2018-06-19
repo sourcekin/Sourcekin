@@ -22,7 +22,7 @@ class ChangeEmailHandler {
      */
     public function __construct(UserRepository $repository) { $this->repository = $repository; }
 
-    public function __invoke(RegisterUser $command) {
+    public function __invoke(ChangeEmail $command) {
         $user = $this->repository->get($command->id());
         $user->changeEmail($command->email());
         $this->repository->save($user);

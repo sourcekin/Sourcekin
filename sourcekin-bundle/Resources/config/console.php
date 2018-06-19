@@ -16,7 +16,9 @@ return function(ContainerConfigurator $container){
         ->bind(EventStore::class, new Reference('prooph_event_store.sourcekin_store'))
         ->bind('$connection', new Reference('doctrine.pdo.connection'))
         ->bind('$vendorDir', new Parameter('app.vendor_dir'))
+        ->bind('$dbalConnection', new Reference('database_connection'))
         ->bind('$bus', new Reference('prooph_service_bus.sourcekin_command_bus'))
+        ->bind('$streamNames', new Parameter('sourcekin.stream_names'))
         ->load('SourcekinBundle\\Command\\', dirname(dirname(__DIR__)) . '/Command/*Command.php' )
         ->tag('console.command')
         ;

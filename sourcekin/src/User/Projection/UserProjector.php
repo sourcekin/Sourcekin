@@ -13,6 +13,8 @@ use Prooph\Bundle\EventStore\Projection\ReadModelProjection;
 use Prooph\EventStore\Projection\ReadModelProjector;
 use Sourcekin\User\Model\Event\EmailChanged;
 use Sourcekin\User\Model\Event\UserRegistered;
+use Sourcekin\User\Model\User;
+use Sourcekin\User\UserModule;
 
 /**
  * Class UserProjector
@@ -23,7 +25,7 @@ class UserProjector implements ReadModelProjection {
     public function project(ReadModelProjector $projector): ReadModelProjector
     {
         $projector
-            ->fromStream('event_stream')
+            ->fromStream(UserModule::STREAM_NAME)
             ->when([
                 UserRegistered::class => function($state, UserRegistered $event){
                     $model = $this->readModel();

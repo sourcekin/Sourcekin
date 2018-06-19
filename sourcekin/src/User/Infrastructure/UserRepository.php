@@ -15,6 +15,7 @@ use Prooph\EventStore\StreamName;
 use Prooph\SnapshotStore\SnapshotStore;
 use Sourcekin\User\Model\User;
 use Sourcekin\User\Model\UserRepository as GenericUserRepository;
+use Sourcekin\User\UserModule;
 
 class UserRepository extends AggregateRepository implements GenericUserRepository {
 
@@ -27,7 +28,9 @@ class UserRepository extends AggregateRepository implements GenericUserRepositor
             $eventStore,
             AggregateType::fromAggregateRootClass(User::class),
             new AggregateTranslator(),
-            $snapshotStore
+            $snapshotStore,
+            new StreamName(UserModule::STREAM_NAME),
+            false
         );
     }
 
