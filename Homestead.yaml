@@ -17,5 +17,6 @@ sites:
         type: "symfony4"
 databases:
     - homestead
+    - sourcekin
 name: sourcekin
 hostname: sourcekin

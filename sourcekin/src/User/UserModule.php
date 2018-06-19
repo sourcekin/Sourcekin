@@ -12,6 +12,7 @@ use Sourcekin\User\Infrastructure\UserRepository;
 use Sourcekin\User\Model\User;
 use Sourcekin\User\Projection\UserProjector;
 use Sourcekin\User\Projection\UserReadModel;
+use Sourcekin\User\Projection\UserSnapshotModel;
 use Sourcekin\User\Projection\UserSnapshotProjector;
 
 class UserModule
@@ -41,7 +42,7 @@ class UserModule
                 'projection' => UserProjector::class
             ],
             'user_snapshot' => [
-                'read_model' => 'user_snapshot_model',
+                'read_model' => UserSnapshotModel::class,
                 'projection' => UserSnapshotProjector::class
             ]
         ];

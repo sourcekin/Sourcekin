@@ -22,14 +22,17 @@ return function(ContainerConfigurator $container){
         ->bind(Connection::class, new Reference('database_connection'))
         ->bind(SnapshotStore::class, new Reference(PdoSnapshotStore::class))
         ->set(UserRepository::class, \Sourcekin\User\Infrastructure\UserRepository::class)
-        ->load(Application::ns('Sourcekin.User.Model.Command.'), Application::path('/User/Model/Command/*Handler.php'))
+        ->load(
+            Application::ns('Sourcekin.User.Model.Command.'),
+            Application::path('/User/Model/Command/*Handler.php')
+        )
         ->tag('prooph_service_bus.sourcekin_command_bus.route_target', ['message_detection' => true])
         ->set(UserProjector::class)
         ->set(UserReadModel::class)
 
         // snapshot
 
-        ->set('user_snapshot_model', \Prooph\Snapshotter\SnapshotReadModel::class)
+        ->set(\Sourcekin\User\Projection\UserSnapshotModel::class, \Prooph\Snapshotter\SnapshotReadModel::class)
         ->arg('$aggregateRepository', new Reference(UserRepository::class))
         ->arg('$aggregateTypes', [\Sourcekin\User\Model\User::class])
 

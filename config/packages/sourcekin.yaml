@@ -1,6 +1,5 @@
 sourcekin:
-    modules:
-        user: Sourcekin\UserModule
+    modules: ~
 
 # prooph_service_bus:
 #   command_buses:

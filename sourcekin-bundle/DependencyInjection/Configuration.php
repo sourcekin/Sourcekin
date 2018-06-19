@@ -12,14 +12,23 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface {
+
     /**
      * Generates the configuration tree builder.
      *
      * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder The tree builder
      */
     public function getConfigTreeBuilder() {
-        $children = ($treeBuilder = new TreeBuilder())->root(Extension::ALIAS)->children();
+        $rootNode = ($treeBuilder = new TreeBuilder())->root('sourcekin');
+
+        $rootNode
+            ->children()
+                ->arrayNode('modules')
+                ->scalarPrototype()
+            ->end()
+        ;
 
         return $treeBuilder;
+
     }
 }

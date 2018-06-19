@@ -15,6 +15,7 @@ return function (ContainerConfigurator $container) {
         ->services()->defaults()->autowire()->autoconfigure()->private()
         ->set('doctrine.pdo.connection', PDO::class)
         ->factory([new Reference('database_connection'), 'getWrappedConnection'])
+        ->lazy()
         ->alias(\Prooph\ServiceBus\EventBus::class, new Reference('prooph_service_bus.sourcekin_event_bus'))
         ->set(AggregateTranslator::class)
         ->alias(\Prooph\EventSourcing\Aggregate\AggregateTranslator::class, AggregateTranslator::class)
@@ -33,7 +34,4 @@ return function (ContainerConfigurator $container) {
         ->set(\Prooph\EventStoreBusBridge\EventPublisher::class)
         ->tag('prooph_event_store.sourcekin_store.plugin')
     ;
-
-   //  $container->parameters()->set('sourcekin.projections');
-
 };
