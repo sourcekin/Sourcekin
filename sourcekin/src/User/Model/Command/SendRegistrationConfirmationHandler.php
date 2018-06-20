@@ -23,6 +23,16 @@ class SendRegistrationConfirmationHandler {
      */
     protected $mailer;
 
+    /**
+     * SendRegistrationConfirmationHandler constructor.
+     *
+     * @param UserFinder    $finder
+     * @param \Swift_Mailer $mailer
+     */
+    public function __construct(UserFinder $finder, \Swift_Mailer $mailer) {
+        $this->finder = $finder;
+        $this->mailer = $mailer;
+    }
 
 
     public function __invoke(SendRegistrationConfirmation $command) {

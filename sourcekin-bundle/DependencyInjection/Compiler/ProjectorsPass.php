@@ -6,7 +6,7 @@
  *
  */
 
-namespace SourcekinBundle\DependencyInjection;
+namespace SourcekinBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

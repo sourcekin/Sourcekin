@@ -30,8 +30,8 @@ class UserFinder {
         $user    = $builder
             ->select()
             ->from(UserReadModel::TABLE_NAME)
-            ->where('id = :id')
-            ->setParameter('id', $id)
+            ->where('id = ?')
+            ->setParameter(0, $id)
             ->execute()
             ->fetch(\PDO::FETCH_OBJ)
         ;

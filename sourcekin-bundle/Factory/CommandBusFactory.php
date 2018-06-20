@@ -8,8 +8,8 @@
 
 namespace SourcekinBundle\Factory;
 
-use Prooph\ServiceBus\CommandBus;
-use Prooph\ServiceBus\Plugin\Router\CommandRouter;
+
+use SourcekinBundle\ServiceBus\CommandBus;
 use Prooph\ServiceBus\Plugin\Router\MessageBusRouterPlugin;
 
 class CommandBusFactory
@@ -17,7 +17,8 @@ class CommandBusFactory
     public function compose(MessageBusRouterPlugin $router)
     {
         $commandBus = new CommandBus();
-        $router->attachToMessageBus($commandBus);
+        $commandBus->addPlugin($router);
+
         return $commandBus;
     }
 

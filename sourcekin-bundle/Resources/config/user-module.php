@@ -30,11 +30,17 @@ return function (ContainerConfigurator $container) {
         ->set(\Sourcekin\User\Projection\UserSnapshotProjector::class)
         ->tag('sourcekin.projector', ['projection' => 'user_snapshots', 'read_model' => \Sourcekin\User\Projection\UserSnapshotModel::class])
 
+        // finder
+        ->set(\Sourcekin\User\Projection\UserFinder::class)
+
         // read models
         ->set(\Sourcekin\User\Projection\UserReadModel::class)
 
         ->set(\Sourcekin\User\Projection\UserSnapshotModel::class, \Prooph\Snapshotter\SnapshotReadModel::class)
         ->arg('$aggregateRepository', new Reference(UserRepository::class))
         ->arg('$aggregateTypes', [\Sourcekin\User\Model\User::class])
+
+        ->set(\Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager::class)
+        ->tag('sourcekin.event_handler')
         ;
 };
