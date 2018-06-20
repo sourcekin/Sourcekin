@@ -8,6 +8,7 @@
 
 namespace SourcekinBundle;
 
+use SourcekinBundle\DependencyInjection\Compiler\BusPluginsPass;
 use SourcekinBundle\DependencyInjection\Compiler\CommandHandlersPass;
 use SourcekinBundle\DependencyInjection\Compiler\EventHandlersPass;
 use SourcekinBundle\DependencyInjection\Compiler\ProjectorsPass;
@@ -21,6 +22,7 @@ class SourcekinBundle extends Bundle {
         $container->addCompilerPass(new CommandHandlersPass());
         $container->addCompilerPass(new ProjectorsPass());
         $container->addCompilerPass(new EventHandlersPass());
+        $container->addCompilerPass(new BusPluginsPass());
     }
 
 

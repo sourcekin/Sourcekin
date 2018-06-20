@@ -18,7 +18,7 @@ use Prooph\EventStore\Pdo\PersistenceStrategy;
 use Prooph\EventStore\Pdo\Projection\MySqlProjectionManager;
 use Prooph\EventStore\Projection\ProjectionManager;
 use Prooph\EventStoreBusBridge\EventPublisher;
-use Prooph\ServiceBus\CommandBus;
+use SourcekinBundle\ServiceBus\CommandBus;
 use Prooph\ServiceBus\Plugin\Router\EventRouter;
 use Prooph\ServiceBus\Plugin\Router\SingleHandlerServiceLocatorRouter;
 use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
@@ -66,7 +66,10 @@ return function (ContainerConfigurator $container) {
         ->alias(EventStore::class, ActionEventEmitterEventStore::class)
 
         // event bus
-        ->set(EventBus::class)
+        ->set(EventBus::class, \SourcekinBundle\ServiceBus\EventBus::class)
+        ->tag('sourcekin.service_bus')
+        ->call('addPlugin', [new Reference('sourcekin.event_bus.logger')])
+        ->alias('sourcekin.event_bus', EventBus::class)
 
         // event router
         ->set(EventRouter::class)->alias('sourcekin.event_router', EventRouter::class)
@@ -75,6 +78,10 @@ return function (ContainerConfigurator $container) {
         ->set(CommandBus::class)
         ->factory([new Reference('sourcekin.command_bus.factory'), 'compose'])
         ->arg('$router', new Reference('sourcekin.command_router'))
+        ->tag('sourcekin.service_bus')
+        ->call('addPlugin', [new Reference('sourcekin.command_bus.logger')])
+        ->alias(\Prooph\ServiceBus\CommandBus::class, new Reference(CommandBus::class))
+        ->alias('sourcekin.command_bus', new Reference(CommandBus::class))
 
         ->set('sourcekin.command_bus.router.single_handler_locator', SingleHandlerServiceLocatorRouter::class)
         ->arg('$container', new Reference('sourcekin.command_handlers'))

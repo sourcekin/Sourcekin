@@ -8,12 +8,15 @@
 
 namespace SourcekinBundle\DependencyInjection;
 
+use Prooph\Bundle\ServiceBus\Plugin\PsrLoggerPlugin;
 use Prooph\EventSourcing\Aggregate\AggregateTranslator;
 use Prooph\EventStore\EventStore;
 use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
 use Sourcekin\Application;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension as SymfonyExtension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -45,7 +48,7 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         $loader->load('service-buses.php');
         $loader->load('console-commands.php');
         $loader->load('user-module.php');
-
+        $loader->load('service-bus-plugins.php');
     }
 
 

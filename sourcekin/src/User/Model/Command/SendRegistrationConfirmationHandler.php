@@ -36,7 +36,7 @@ class SendRegistrationConfirmationHandler {
 
 
     public function __invoke(SendRegistrationConfirmation $command) {
-        $user = $this->finder->findById($command->id());
+       //  $user = $this->finder->findById($command->id());
 
     }
 
