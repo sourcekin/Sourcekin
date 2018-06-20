@@ -1,32 +1,39 @@
 sourcekin:
     modules: ~
 
-# prooph_service_bus:
-#   command_buses:
-#     sourcekin_command_bus: ~
+#prooph_service_bus:
+#  command_buses:
+#    sourcekin_command_bus: ~
 #
-#   event_buses:
-#     sourcekin_event_bus: ~
+#  event_buses:
+#    sourcekin_event_bus:
+#        plugins:
+#            - 'prooph_service_bus.on_event_invoke_strategy'
+#        router:
+#            type: 'prooph_service_bus.event_bus_router'
+#            routes:
+#               'Sourcekin\User\Model\Event\UserRegistered':
+#                    - 'Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager'
 #
-# prooph_event_store:
-#     stores:
-#         sourcekin_store:
-#             event_store: Prooph\EventStore\EventStore
-#             repositories:
-#                 user_collection:
-#                     repository_class: Sourcekin\User\Infrastructure\UserRepository
-#                     aggregate_type: Sourcekin\User\Model\User
-#                     aggregate_translator: Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator
-#                     snapshot_store:  Prooph\SnapshotStore\Pdo\PdoSnapshotStore
+#prooph_event_store:
+#    stores:
+#        sourcekin_store:
+#            event_store: Prooph\EventStore\EventStore
+#            repositories:
+#                user_collection:
+#                    repository_class: Sourcekin\User\Infrastructure\UserRepository
+#                    aggregate_type: Sourcekin\User\Model\User
+#                    aggregate_translator: Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator
+#                    snapshot_store:  Prooph\SnapshotStore\Pdo\PdoSnapshotStore
 #
-#     projection_managers:
-#         sourcekin_projection_manager:
-#             event_store: Prooph\EventStore\EventStore
-#             connection: 'doctrine.pdo.connection'
-#             projections:
-#                 user_projection:
-#                     read_model: Sourcekin\User\Projection\UserReadModel
-#                     projection: Sourcekin\User\Projection\UserProjector
-#                 user_snapshot:
-#                     read_model: user_snapshot_model
-#                     projection: Sourcekin\User\Projection\UserSnapshotProjector
+#    projection_managers:
+#        sourcekin_projection_manager:
+#            event_store: Prooph\EventStore\EventStore
+#            connection: 'doctrine.pdo.connection'
+#            projections:
+#                user_projection:
+#                    read_model: Sourcekin\User\Projection\UserReadModel
+#                    projection: Sourcekin\User\Projection\UserProjector
+#                user_snapshot:
+#                    read_model: Sourcekin\User\Projection\UserSnapshotModel
+#                    projection: Sourcekin\User\Projection\UserSnapshotProjector

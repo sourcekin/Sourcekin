@@ -31,6 +31,7 @@ return function (ContainerConfigurator $container) {
         ->set(\Prooph\SnapshotStore\Pdo\PdoSnapshotStore::class)
         ->arg('$connection', new Reference('doctrine.pdo.connection'))
         ->alias(\Prooph\SnapshotStore\SnapshotStore::class, \Prooph\SnapshotStore\Pdo\PdoSnapshotStore::class)
+
         ->set(\Prooph\EventStoreBusBridge\EventPublisher::class)
         ->tag('prooph_event_store.sourcekin_store.plugin')
     ;
