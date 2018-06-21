@@ -8,6 +8,7 @@
 
 namespace Sourcekin\User;
 
+use Sourcekin\Module;
 use Sourcekin\User\Infrastructure\UserRepository;
 use Sourcekin\User\Model\Event\UserRegistered;
 use Sourcekin\User\Model\User;
@@ -17,14 +18,9 @@ use Sourcekin\User\Projection\UserReadModel;
 use Sourcekin\User\Projection\UserSnapshotModel;
 use Sourcekin\User\Projection\UserSnapshotProjector;
 
-class UserModule
+class UserModule extends Module
 {
     const STREAM_NAME = 'user_events';
-
-    public static function streamName()
-    {
-        return static::STREAM_NAME;
-    }
 
     public static function repositories()
     {

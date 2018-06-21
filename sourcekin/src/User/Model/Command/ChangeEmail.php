@@ -8,16 +8,17 @@ namespace Sourcekin\User\Model\Command;
 
 
 use Prooph\Common\Messaging\Command;
+use Prooph\Common\Messaging\PayloadConstructable;
 use Prooph\Common\Messaging\PayloadTrait;
 
-class ChangeEmail extends Command {
+class ChangeEmail extends Command implements PayloadConstructable {
     use PayloadTrait;
 
     public function id() {
-        return $this->payload()['id'];
+        return $this->payload['id'];
     }
 
     public function email() {
-        return $this->payload()['email'];
+        return $this->payload['email'];
     }
 }

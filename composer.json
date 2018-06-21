@@ -33,6 +33,7 @@
     },
     "require-dev": {
         "laravel/homestead": "^7.7",
+        "nette/php-generator": "^3.1",
         "symfony/debug-pack": "*",
         "symfony/dotenv": "^4.1",
         "symfony/maker-bundle": "^1.0",

@@ -86,6 +86,12 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "nette/php-generator": {
+        "version": "v3.1.2"
+    },
+    "nette/utils": {
+        "version": "v2.5.2"
+    },
     "nikic/php-parser": {
         "version": "v4.0.2"
     },
