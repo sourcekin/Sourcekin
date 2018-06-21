@@ -7,12 +7,14 @@
 namespace Sourcekin;
 
 
+use Sourcekin\Content\ContentModule;
 use Sourcekin\User\UserModule;
 
 class Application {
 
     protected static $modules = [
-        'user' => UserModule::class
+        'user'    => UserModule::class,
+        'content' => ContentModule::class,
     ];
 
     public static function path($relative) {

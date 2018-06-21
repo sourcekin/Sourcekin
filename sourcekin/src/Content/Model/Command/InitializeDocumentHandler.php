@@ -18,6 +18,14 @@ class InitializeDocumentHandler
      */
     private $repository;
 
+    /**
+     * InitializeDocumentHandler constructor.
+     *
+     * @param DocumentRepository $repository
+     */
+    public function __construct(DocumentRepository $repository) { $this->repository = $repository; }
+
+
     public function __invoke(InitializeDocument $command)
     {
         $document = Document::initialize($command->id(), $command->name(), $command->title(), $command->content());

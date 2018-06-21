@@ -38,4 +38,12 @@ class Document extends AggregateRoot
 
         return $obj;
     }
+
+    public function onDocumentWasInitialized(DocumentWasInitialized $event)
+    {
+        $this->id      = $event->aggregateId();
+        $this->title   = $event->title();
+        $this->name    = $event->name();
+        $this->content = $event->content();
+    }
 }

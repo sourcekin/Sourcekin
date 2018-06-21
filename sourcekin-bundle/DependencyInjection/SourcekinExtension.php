@@ -39,7 +39,7 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $configs);
 
-        $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));
+        $loader = new PhpFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config/container'));
         $this->defineParameters($container);
 
         // $loader->load('services.php');
@@ -47,8 +47,11 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         // $loader->load('user.php');
         $loader->load('service-buses.php');
         $loader->load('console-commands.php');
-        $loader->load('user-module.php');
         $loader->load('service-bus-plugins.php');
+        $loader->load('controllers.php');
+
+        $loader->load('user-module.php');
+        $loader->load('content-module.php');
     }
 
 

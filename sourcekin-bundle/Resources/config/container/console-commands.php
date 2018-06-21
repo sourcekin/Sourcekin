@@ -26,7 +26,7 @@ return function(ContainerConfigurator $container){
         ->tag('console.command', ['command' => 'sourcekin:projection:run'])
 
         ->set(\SourcekinBundle\Command\InstallCommand::class)
-        ->arg('$streamNames', ['user_events'])
+        ->arg('$streamNames', new Parameter('sourcekin.stream_names'))
         ->tag('console.command', ['command' => 'sourcekin:install'])
 
         ->set(\SourcekinBundle\Command\MakeUserCommand::class)
