@@ -71,9 +71,6 @@ return function (ContainerConfigurator $container) {
         ->call('addPlugin', [new Reference('sourcekin.event_bus.logger')])
         ->alias('sourcekin.event_bus', EventBus::class)
 
-        // event router
-        ->set(EventRouter::class)->alias('sourcekin.event_router', EventRouter::class)
-
         // command bus
         ->set(CommandBus::class)
         ->factory([new Reference('sourcekin.command_bus.factory'), 'compose'])

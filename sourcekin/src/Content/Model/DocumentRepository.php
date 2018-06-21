@@ -11,5 +11,11 @@ namespace Sourcekin\Content\Model;
 interface DocumentRepository
 {
     public function save(Document $document): void;
+
+    /**
+     * @param string $id
+     *
+     * @return null|Document
+     */
     public function get(string $id): ?Document;
 }

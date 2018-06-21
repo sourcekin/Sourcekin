@@ -15,8 +15,6 @@ return function(ContainerConfigurator $container){
     $container
         ->services()->defaults()->autowire()->autoconfigure()
 
-        // ->bind('$connection', new Reference('doctrine.pdo.connection'))
-        // ->bind('$vendorDir', new Parameter('app.vendor_dir'))
         ->bind('$dbalConnection', new Reference('database_connection'))
 
         ->set(\SourcekinBundle\Command\RunProjectionCommand::class)

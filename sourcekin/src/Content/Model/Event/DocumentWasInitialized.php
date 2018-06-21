@@ -22,8 +22,8 @@ class DocumentWasInitialized extends AggregateChanged
         return $this->payload['name'];
     }
 
-    public function content()
+    public function text()
     {
-        return $this->payload['content'];
+        return $this->payload['text'];
     }
 }
