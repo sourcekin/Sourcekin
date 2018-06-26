@@ -46,11 +46,17 @@ class DocumentReadModelXML extends AbstractReadModel
         rmdir($this->storageUrl);
     }
 
+    protected function xmlDocument()
+    {
+        $document = new \DOMDocument();
+        $document->standalone = true;
+        $document->preserveWhiteSpace;
+        return $document;
+    }
+
     public function insert($data)
     {
-        $document          = new \DOMDocument();
-        $document->doctype = new \DOMDocumentType();
-
+        $document = $this->xmlDocument();
         $document->appendChild($node = $document->createElement('Document'));
         $node->setAttribute('id', $data['id']);
         $node->setIdAttribute('id', true);
@@ -65,7 +71,7 @@ class DocumentReadModelXML extends AbstractReadModel
     public function addContent($data)
     {
         $fileName = sprintf('%s/%s.xml', $this->storageUrl, $data['id']);
-        $document = new \DOMDocument();
+        $document = $this->xmlDocument();
         $document->load($fileName);
 
         $content  = $document->createElement('Content');
@@ -73,15 +79,12 @@ class DocumentReadModelXML extends AbstractReadModel
         $content->setIdAttribute('id', true);
         $content->setAttribute('type', $data['type']);
         $content->setAttribute('index', $data['index']);
+        if( $data['parent'] !== $data['id'])
+            $content->setAttribute('parent', $data['parent']);
+
         $content->appendChild($document->createElement('Elements'));
         $content->appendChild($document->createElement('Fields'));
-
-        $parent = $document;
-        if( $data['parent'] !== $data['id']) {
-            $parent = $document->getElementById($data['parent']);
-        }
-
-        $parent->getElementsByTagName('Elements')->item(0)->appendChild($content);
+        $document->getElementsByTagName('Elements')->item(0)->appendChild($content);
 
         $document->save($fileName);
 
@@ -91,7 +94,7 @@ class DocumentReadModelXML extends AbstractReadModel
     public function addField($data)
     {
         $fileName = sprintf('%s/%s.xml', $this->storageUrl, $data['id']);
-        $document = new \DOMDocument();
+        $document = $this->xmlDocument();
         $document->load($fileName);
 
         $field = $document->createElement('Field', $data['value']);
@@ -100,7 +103,7 @@ class DocumentReadModelXML extends AbstractReadModel
         $field->setAttribute('name', $data['name']);
         $field->setAttribute('type', $data['type']);
 
-        $content = $document->getElementById($data['content_id']);
+        $content = (new \DOMXPath($document))->query(sprintf('//Content[@id="%s"]', $data['content_id']))->item(0);  //$document->getElementById($data['content_id']);
         $content->getElementsByTagName('Fields')->item(0)->appendChild($field);
 
         $document->save($fileName);
