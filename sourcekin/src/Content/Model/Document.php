@@ -9,6 +9,7 @@
 namespace Sourcekin\Content\Model;
 
 use Prooph\EventSourcing\AggregateRoot;
+use Ramsey\Uuid\Uuid;
 use Sourcekin\Components\ApplyEventCapabilities;
 use Sourcekin\Content\Model\Event\ContentWasAdded;
 use Sourcekin\Content\Model\Event\DocumentWasInitialized;
@@ -33,10 +34,47 @@ class Document extends AggregateRoot
      */
     private $elements = [];
 
+    public function id()
+    {
+        return $this->aggregateId();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @return Content[]
+     * @todo: this should be a collection of value object
+     */
+    public function getElements(): array
+    {
+        return $this->elements;
+    }
+
+
     public function addContent($identifier, $type, $index, $parent)
     {
-
-
         if( ! ($parent === $this->aggregateId())) {
             if( ! array_key_exists($parent, $this->elements)) {
                 throw new \InvalidArgumentException(sprintf('Parent %s is invalid.', $parent));
@@ -79,10 +117,10 @@ class Document extends AggregateRoot
 
     }
 
-    public static function initialize($id, $name, $title, $text)
+    public static function initialize($name, $title, $text)
     {
         $obj = new self;
-        $obj->recordThat(DocumentWasInitialized::occur($id, ['name' => $name, 'title' => $title, 'text' => $text]));
+        $obj->recordThat(DocumentWasInitialized::occur(Uuid::uuid4()->toString(), ['name' => $name, 'title' => $title, 'text' => $text]));
 
         return $obj;
     }

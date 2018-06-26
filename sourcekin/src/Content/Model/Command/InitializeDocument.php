@@ -16,10 +16,6 @@ class InitializeDocument extends Command implements PayloadConstructable
 {
     use PayloadTrait;
 
-    public function id()
-    {
-        return $this->payload['id'];
-    }
 
     public function title()
     {

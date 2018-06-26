@@ -1,5 +1,11 @@
 command::initalize-document:
-    path: /api/commands/initialize-document
+    path: /api/commands/documents/initialize
     defaults: { _controller: SourcekinBundle\Controller\ApiCommandController:postAction, sourcekin_command_name: Sourcekin\Content\Model\Command\InitializeDocument }
 
+command::add-content:
+    path: /api/command/documents/{id}/contents/add
+    defaults: { _controller: SourcekinBundle\Controller\ApiCommandController:postAction, sourcekin_command_name: Sourcekin\Content\Model\Command\AddContent }
 
+command::add-field:
+    path: /api/command/documents/{id}/contents/{id}/fields/add
+    defaults: { _controller: SourcekinBundle\Controller\ApiCommandController:postAction, sourcekin_command_name: Sourcekin\Content\Model\Command\AddField }

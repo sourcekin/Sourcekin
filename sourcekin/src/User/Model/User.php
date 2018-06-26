@@ -8,6 +8,7 @@ namespace Sourcekin\User\Model;
 
 
 use Prooph\EventSourcing\AggregateRoot;
+use Ramsey\Uuid\Uuid;
 use Sourcekin\Components\ApplyEventCapabilities;
 use Sourcekin\User\Model\Event\EmailChanged;
 use Sourcekin\User\Model\Event\UserRegistered;
@@ -18,12 +19,12 @@ class User extends AggregateRoot {
 
     private $id, $username, $email, $password;
 
-    static public function registerWithData(string $id, string $email, string $username, string $password): self {
+    static public function registerWithData(string $email, string $username, string $password): self {
         $obj = new self;
         $obj
             ->recordThat(
                 UserRegistered::occur(
-                    $id,
+                    Uuid::uuid4()->toString(),
                     [
                         'username' => $username,
                         'email'    => $email,

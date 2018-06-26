@@ -12,10 +12,6 @@ class ContentWasAdded extends AggregateChanged
 {
 
 
-    public function documentId()
-    {
-        return $this->payload['document_id'];
-    }
 
     public function index()
     {

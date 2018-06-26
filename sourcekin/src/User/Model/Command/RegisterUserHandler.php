@@ -24,7 +24,7 @@ class RegisterUserHandler {
     public function __construct(UserRepository $repository) { $this->repository = $repository; }
 
     public function __invoke(RegisterUser $command) {
-        $user = User::registerWithData($command->id(), $command->email(), $command->username(), $command->password());
+        $user = User::registerWithData($command->email(), $command->username(), $command->password());
         $this->repository->save($user);
     }
 

@@ -28,7 +28,7 @@ class InitializeDocumentHandler
 
     public function __invoke(InitializeDocument $command)
     {
-        $document = Document::initialize($command->id(), $command->name(), $command->title(), $command->content());
+        $document = Document::initialize($command->name(), $command->title(), $command->content());
         $this->repository->save($document);
     }
 

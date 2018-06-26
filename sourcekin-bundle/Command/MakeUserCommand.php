@@ -49,23 +49,14 @@ class MakeUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $uuid = Uuid::uuid4();
         $this->bus->dispatch(
             new RegisterUser([
-                    'id'       => $uuid,
                     'username' => 'karlheinz',
                     'email'    => 'karlheinz@sourcekin.de',
                     'password' => '12345',
                 ]
             )
         );
-
-        for($i = 0; $i < 5; $i++) {
-            $this->bus->dispatch(new ChangeEmail([
-                'id'    => $uuid,
-                'email' => "new-email-$i@sourcekin.de",
-            ]));
-        }
 
     }
 
