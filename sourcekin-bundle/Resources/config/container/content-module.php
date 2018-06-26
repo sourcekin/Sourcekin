@@ -17,5 +17,10 @@ return function (ContainerConfigurator $container) {
         ->set(\Sourcekin\Content\Model\Command\InitializeDocumentHandler::class)
         ->tag('sourcekin.command_handler')
 
+        ->set(\Sourcekin\Content\Model\Command\AddContentHandler::class)
+        ->tag('sourcekin.command_handler')
+
+        ->set(\Sourcekin\Content\Model\Command\AddFieldHandler::class)
+        ->tag('sourcekin.command_handler')
     ;
 };

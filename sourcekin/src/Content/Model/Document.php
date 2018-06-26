@@ -12,6 +12,7 @@ use Prooph\EventSourcing\AggregateRoot;
 use Sourcekin\Components\ApplyEventCapabilities;
 use Sourcekin\Content\Model\Event\ContentWasAdded;
 use Sourcekin\Content\Model\Event\DocumentWasInitialized;
+use Sourcekin\Content\Model\Event\FieldWasAdded;
 
 class Document extends AggregateRoot
 {
@@ -32,27 +33,50 @@ class Document extends AggregateRoot
      */
     private $elements = [];
 
-    public function addContent($identifier, $type, $index, $parent) {
+    public function addContent($identifier, $type, $index, $parent)
+    {
 
-        if( ! $parent = $this->elements[$parent]??null) {
-            throw new \InvalidArgumentException('parent not found');
+
+        if( ! ($parent === $this->aggregateId())) {
+            if( ! array_key_exists($parent, $this->elements)) {
+                throw new \InvalidArgumentException(sprintf('Parent %s is invalid.', $parent));
+            }
         }
 
-        if( $item = $this->elements[$identifier]??null){
-            throw new \InvalidArgumentException('identifier must be unique');
+        if(array_key_exists($identifier, $this->elements)) {
+            throw new \InvalidArgumentException(sprintf('Duplicate content #%s.', $identifier));
         }
 
-        $this->recordThat(ContentWasAdded::occur($this->aggregateId(), [
-            'identifier' => $identifier,
-            'type'       => $type,
-            'index'      => $index,
-            'parent'     => $parent
-        ]));
+        $this->recordThat(
+            ContentWasAdded::occur(
+                $this->aggregateId(),
+                [
+                    'identifier' => $identifier,
+                    'type'       => $type,
+                    'index'      => $index,
+                    'parent'     => $parent,
+                ]
+            )
+        );
     }
 
-    protected function aggregateId(): string
+    public function addField($contentId, $name, $value, $type)
     {
-        return $this->id;
+        if( ! ($content = $this->elements[$contentId]??null)) {
+            throw new \InvalidArgumentException(sprintf('Content %s not found.', $contentId));
+        }
+
+        if( $content->containsField($name)) {
+            throw new \InvalidArgumentException(sprintf('Duplicate field %s.', $name));
+        }
+
+        $this->recordThat(FieldWasAdded::occur($this->aggregateId(), [
+            'content_id' => $contentId,
+            'name'       => $name,
+            'value'      => $value,
+            'type'       => $type,
+        ]));
+
     }
 
     public static function initialize($id, $name, $title, $text)
@@ -63,20 +87,28 @@ class Document extends AggregateRoot
         return $obj;
     }
 
-
-
     public function onDocumentWasInitialized(DocumentWasInitialized $event)
     {
-        $this->id    = $event->aggregateId();
-        $this->title = $event->title();
-        $this->name  = $event->name();
-        $this->text  = $event->text();
+        $this->id                  = $event->aggregateId();
+        $this->title               = $event->title();
+        $this->name                = $event->name();
+        $this->text                = $event->text();
     }
 
-    public function onContentWasAdded(ContentWasAdded $event) {
-        $content = $event->content();
-        $this->elements[$event->parent()]->add($content);
+    public function onContentWasAdded(ContentWasAdded $event)
+    {
+        $content = Content::from($event->identifier(), $event->type(), $event->index());
+        $this->elements[$content->getIdentifier()] = $content;
+    }
 
+    public function onFieldWasAdded(FieldWasAdded $event)
+    {
+        $content = $this->elements[$event->contentId()];
+        $content->addField($event->name(), $event->value(), $event->type());
+    }
 
+    protected function aggregateId(): string
+    {
+        return $this->id;
     }
 }

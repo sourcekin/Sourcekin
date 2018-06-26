@@ -10,7 +10,8 @@ namespace Sourcekin\Content\Model;
 
 class Content
 {
-    protected $elements;
+    protected $elements = [];
+    protected $fields   = [];
     protected $identifier;
     protected $type;
     protected $index;
@@ -56,8 +57,19 @@ class Content
         return $this->type;
     }
 
-    public function add(Content $content) {
-        $this->elements[] = $content;
+    public function addChild(Content $content) {
+        $this->elements[$content->getIdentifier()] = $content;
+    }
+
+    public function containsField($name)
+    {
+        return array_key_exists($name, $this->fields);
+    }
+
+    public function addField($name, $value, $type)
+    {
+        $field = Field::from($name, $value, $type, count($this->fields));
+        $this->fields[$name] = $field;
     }
 
 }
