@@ -10,7 +10,6 @@ namespace Sourcekin\User\Projection;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
 use Prooph\EventStore\Projection\AbstractReadModel;
 
 class UserReadModel extends AbstractReadModel

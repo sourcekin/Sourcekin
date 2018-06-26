@@ -3,6 +3,7 @@
 parameters:
     locale: 'en'
     app.vendor_dir    : '%kernel.project_dir%/vendor'
+    app.storage.xml   : '%env(resolve:XML_STORAGE)%'
 
 services:
     # default configuration for services in *this* file

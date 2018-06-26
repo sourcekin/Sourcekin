@@ -29,7 +29,9 @@ return function(ContainerConfigurator $container){
 
         ->set(\SourcekinBundle\Command\MakeUserCommand::class)
         ->tag('console.command', ['command' => 'sourcekin:make:user'])
-        ;
 
 
+        ->set(\SourcekinBundle\Command\MakeDocumentCommand::class)
+        ->tag('console.command', ['command' => 'sourcekin:make-document'])
+;
 };
