@@ -47,6 +47,7 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         // $loader->load('user.php');
         $loader->load('service-buses.php');
         $loader->load('console-commands.php');
+        $loader->load('projectors.php');
         $loader->load('service-bus-plugins.php');
         $loader->load('controllers.php');
 

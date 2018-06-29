@@ -25,6 +25,7 @@ use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
 use Prooph\SnapshotStore\SnapshotStore;
 use Prooph\ServiceBus\EventBus;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
@@ -88,6 +89,16 @@ return function (ContainerConfigurator $container) {
         ->set(SnapshotStore::class, PdoSnapshotStore::class)
         // projection manager
         ->set(ProjectionManager::class, MySqlProjectionManager::class)
+
+        ->set(\Elasticsearch\ClientBuilder::class)
+        ->factory([\Elasticsearch\ClientBuilder::class, 'create'])
+        ->set(\Elasticsearch\Client::class)
+        ->factory([new Reference(\Elasticsearch\ClientBuilder::class), 'fromConfig'])
+        ->arg('$config', [
+            'hosts'  => new Parameter('app.elasticsearch.hosts'),
+            'logger' => new Reference('logger')
+        ])
+    ;
     ;
 
 

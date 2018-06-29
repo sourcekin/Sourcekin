@@ -25,10 +25,12 @@ return function (ContainerConfigurator $container) {
         // read models
         ->set(\Sourcekin\Content\Projection\DocumentReadModelXML::class)
         ->arg('$storageUrl', new Parameter('app.storage.xml'))
+        ->set(\Sourcekin\Content\Projection\DocumentModelElasticSearch::class)
+
 
         // projectors
-        ->set(\Sourcekin\Content\Projection\DocumentProjectionXML::class)
-        ->tag('sourcekin.projector', ['projection' => 'xml_documents', 'read_model' => \Sourcekin\Content\Projection\DocumentReadModelXML::class])
+        ->set(\Sourcekin\Content\Projection\DocumentProjection::class)
+        ->tag('sourcekin.projector', ['projection' => 'documents', 'read_model' => \Sourcekin\Content\Projection\DocumentModelElasticSearch::class])
 
     ;
 };

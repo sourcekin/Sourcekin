@@ -17,12 +17,6 @@ return function(ContainerConfigurator $container){
 
         ->bind('$dbalConnection', new Reference('database_connection'))
 
-        ->set(\SourcekinBundle\Command\RunProjectionCommand::class)
-        ->arg('$projections', new Reference('sourcekin.projection.projectors'))
-        ->arg('$readModels', new Reference('sourcekin.projection.read_models'))
-
-        ->tag('console.command', ['command' => 'sourcekin:projection:run'])
-
         ->set(\SourcekinBundle\Command\InstallCommand::class)
         ->arg('$streamNames', new Parameter('sourcekin.stream_names'))
         ->tag('console.command', ['command' => 'sourcekin:install'])
