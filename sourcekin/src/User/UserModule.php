@@ -35,7 +35,7 @@ class UserModule extends Module
     public static function projections()
     {
         return [
-            'user_projection' => [
+            'users' => [
                 'read_model' => UserReadModel::class,
                 'projection' => UserProjector::class
             ],

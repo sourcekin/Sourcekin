@@ -34,11 +34,14 @@ return function (ContainerConfigurator $container) {
 
     $container
         ->services()->defaults()->autowire()->autoconfigure()->private()
+
+        // pdo connection
         ->set('doctrine.pdo.connection', PDO::class)
         ->factory([new Reference('database_connection'), 'getWrappedConnection'])
         ->lazy()
         ->alias(PDO::class, 'doctrine.pdo.connection')
-        // translator
+
+        // Aggregate translator
         ->set(AggregateTranslator::class, \Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator::class)
 
         // factories
@@ -61,10 +64,6 @@ return function (ContainerConfigurator $container) {
         // event router
         ->set(EventRouter::class)
         ->alias('sourcekin.event_router', EventRouter::class)
-
-        // service-locators
-        ->set('sourcekin.projection.projectors', ServiceLocator::class)
-        ->set('sourcekin.projection.read_models', ServiceLocator::class)
 
         // event store
         ->set(MySqlEventStore::class)
@@ -110,15 +109,6 @@ return function (ContainerConfigurator $container) {
         // projection manager
         ->set(ProjectionManager::class, MySqlProjectionManager::class)
 
-        ->set(\Elasticsearch\ClientBuilder::class)
-        ->factory([\Elasticsearch\ClientBuilder::class, 'create'])
-        ->set(\Elasticsearch\Client::class)
-        ->factory([new Reference(\Elasticsearch\ClientBuilder::class), 'fromConfig'])
-        ->arg('$config', [
-            'hosts'  => new Parameter('app.elasticsearch.hosts'),
-            'logger' => new Reference('logger')
-        ])
-    ;
     ;
 
 

@@ -21,6 +21,13 @@ return function(ContainerConfigurator $container){
         ->arg('$streamNames', new Parameter('sourcekin.stream_names'))
         ->tag('console.command', ['command' => 'sourcekin:install'])
 
+
+        ->set(\SourcekinBundle\Command\ConfigureSupervisorCommand::class)
+        ->arg('$projections', new Parameter('sourcekin.projections'))
+        ->arg('$confDir', new Parameter('kernel.project_dir'))
+        ->tag('console.command', ['command' => 'sourcekin:configure:supervisor'])
+
+
         ->set(\SourcekinBundle\Command\MakeUserCommand::class)
         ->tag('console.command', ['command' => 'sourcekin:make:user'])
 
