@@ -6,7 +6,7 @@
  *
  */
 
-namespace SourcekinBundle\ServiceBus;
+namespace Sourcekin\Components\ServiceBus;
 
 class QueryBus extends \Prooph\ServiceBus\QueryBus implements PluginAwareMessageBus
 {

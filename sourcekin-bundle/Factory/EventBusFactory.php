@@ -9,7 +9,7 @@
 namespace SourcekinBundle\Factory;
 
 use Prooph\Common\Event\ActionEventEmitter;
-use SourcekinBundle\ServiceBus\EventBus;
+use Sourcekin\Components\ServiceBus\EventBus;
 
 class EventBusFactory
 {

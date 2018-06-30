@@ -17,16 +17,14 @@ use Prooph\EventStore\Pdo\MySqlEventStore;
 use Prooph\EventStore\Pdo\PersistenceStrategy;
 use Prooph\EventStore\Pdo\Projection\MySqlProjectionManager;
 use Prooph\EventStore\Projection\ProjectionManager;
-use Prooph\EventStoreBusBridge\EventPublisher;
-use SourcekinBundle\ServiceBus\CommandBus;
+use Prooph\ServiceBus\EventBus;
 use Prooph\ServiceBus\Plugin\Router\EventRouter;
 use Prooph\ServiceBus\Plugin\Router\SingleHandlerServiceLocatorRouter;
 use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
 use Prooph\SnapshotStore\SnapshotStore;
-use Prooph\ServiceBus\EventBus;
-use SourcekinBundle\ServiceBus\QueryBus;
+use Sourcekin\Components\ServiceBus\CommandBus;
+use Sourcekin\Components\ServiceBus\QueryBus;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
@@ -40,6 +38,12 @@ return function (ContainerConfigurator $container) {
         ->factory([new Reference('database_connection'), 'getWrappedConnection'])
         ->lazy()
         ->alias(PDO::class, 'doctrine.pdo.connection')
+
+
+        // service-locators
+        ->set('sourcekin.projection.projectors', ServiceLocator::class)
+        ->set('sourcekin.projection.read_models', ServiceLocator::class)
+
 
         // Aggregate translator
         ->set(AggregateTranslator::class, \Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator::class)
@@ -74,10 +78,10 @@ return function (ContainerConfigurator $container) {
         ->set(ActionEventEmitter::class, ProophActionEventEmitter::class)
 
         // event bus
-        ->set(\SourcekinBundle\ServiceBus\EventBus::class)->tag('sourcekin.service_bus')
+        ->set(\Sourcekin\Components\ServiceBus\EventBus::class)->tag('sourcekin.service_bus')
         ->factory([new Reference('sourcekin.event_bus.factory'), 'compose'])
         ->call('addPlugin', [new Reference('sourcekin.event_bus.logger')])
-        ->alias(EventBus::class, \SourcekinBundle\ServiceBus\EventBus::class)
+        ->alias(EventBus::class, \Sourcekin\Components\ServiceBus\EventBus::class)
         ->alias('sourcekin.event_bus', EventBus::class)
 
         ->set(ActionEventEmitterEventStore::class)

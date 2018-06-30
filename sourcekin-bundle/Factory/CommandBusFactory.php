@@ -9,8 +9,8 @@
 namespace SourcekinBundle\Factory;
 
 
-use SourcekinBundle\ServiceBus\CommandBus;
 use Prooph\ServiceBus\Plugin\Router\MessageBusRouterPlugin;
+use Sourcekin\Components\ServiceBus\CommandBus;
 
 class CommandBusFactory
 {

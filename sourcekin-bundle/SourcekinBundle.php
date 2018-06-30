@@ -24,9 +24,9 @@ class SourcekinBundle extends Bundle {
         $container->addCompilerPass(new CommandHandlersPass());
         $container->addCompilerPass(new EventHandlersPass());
         $container->addCompilerPass(new QueryHandlersPass());
-
         $container->addCompilerPass(new ProjectorsPass());
         $container->addCompilerPass(new BusPluginsPass());
+
 
     }
 

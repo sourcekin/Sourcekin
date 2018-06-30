@@ -6,7 +6,6 @@
 
 namespace Sourcekin;
 
-
 use Sourcekin\Content\ContentModule;
 use Sourcekin\User\UserModule;
 

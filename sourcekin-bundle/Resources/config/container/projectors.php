@@ -9,11 +9,6 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 return function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $container) {
     $container
         ->services()
-
-        // service-locators
-        ->set('sourcekin.projection.projectors', ServiceLocator::class)
-        ->set('sourcekin.projection.read_models', ServiceLocator::class)
-
         // elastic search builder
         ->set(ClientBuilder::class)
         ->factory([ClientBuilder::class, 'create'])
@@ -42,6 +37,12 @@ return function (\Symfony\Component\DependencyInjection\Loader\Configurator\Cont
         ->set(\SourcekinBundle\Command\Projections\ResetProjectionCommand::class)
         ->parent(\SourcekinBundle\Command\Projections\ProjectionCommand::class)
         ->tag('console.command', ['command' => 'sourcekin:projection:reset'])
+        ->autowire()
+
+        // stop projection
+        ->set(\SourcekinBundle\Command\Projections\StopProjectionCommand::class)
+        ->parent(\SourcekinBundle\Command\Projections\ProjectionCommand::class)
+        ->tag('console.command', ['command' => 'sourcekin:projection:stop'])
         ->autowire()
     ;
 };

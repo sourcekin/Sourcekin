@@ -8,20 +8,13 @@
 
 namespace SourcekinBundle\DependencyInjection;
 
-use Prooph\Bundle\ServiceBus\Plugin\PsrLoggerPlugin;
-use Prooph\EventSourcing\Aggregate\AggregateTranslator;
-use Prooph\EventStore\EventStore;
-use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
 use Sourcekin\Application;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension as SymfonyExtension;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
-class SourcekinExtension extends SymfonyExtension implements PrependExtensionInterface {
+class SourcekinExtension extends SymfonyExtension {
 
     const ALIAS = 'sourcekin';
 
@@ -60,72 +53,10 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
      * @param ContainerBuilder $container
      */
     public function prepend(ContainerBuilder $container) {
-        return;
-        $this->prependServiceBusConfig($container);
-        $this->prependEventStoreConfig($container);
-
     }
 
-    protected function hasBundle($container, $class) {
+    protected function hasBundle(ContainerBuilder $container, $class) {
         return in_array($class, $container->getParameter('kernel.bundles'), TRUE);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    protected function prependServiceBusConfig(ContainerBuilder $container): void {
-
-        $routes = $this->listEventRoutes(Application::modules());
-        $config = [
-            'command_buses' => [
-                'sourcekin_command_bus' => NULL,
-            ],
-            'event_buses'   => [
-                'sourcekin_event_bus' => [
-                    'router' => [
-                        'routes' => $routes,
-                    ],
-                ],
-            ],
-        ];
-
-        $container->prependExtensionConfig('prooph_service_bus', $config);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    protected function prependEventStoreConfig(ContainerBuilder $container): void {
-        $repositories = $projections = [];
-        foreach (Application::modules() as $name => $module) {
-            foreach ($module::repositories() as $name => $config) {
-                $config['aggregate_translator'] = AggregateTranslator::class;
-                $config['snapshot_store']       = PdoSnapshotStore::class;
-                $repositories[$name]            = $config;
-            }
-
-            foreach ($module::projections() as $name => $projection) {
-                $projections[$name] = $projection;
-            }
-        }
-
-        $config = [
-            'stores'              => [
-                'sourcekin_store' => [
-                    'event_store'  => EventStore::class,
-                    'repositories' => $repositories,
-                ],
-            ],
-            'projection_managers' => [
-                'sourcekin_projection_manager' => [
-                    'event_store' => EventStore::class,
-                    'connection'  => 'doctrine.pdo.connection',
-                    'projections' => $projections,
-                ],
-            ],
-        ];
-
-        $container->prependExtensionConfig('prooph_event_store', $config);
     }
 
     /**
@@ -170,5 +101,5 @@ class SourcekinExtension extends SymfonyExtension implements PrependExtensionInt
         }
 
         return $eventRoutes;
-}
+    }
 }

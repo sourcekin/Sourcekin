@@ -4,7 +4,7 @@
  * Created by {avanzu} on 20.06.18.
  */
 
-namespace SourcekinBundle\ServiceBus;
+namespace Sourcekin\Components\ServiceBus;
 
 
 class CommandBus extends \Prooph\ServiceBus\CommandBus implements PluginAwareMessageBus {
