@@ -15,6 +15,7 @@ return function(\Symfony\Component\DependencyInjection\Loader\Configurator\Conta
         ->set(\Prooph\Bundle\ServiceBus\MessageContext\ContextFactory::class)
 
         ->arg('$messageDataConverter', new Reference(\Prooph\Bundle\ServiceBus\MessageContext\DefaultMessageDataConverter::class))
+
         ->set('sourcekin.command_bus.logger', \Prooph\Bundle\ServiceBus\Plugin\PsrLoggerPlugin::class)
         ->arg('$logger', new Reference('logger', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE))
         ->tag('monolog.logger', ['channel' => 'command_bus'])
@@ -22,5 +23,9 @@ return function(\Symfony\Component\DependencyInjection\Loader\Configurator\Conta
         ->set('sourcekin.event_bus.logger', \Prooph\Bundle\ServiceBus\Plugin\PsrLoggerPlugin::class)
         ->arg('$logger', new Reference('logger', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE))
         ->tag('monolog.logger', ['channel' => 'event_bus'])
+
+        ->set('sourcekin.query_bus.logger', \Prooph\Bundle\ServiceBus\Plugin\PsrLoggerPlugin::class)
+        ->arg('$logger', new Reference('logger', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE))
+        ->tag('monolog.logger', ['channel' => 'query_bus'])
     ;
 };

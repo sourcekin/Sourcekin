@@ -4,10 +4,11 @@
  * Created by {avanzu} on 19.06.18.
  */
 
-namespace Sourcekin\User\Model\Command;
+namespace Sourcekin\User\Model\Handler\Command;
 
 
 use Prooph\ServiceBus\QueryBus;
+use Sourcekin\User\Model\Command\SendRegistrationConfirmation;
 use Sourcekin\User\Projection\UserFinder;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 

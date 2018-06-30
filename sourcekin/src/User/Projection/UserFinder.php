@@ -39,5 +39,9 @@ class UserFinder {
         return $user;
     }
 
+    public function findAll()
+    {
+        return $this->connection->createQueryBuilder()->select()->from(UserReadModel::TABLE_NAME)->execute()->fetchAll();
+    }
 
 }

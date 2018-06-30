@@ -9,19 +9,13 @@
 namespace SourcekinBundle\Factory;
 
 use Prooph\Common\Event\ActionEventEmitter;
-use Prooph\EventStore\ActionEventEmitterEventStore;
-use Prooph\EventStoreBusBridge\EventPublisher;
-use Prooph\ServiceBus\EventBus;
-use Prooph\ServiceBus\Plugin\Router\EventRouter;
+use SourcekinBundle\ServiceBus\EventBus;
 
 class EventBusFactory
 {
-    public function compose(ActionEventEmitter $emitter, ActionEventEmitterEventStore $eventStore, EventRouter $router)
+    public function compose(ActionEventEmitter $emitter)
     {
-        $eventBus  = new EventBus($emitter);
-        $publisher = new EventPublisher($eventBus);
-        $publisher->attachToEventStore($eventStore);
-        $router->attachToMessageBus($eventBus);
+        $eventBus = new EventBus($emitter);
 
         return $eventBus;
     }

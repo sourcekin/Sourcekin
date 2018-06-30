@@ -19,6 +19,8 @@ class ModuleMaker
         '/Infrastructure',
         '/Model/Command',
         '/Model/Event',
+        '/Model/Query',
+        '/Model/Handler',
         '/Projection',
         '/ProcessManager',
     ];

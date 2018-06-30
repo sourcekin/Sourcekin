@@ -16,12 +16,12 @@ return function (ContainerConfigurator $container) {
         // repository
         ->set(\Sourcekin\User\Model\UserRepository::class, \Sourcekin\User\Infrastructure\UserRepository::class)
 
-        // handlers
-        ->set(\Sourcekin\User\Model\Command\ChangeEmailHandler::class)
+        // command handlers
+        ->set(\Sourcekin\User\Model\Handler\Command\ChangeEmailHandler::class)
         ->tag('sourcekin.command_handler')
-        ->set(\Sourcekin\User\Model\Command\RegisterUserHandler::class)
+        ->set(\Sourcekin\User\Model\Handler\Command\RegisterUserHandler::class)
         ->tag('sourcekin.command_handler')
-        ->set(\Sourcekin\User\Model\Command\SendRegistrationConfirmationHandler::class)
+        ->set(\Sourcekin\User\Model\Handler\Command\SendRegistrationConfirmationHandler::class)
         ->tag('sourcekin.command_handler')
 
         // projectors
@@ -32,6 +32,12 @@ return function (ContainerConfigurator $container) {
 
         // finder
         ->set(\Sourcekin\User\Projection\UserFinder::class)
+
+        // query handler
+        ->set(\Sourcekin\User\Model\Handler\Query\GetUserByIdHandler::class)
+        ->tag('sourcekin.query_handler')
+        ->set(\Sourcekin\User\Model\Handler\Query\GetAllUsersHandler::class)
+        ->tag('sourcekin.query_handler')
 
         // read models
         ->set(\Sourcekin\User\Projection\UserReadModel::class)

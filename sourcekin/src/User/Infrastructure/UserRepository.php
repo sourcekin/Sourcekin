@@ -22,6 +22,9 @@ class UserRepository extends AggregateRepository implements GenericUserRepositor
 
     /**
      * UserRepository constructor.
+     *
+     * @param EventStore    $eventStore
+     * @param SnapshotStore $snapshotStore
      */
     public function __construct(EventStore $eventStore, SnapshotStore $snapshotStore) {
         parent::__construct(

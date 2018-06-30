@@ -39,14 +39,15 @@ class InstallCommand extends Command
      * InstallCommand constructor.
      *
      * @param Connection $dbalConnection
-     * @param array      $streams
+     * @param EventStore $eventStore
+     * @param array      $streamNames
      */
     public function __construct(Connection $dbalConnection, EventStore $eventStore, array $streamNames)
     {
         $this->dbalConnection = $dbalConnection;
         $this->streams        = $streamNames;
-        parent::__construct();
         $this->eventStore = $eventStore;
+        parent::__construct();
     }
 
 
@@ -60,14 +61,23 @@ class InstallCommand extends Command
         $io            = new SymfonyStyle($input, $output);
         $currentSchema = $this->dbalConnection->getSchemaManager()->createSchema();
         $platform      = $this->dbalConnection->getDatabasePlatform();
+        $queries       = 0;
         foreach ($currentSchema->getMigrateToSql(SchemaFactory::makeInstallationSchema(), $platform) as $query) {
             $this->dbalConnection->exec($query);
-            $io->writeln($query);
+            $queries++;
+            // $io->writeln($query);
         };
+        $io->writeln(sprintf('Executed <info>%d</info> queries', ($queries)));
 
         foreach ($this->streams as $stream) {
-            if( $this->eventStore->hasStream($streamName = new StreamName($stream))) continue;
-            $this->eventStore->create(new Stream($streamName, new \ArrayIterator([])));
+            $io->writeln(sprintf('Checking stream <info>%s</info>',$stream));
+
+            if( $this->eventStore->hasStream($streamName = new StreamName($stream))) {
+                $this->eventStore->appendTo($streamName, new \ArrayIterator([]));
+                continue;
+            }
+
+            $this->eventStore->create(new Stream(new StreamName($stream), new \ArrayIterator([])));
             $io->success($stream);
         }
 

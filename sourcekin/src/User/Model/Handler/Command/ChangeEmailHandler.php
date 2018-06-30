@@ -4,9 +4,10 @@
  * Created by {avanzu} on 17.06.18.
  */
 
-namespace Sourcekin\User\Model\Command;
+namespace Sourcekin\User\Model\Handler\Command;
 
 
+use Sourcekin\User\Model\Command\ChangeEmail;
 use Sourcekin\User\Model\UserRepository;
 
 class ChangeEmailHandler {

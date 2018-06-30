@@ -12,6 +12,7 @@ use Prooph\EventStore\ActionEventEmitterEventStore;
 use Prooph\EventStore\EventStore;
 use Prooph\EventStoreBusBridge\EventPublisher;
 use Prooph\ServiceBus\EventBus;
+use Prooph\ServiceBus\Plugin\Plugin;
 use Prooph\ServiceBus\Plugin\Router\MessageBusRouterPlugin;
 
 class EventStoreFactory {
@@ -23,8 +24,9 @@ class EventStoreFactory {
     ) {
         $emitterStore = new ActionEventEmitterEventStore($eventStore, $emitter);
         $publisher    = new EventPublisher($eventBus);
-        $publisher->attachToEventStore($emitterStore);
+        /** @var $router MessageBusRouterPlugin|Plugin */
         $router->attachToMessageBus($eventBus);
+        $publisher->attachToEventStore($emitterStore);
 
         return $emitterStore;
 
