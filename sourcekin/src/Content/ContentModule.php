@@ -2,11 +2,11 @@
 namespace Sourcekin\Content;
 
 use Sourcekin\Content\Model\Command\AddContent;
-use Sourcekin\Content\Model\Command\AddContentHandler;
+use Sourcekin\Content\Model\Handler\Command\AddContentHandler;
 use Sourcekin\Content\Model\Command\AddField;
-use Sourcekin\Content\Model\Command\AddFieldHandler;
+use Sourcekin\Content\Model\Handler\Command\AddFieldHandler;
 use Sourcekin\Content\Model\Command\InitializeDocument;
-use Sourcekin\Content\Model\Command\InitializeDocumentHandler;
+use Sourcekin\Content\Model\Handler\Command\InitializeDocumentHandler;
 use Sourcekin\Module;
 
 class ContentModule extends Module

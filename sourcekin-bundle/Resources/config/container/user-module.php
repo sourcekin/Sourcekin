@@ -24,15 +24,6 @@ return function (ContainerConfigurator $container) {
         ->tag('sourcekin.query_handler')
 
 
-        // command handlers
-            /*
-        ->set(\Sourcekin\User\Model\Handler\Command\ChangeEmailHandler::class)
-        ->tag('sourcekin.command_handler')
-        ->set(\Sourcekin\User\Model\Handler\Command\RegisterUserHandler::class)
-        ->tag('sourcekin.command_handler')
-        ->set(\Sourcekin\User\Model\Handler\Command\SendRegistrationConfirmationHandler::class)
-        ->tag('sourcekin.command_handler')
-        */
         // projectors
         ->set(\Sourcekin\User\Projection\UserProjector::class)
         ->tag('sourcekin.projector', ['projection' => 'users', 'read_model' => \Sourcekin\User\Projection\UserReadModel::class])
@@ -42,20 +33,12 @@ return function (ContainerConfigurator $container) {
         // finder
         ->set(\Sourcekin\User\Projection\UserFinder::class)
 
-        // query handler
-            /*
-        ->set(\Sourcekin\User\Model\Handler\Query\GetUserByIdHandler::class)
-        ->tag('sourcekin.query_handler')
-        ->set(\Sourcekin\User\Model\Handler\Query\GetAllUsersHandler::class)
-        ->tag('sourcekin.query_handler')
-        */
         // read models
         ->set(\Sourcekin\User\Projection\UserReadModel::class)
 
         ->set(\Sourcekin\User\Projection\UserSnapshotModel::class, \Prooph\Snapshotter\SnapshotReadModel::class)
         ->arg('$aggregateRepository', new Reference(UserRepository::class))
         ->arg('$aggregateTypes', [\Sourcekin\User\Model\User::class])
-
 
         ->set(\Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager::class)
         ->tag('sourcekin.event_handler')

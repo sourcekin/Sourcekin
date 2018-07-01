@@ -6,8 +6,9 @@
  *
  */
 
-namespace Sourcekin\Content\Model\Command;
+namespace Sourcekin\Content\Model\Handler\Command;
 
+use Sourcekin\Content\Model\Command\InitializeDocument;
 use Sourcekin\Content\Model\Document;
 use Sourcekin\Content\Model\DocumentRepository;
 

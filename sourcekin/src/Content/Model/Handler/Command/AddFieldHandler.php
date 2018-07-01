@@ -1,32 +1,34 @@
 <?php
 /**
  * This file is part of the "sourcekin" Project.
- * Created by {avanzu} on 21.06.18.
+ *
+ * Created by avanzu on 26.06.18
+ *
  */
 
-namespace Sourcekin\Content\Model\Command;
+namespace Sourcekin\Content\Model\Handler\Command;
 
-
-use Sourcekin\Content\Model\Document;
+use Sourcekin\Content\Model\Command\AddField;
 use Sourcekin\Content\Model\DocumentRepository;
 
-class AddContentHandler {
+class AddFieldHandler
+{
     /**
      * @var DocumentRepository
      */
     private $repository;
 
     /**
-     * AddContentHandler constructor.
+     * AddFieldHandler constructor.
      *
      * @param DocumentRepository $repository
      */
     public function __construct(DocumentRepository $repository) { $this->repository = $repository; }
 
-    public function __invoke(AddContent $command) {
-        /** @var Document $document */
+    public function __invoke(AddField $command)
+    {
         $document = $this->repository->get($command->documentId());
-        $document->addContent($command->identifier(), $command->type(), $command->index(), $command->parent());
+        $document->addField($command->contentId(), $command->name(), $command->value(), $command->type());
         $this->repository->save($document);
     }
 
