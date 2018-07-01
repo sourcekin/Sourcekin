@@ -22,11 +22,12 @@ class QueryHandlersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+
         $definition = $container->findDefinition('sourcekin.query_handlers');
-        $handlers   = [];
+        $handlers   = $definition->getArguments()[0] ?? [];
         foreach ($container->findTaggedServiceIds('sourcekin.query_handler') as $id => $tags) {
-            $classKey = ContainerHelper::getHandledCommand($id, $container);
-            $handlers[$classKey] = new Reference($id);
+            $handlers[$id] = new Reference($id);
+
         }
 
         $definition->setArgument(0, $handlers);

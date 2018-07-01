@@ -6,21 +6,37 @@
 
 namespace Sourcekin\Components\DependencyInjection;
 
+use Prooph\EventStore\EventStore;
+use Prooph\ServiceBus\Plugin\Plugin;
 
-use Prooph\EventSourcing\Aggregate\AggregateTranslator;
-
-interface Dependencies {
+interface Dependencies
+{
 
     /**
      * @return \PDO
      */
     public function pdo();
 
-    /**
-     * @return AggregateTranslator
-     */
-    public function aggregateTranslator();
 
+    /**
+     * @return EventStore
+     */
+    public function store();
+
+    /**
+     * @return Plugin[]
+     */
+    public function eventBusPlugins();
+
+    /**
+     * @return Plugin[]
+     */
+    public function commandBusPlugins();
+
+    /**
+     * @return Plugin[]
+     */
+    public function queryBusPlugins();
 
 
 }

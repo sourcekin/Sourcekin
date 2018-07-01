@@ -7,7 +7,7 @@
 namespace Sourcekin\User\ProcessManager;
 
 
-use Prooph\ServiceBus\CommandBus;
+use Sourcekin\Components\ServiceBus\CommandBus;
 use Sourcekin\User\Model\Command\SendRegistrationConfirmation;
 use Sourcekin\User\Model\Event\UserRegistered;
 

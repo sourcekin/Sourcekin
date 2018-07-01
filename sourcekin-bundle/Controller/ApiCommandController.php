@@ -10,7 +10,7 @@ namespace SourcekinBundle\Controller;
 
 use Exception;
 use Prooph\Common\Messaging\MessageFactory;
-use Prooph\ServiceBus\CommandBus;
+use Sourcekin\Components\ServiceBus\CommandBus;
 use Prooph\ServiceBus\Exception\CommandDispatchException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

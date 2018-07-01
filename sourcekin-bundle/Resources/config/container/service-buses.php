@@ -17,13 +17,15 @@ use Prooph\EventStore\Pdo\MySqlEventStore;
 use Prooph\EventStore\Pdo\PersistenceStrategy;
 use Prooph\EventStore\Pdo\Projection\MySqlProjectionManager;
 use Prooph\EventStore\Projection\ProjectionManager;
-use Prooph\ServiceBus\EventBus;
 use Prooph\ServiceBus\Plugin\Router\EventRouter;
 use Prooph\ServiceBus\Plugin\Router\SingleHandlerServiceLocatorRouter;
 use Prooph\SnapshotStore\Pdo\PdoSnapshotStore;
 use Prooph\SnapshotStore\SnapshotStore;
+use Sourcekin\Application;
+use Sourcekin\Components\ServiceBus\EventBus;
 use Sourcekin\Components\ServiceBus\CommandBus;
 use Sourcekin\Components\ServiceBus\QueryBus;
+use SourcekinBundle\DependencyInjection\Dependencies;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
@@ -33,80 +35,43 @@ return function (ContainerConfigurator $container) {
     $container
         ->services()->defaults()->autowire()->autoconfigure()->private()
 
-        // pdo connection
-        ->set('doctrine.pdo.connection', PDO::class)
-        ->factory([new Reference('database_connection'), 'getWrappedConnection'])
-        ->lazy()
-        ->alias(PDO::class, 'doctrine.pdo.connection')
-
-
         // service-locators
         ->set('sourcekin.projection.projectors', ServiceLocator::class)
         ->set('sourcekin.projection.read_models', ServiceLocator::class)
 
-
         // Aggregate translator
         ->set(AggregateTranslator::class, \Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator::class)
 
-        // factories
-        ->set('sourcekin.command_bus.factory', \SourcekinBundle\Factory\CommandBusFactory::class)
-        ->set('sourcekin.event_bus.factory', \SourcekinBundle\Factory\EventBusFactory::class)
-        ->set('sourcekin.event_store.factory', \SourcekinBundle\Factory\EventStoreFactory::class)
-
-        // command router
+        // command locator
         ->set('sourcekin.command_handlers', ServiceLocator::class)
-        ->set('sourcekin.command_bus.router.single_handler_locator', SingleHandlerServiceLocatorRouter::class)
-        ->arg('$container', new Reference('sourcekin.command_handlers'))
-        ->alias('sourcekin.command_router', 'sourcekin.command_bus.router.single_handler_locator')
+        ->set('sourcekin.command_locator', \Prooph\ServiceBus\Plugin\ServiceLocatorPlugin::class)
+        ->arg('$serviceLocator', new Reference('sourcekin.command_handlers'))
+        ->tag('sourcekin.plugin', ['type' => Dependencies::TYPE_COMMAND_BUS])
 
-        // query router
+        // query locator
         ->set('sourcekin.query_handlers', ServiceLocator::class)
-        ->set('sourcekin.query_bus.router.single_handler_locator', SingleHandlerServiceLocatorRouter::class)
-        ->arg('$container', new Reference('sourcekin.query_handlers'))
-        ->alias('sourcekin.query_router', 'sourcekin.query_bus.router.single_handler_locator')
+        ->set('sourcekin.query_locator', \Prooph\ServiceBus\Plugin\ServiceLocatorPlugin::class)
+        ->arg('$serviceLocator', new Reference('sourcekin.query_handlers'))
+        ->tag('sourcekin.plugin', ['type' => Dependencies::TYPE_QUERY_BUS])
 
-        // event router
-        ->set(EventRouter::class)
-        ->alias('sourcekin.event_router', EventRouter::class)
+        // event locator
+        ->set('sourcekin.event_handlers', ServiceLocator::class)
+        ->set('sourcekin.event_locator', \Prooph\ServiceBus\Plugin\ServiceLocatorPlugin::class)
+        ->arg('$serviceLocator', new Reference('sourcekin.event_handlers'))
+        ->tag('sourcekin.plugin', ['type' => Dependencies::TYPE_EVENT_BUS])
 
-        // event store
-        ->set(MySqlEventStore::class)
+
+        // inner event store
         ->set(MessageFactory::class, FQCNMessageFactory::class)
         ->set(PersistenceStrategy::class, PersistenceStrategy\MySqlSingleStreamStrategy::class)
+        ->set(MySqlEventStore::class)
+        ->tag('sourcekin.dependency', ['alias' => Dependencies::EVENT_STORE])
 
-        // event emitter
-        ->set(ActionEventEmitter::class, ProophActionEventEmitter::class)
-
-        // event bus
-        ->set(\Sourcekin\Components\ServiceBus\EventBus::class)->tag('sourcekin.service_bus')
-        ->factory([new Reference('sourcekin.event_bus.factory'), 'compose'])
-        ->call('addPlugin', [new Reference('sourcekin.event_bus.logger')])
-        ->alias(EventBus::class, \Sourcekin\Components\ServiceBus\EventBus::class)
-        ->alias('sourcekin.event_bus', EventBus::class)
-
-        ->set(ActionEventEmitterEventStore::class)
-        ->factory([new Reference('sourcekin.event_store.factory'), 'decorate'])
-        ->arg('$eventStore', new Reference(MySqlEventStore::class))
-        ->arg('$router', new Reference('sourcekin.event_router'))
-        ->alias(EventStore::class, ActionEventEmitterEventStore::class)
-
-
-        // command bus
-        ->set(CommandBus::class)->tag('sourcekin.service_bus')
-        ->factory([new Reference('sourcekin.command_bus.factory'), 'compose'])
-        ->arg('$router', new Reference('sourcekin.command_router'))
-        ->call('addPlugin', [new Reference('sourcekin.command_bus.logger')])
-
-        ->alias(\Prooph\ServiceBus\CommandBus::class, new Reference(CommandBus::class))
-        ->alias('sourcekin.command_bus', new Reference(CommandBus::class))
-
-
-        // query bus
-        ->set(QueryBus::class)->tag('sourcekin.service_bus')
-        ->call('addPlugin', [new Reference('sourcekin.query_router')])
-        ->call('addPlugin', [new Reference('sourcekin.query_bus.logger')])
-        ->alias(\Prooph\ServiceBus\QueryBus::class, QueryBus::class)
-        ->alias('sourcekin.query_bus', QueryBus::class)
+        
+        ->set(EventStore::class)->factory([new Reference(Application::class), 'getEventStore'])
+        ->set(EventBus::class)->factory([new Reference(Application::class), 'getEventBus'])
+        ->set(CommandBus::class)->factory([new Reference(Application::class), 'getCommandBus'])
+        ->set(QueryBus::class)->factory([new Reference(Application::class), 'getQueryBus'])
 
         // snapshot
         ->set(SnapshotStore::class, PdoSnapshotStore::class)

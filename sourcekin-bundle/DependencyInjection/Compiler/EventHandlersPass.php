@@ -8,6 +8,7 @@
 
 namespace SourcekinBundle\DependencyInjection\Compiler;
 
+use Prooph\ServiceBus\Plugin\Router\EventRouter;
 use SourcekinBundle\DependencyInjection\ContainerHelper;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,14 +23,13 @@ class EventHandlersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $router   = $container->findDefinition('sourcekin.event_router');
-        $eventMap = $router->getArguments()[0]?? [];
+        $definition = $container->findDefinition('sourcekin.event_handlers');
+        $handlers   = $definition->getArguments()[0] ?? [];
         foreach ($container->findTaggedServiceIds('sourcekin.event_handler') as $id => $tags) {
-            $container->findDefinition($id)->setLazy(true);
-            $event = ContainerHelper::getHandledCommand($id, $container);
-            isset($eventMap[$event]) or $eventMap[$event] = [];
-            $eventMap[$event][] = new Reference($id);
+            $handlers[$id] = new Reference($id);
         }
-        $router->setArgument(0, $eventMap);
+
+        $definition->setArgument(0, $handlers);
+
     }
 }

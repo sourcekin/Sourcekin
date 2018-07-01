@@ -6,6 +6,7 @@
  *
  */
 
+use Sourcekin\Application as App;
 use Sourcekin\User\Model\UserRepository;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,14 +17,22 @@ return function (ContainerConfigurator $container) {
         // repository
         ->set(\Sourcekin\User\Model\UserRepository::class, \Sourcekin\User\Infrastructure\UserRepository::class)
 
+        ->load(App::ns('Sourcekin.User.Model.Handler.Command.'), App::path('/User/Model/Handler/Command'))
+        ->tag('sourcekin.command_handler')
+
+        ->load(App::ns('Sourcekin.User.Model.Handler.Query.'), App::path('/User/Model/Handler/Query'))
+        ->tag('sourcekin.query_handler')
+
+
         // command handlers
+            /*
         ->set(\Sourcekin\User\Model\Handler\Command\ChangeEmailHandler::class)
         ->tag('sourcekin.command_handler')
         ->set(\Sourcekin\User\Model\Handler\Command\RegisterUserHandler::class)
         ->tag('sourcekin.command_handler')
         ->set(\Sourcekin\User\Model\Handler\Command\SendRegistrationConfirmationHandler::class)
         ->tag('sourcekin.command_handler')
-
+        */
         // projectors
         ->set(\Sourcekin\User\Projection\UserProjector::class)
         ->tag('sourcekin.projector', ['projection' => 'users', 'read_model' => \Sourcekin\User\Projection\UserReadModel::class])
@@ -34,11 +43,12 @@ return function (ContainerConfigurator $container) {
         ->set(\Sourcekin\User\Projection\UserFinder::class)
 
         // query handler
+            /*
         ->set(\Sourcekin\User\Model\Handler\Query\GetUserByIdHandler::class)
         ->tag('sourcekin.query_handler')
         ->set(\Sourcekin\User\Model\Handler\Query\GetAllUsersHandler::class)
         ->tag('sourcekin.query_handler')
-
+        */
         // read models
         ->set(\Sourcekin\User\Projection\UserReadModel::class)
 
@@ -46,7 +56,9 @@ return function (ContainerConfigurator $container) {
         ->arg('$aggregateRepository', new Reference(UserRepository::class))
         ->arg('$aggregateTypes', [\Sourcekin\User\Model\User::class])
 
+
         ->set(\Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager::class)
         ->tag('sourcekin.event_handler')
+
         ;
 };

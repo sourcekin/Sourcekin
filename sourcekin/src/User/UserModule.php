@@ -8,9 +8,22 @@
 
 namespace Sourcekin\User;
 
+use Prooph\ServiceBus\Plugin\Router\CommandRouter;
+use Prooph\ServiceBus\Plugin\Router\EventRouter;
+use Prooph\ServiceBus\Plugin\Router\QueryRouter;
 use Sourcekin\Module;
 use Sourcekin\User\Infrastructure\UserRepository;
+use Sourcekin\User\Model\Command\ChangeEmail;
+use Sourcekin\User\Model\Command\RegisterUser;
+use Sourcekin\User\Model\Command\SendRegistrationConfirmation;
 use Sourcekin\User\Model\Event\UserRegistered;
+use Sourcekin\User\Model\Handler\Command\ChangeEmailHandler;
+use Sourcekin\User\Model\Handler\Command\RegisterUserHandler;
+use Sourcekin\User\Model\Handler\Command\SendRegistrationConfirmationHandler;
+use Sourcekin\User\Model\Handler\Query\GetAllUsersHandler;
+use Sourcekin\User\Model\Handler\Query\GetUserByIdHandler;
+use Sourcekin\User\Model\Query\GetAllUsers;
+use Sourcekin\User\Model\Query\GetUserById;
 use Sourcekin\User\Model\User;
 use Sourcekin\User\ProcessManager\SendRegistrationConfirmationProcessManager;
 use Sourcekin\User\Projection\UserProjector;
@@ -51,6 +64,23 @@ class UserModule extends Module
             UserRegistered::class => [
                 SendRegistrationConfirmationProcessManager::class
             ]
+        ];
+    }
+
+    public static function commandRoutes()
+    {
+        return [
+            RegisterUser::class                 => RegisterUserHandler::class,
+            ChangeEmail::class                  => ChangeEmailHandler::class,
+            SendRegistrationConfirmation::class => SendRegistrationConfirmationHandler::class,
+        ];
+    }
+
+    public static function queryRoutes()
+    {
+        return [
+            GetUserById::class => GetUserByIdHandler::class,
+            GetAllUsers::class => GetAllUsersHandler::class
         ];
     }
 

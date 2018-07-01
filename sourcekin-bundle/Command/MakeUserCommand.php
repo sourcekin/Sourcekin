@@ -9,7 +9,7 @@
 namespace SourcekinBundle\Command;
 
 use Prooph\Common\Messaging\MessageFactory;
-use Prooph\ServiceBus\CommandBus;
+use Sourcekin\Components\ServiceBus\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Sourcekin\User\Model\Command\ChangeEmail;
 use Sourcekin\User\Model\Command\RegisterUser;
