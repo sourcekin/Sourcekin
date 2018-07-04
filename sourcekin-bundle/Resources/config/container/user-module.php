@@ -23,7 +23,6 @@ return function (ContainerConfigurator $container) {
         ->load(App::ns('Sourcekin.User.Model.Handler.Query.'), App::path('/User/Model/Handler/Query'))
         ->tag('sourcekin.query_handler')
 
-
         // projectors
         ->set(\Sourcekin\User\Projection\UserProjector::class)
         ->tag('sourcekin.projector', ['projection' => 'users', 'read_model' => \Sourcekin\User\Projection\UserReadModel::class])
@@ -44,4 +43,5 @@ return function (ContainerConfigurator $container) {
         ->tag('sourcekin.event_handler')
 
         ;
+
 };

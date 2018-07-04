@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "06602e4bcbe9879aa10137986d7621f0",
+    "content-hash": "66cb7b53c59ddb22114ca8f3d9a1cc0f",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -6863,6 +6863,52 @@
             "time": "2018-06-21T13:13:39+00:00"
         },
         {
+            "name": "prolic/fpp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/prolic/fpp.git",
+                "reference": "a47e4bee9c44ededf7c4d33882601f9f27a60c0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/prolic/fpp/zipball/a47e4bee9c44ededf7c4d33882601f9f27a60c0f",
+                "reference": "a47e4bee9c44ededf7c4d33882601f9f27a60c0f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "malukenho/docheader": "^0.1.4",
+                "mikey179/vfsstream": "^1.6.5",
+                "phpunit/phpunit": "^7.0",
+                "prooph/php-cs-fixer-config": "^0.2.2",
+                "satooshi/php-coveralls": "^2.0"
+            },
+            "bin": [
+                "bin/fpp"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fpp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sascha-Oliver Prolic",
+                    "email": "saschaprolic@googlemail.com"
+                }
+            ],
+            "description": "Functional PHP Preprocessor",
+            "time": "2018-06-28T10:36:32+00:00"
+        },
+        {
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.1",
             "source": {
@@ -8279,7 +8325,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "symfony/lts": 20
+        "symfony/lts": 20,
+        "prolic/fpp": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

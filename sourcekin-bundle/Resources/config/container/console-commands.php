@@ -34,5 +34,9 @@ return function(ContainerConfigurator $container){
 
         ->set(\SourcekinBundle\Command\MakeDocumentCommand::class)
         ->tag('console.command', ['command' => 'sourcekin:make-document'])
+
+        ->set(\SourcekinBundle\Command\FindDocumentCommand::class)
+        ->tag('console.command', ['command' => 'sourcekin:find:document'])
+
 ;
 };

@@ -10,7 +10,7 @@ namespace Sourcekin\Content\Model;
 
 use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\Uuid;
-use Sourcekin\Components\ApplyEventCapabilities;
+use Sourcekin\Components\EventSourcing\ApplyEventCapabilities;
 use Sourcekin\Content\Model\Event\ContentWasAdded;
 use Sourcekin\Content\Model\Event\DocumentWasInitialized;
 use Sourcekin\Content\Model\Event\FieldWasAdded;
@@ -20,7 +20,7 @@ use Sourcekin\Content\Model\Event\FieldWasAdded;
  */
 class Document extends AggregateRoot
 {
-    use ApplyEventCapabilities;
+    use  ApplyEventCapabilities;
 
     /**
      * @var

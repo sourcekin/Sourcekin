@@ -125,7 +125,6 @@ class DocumentModelElasticSearch extends AbstractReadModel {
     protected function deleteIndex(): bool {
         $indexParams = [
             'index'   => static::INDEX,
-            'timeout' => '5s',
         ];
 
         try {
@@ -136,7 +135,6 @@ class DocumentModelElasticSearch extends AbstractReadModel {
         }
         $response = $this->client->cluster()->health(
             [
-                'index'           => static::INDEX,
                 'wait_for_status' => 'yellow',
                 'timeout'         => '10s',
             ]

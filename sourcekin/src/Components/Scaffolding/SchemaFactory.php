@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sourcekin\Components;
+namespace Sourcekin\Components\Scaffolding;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;

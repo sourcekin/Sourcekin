@@ -4,7 +4,7 @@
  * Created by {avanzu} on 17.06.18.
  */
 
-namespace Sourcekin\Components;
+namespace Sourcekin\Components\EventSourcing;
 
 
 use Prooph\EventSourcing\AggregateChanged;

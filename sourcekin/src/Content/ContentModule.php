@@ -7,6 +7,8 @@ use Sourcekin\Content\Model\Command\AddField;
 use Sourcekin\Content\Model\Handler\Command\AddFieldHandler;
 use Sourcekin\Content\Model\Command\InitializeDocument;
 use Sourcekin\Content\Model\Handler\Command\InitializeDocumentHandler;
+use Sourcekin\Content\Model\Handler\Query\GetDocumentByIdHandler;
+use Sourcekin\Content\Model\Query\GetDocumentById;
 use Sourcekin\Module;
 
 class ContentModule extends Module
@@ -50,6 +52,8 @@ class ContentModule extends Module
 
     static public function queryRoutes()
     {
-        return [];
+        return [
+            GetDocumentById::class => GetDocumentByIdHandler::class
+        ];
     }
 }

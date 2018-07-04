@@ -25,6 +25,8 @@ class DocumentFinder {
     }
 
     public function findById($id) {
-        return $this->client->getSource(['index' => DocumentModelElasticSearch::INDEX, 'type' => 'document', 'id' => $id]);
+        $source =  $this->client->getSource(['index' => DocumentModelElasticSearch::INDEX, 'type' => 'document', 'id' => $id]);
+
+        return $source;
     }
 }

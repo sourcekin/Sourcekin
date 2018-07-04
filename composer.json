@@ -36,6 +36,7 @@
         "laravel/homestead": "^7.7",
         "nette/php-generator": "^3.1",
         "phpunit/phpunit": "^7.2",
+        "prolic/fpp": "dev-master",
         "symfony/debug-pack": "*",
         "symfony/dotenv": "^4.1",
         "symfony/maker-bundle": "^1.0",

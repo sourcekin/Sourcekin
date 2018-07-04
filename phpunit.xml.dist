@@ -21,8 +21,8 @@
         <testsuite name="Project Test Suite">
             <directory>tests/</directory>
         </testsuite>
-        <testsuite name="Sourcekin Unit">
-            <directory>./sourcekin/tests/Unit</directory>
+        <testsuite name="Sourcekin Module Unit">
+            <directory>./sourcekin/*/tests/Unit</directory>
         </testsuite>
     </testsuites>
 

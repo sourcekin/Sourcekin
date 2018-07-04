@@ -204,7 +204,6 @@ class Application
 
     protected function initializeModules()
     {
-
         foreach (static::modules() as $moduleClass) {
             /** @var Module $module */
             $module = new $moduleClass();

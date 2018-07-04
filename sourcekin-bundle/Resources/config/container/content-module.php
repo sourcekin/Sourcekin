@@ -19,6 +19,9 @@ return function (ContainerConfigurator $container) {
         ->load(App::ns('Sourcekin.Content.Model.Handler.Command.'), App::path('/Content/Model/Handler/Command'))
         ->tag('sourcekin.command_handler')
 
+        ->load(App::ns('Sourcekin.Content.Model.Handler.Query.'), App::path('/Content/Model/Handler/Query'))
+        ->tag('sourcekin.query_handler')
+
         // read models
         ->set(\Sourcekin\Content\Projection\DocumentReadModelXML::class)
         ->arg('$storageUrl', new Parameter('app.storage.xml'))
@@ -28,6 +31,8 @@ return function (ContainerConfigurator $container) {
         // projectors
         ->set(\Sourcekin\Content\Projection\DocumentProjection::class)
         ->tag('sourcekin.projector', ['projection' => 'documents', 'read_model' => \Sourcekin\Content\Projection\DocumentModelElasticSearch::class])
+
+        ->set(\Sourcekin\Content\Projection\DocumentFinder::class)
 
     ;
 };

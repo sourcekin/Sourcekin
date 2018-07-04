@@ -9,10 +9,9 @@ namespace Sourcekin\User\Model;
 
 use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\Uuid;
-use Sourcekin\Components\ApplyEventCapabilities;
+use Sourcekin\Components\EventSourcing\ApplyEventCapabilities;
 use Sourcekin\User\Model\Event\EmailChanged;
 use Sourcekin\User\Model\Event\UserRegistered;
-
 class User extends AggregateRoot {
 
     use ApplyEventCapabilities;
