@@ -9,31 +9,42 @@
 namespace Sourcekin\Components\Rendering;
 
 use Sourcekin\Components\Events\EventDispatcher;
-use Sourcekin\Components\Rendering\Views\DocumentView;
-use Sourcekin\Components\Rendering\Views\ViewFactory;
+use Sourcekin\Components\Events\EventEmitter;
+use Sourcekin\Components\Rendering\Model\Content;
+use Sourcekin\Components\Rendering\Views\ContentView;
 
-class Renderer
-{
-    /**
-     * @var EventDispatcher
-     */
-    protected $dispatcher;
+class Renderer {
 
     /**
-     * @var ViewFactory
+     * @var EventEmitter
      */
-    protected $viewFactory;
+    protected $emitter;
 
+    /**
+     * Renderer constructor.
+     *
+     * @param EventEmitter $emitter
+     */
+    public function __construct(EventEmitter $emitter) {
+        $this->emitter = $emitter;
+    }
 
-    public function render($contents)
-    {
-        $document = $this->viewFactory->makeDocumentView();
+    /**
+     * @param $content
+     *
+     * @return ContentView
+     */
+    public function render(Content $content) {
+
 
         // resolve content handlers
 
         // call each content handler with individual content and context (Document-View?)
 
         //
+
+
+        return new ContentView();
     }
 
 

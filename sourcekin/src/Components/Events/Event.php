@@ -8,8 +8,17 @@
 
 namespace Sourcekin\Components\Events;
 
-abstract class Event implements IEvent
+abstract class Event
 {
+    protected $stoppedPropagation = false;
 
+    abstract public function getName();
 
+    public function stopPropagation(bool $stop = true){
+        $this->stoppedPropagation = $stop;
+    }
+
+    public function isPropagationStopped() : bool {
+        return $this->stoppedPropagation;
+    }
 }
