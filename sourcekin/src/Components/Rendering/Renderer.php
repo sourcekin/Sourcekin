@@ -8,10 +8,12 @@
 
 namespace Sourcekin\Components\Rendering;
 
-use Sourcekin\Components\Events\EventDispatcher;
 use Sourcekin\Components\Events\EventEmitter;
+use Sourcekin\Components\Events\SourcekinEventEmitter;
+use Sourcekin\Components\Rendering\Control\ContentControl;
+use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
-use Sourcekin\Components\Rendering\Views\ContentView;
+use Sourcekin\Components\Rendering\View\ContentView;
 
 class Renderer {
 
@@ -21,12 +23,19 @@ class Renderer {
     protected $emitter;
 
     /**
+     * @var ControlCollection
+     */
+    protected $controls;
+
+    /**
      * Renderer constructor.
      *
-     * @param EventEmitter $emitter
+     * @param ControlCollection $controls
+     * @param EventEmitter      $emitter
      */
-    public function __construct(EventEmitter $emitter) {
-        $this->emitter = $emitter;
+    public function __construct(ControlCollection $controls, EventEmitter $emitter = NULL) {
+        $this->controls = $controls;
+        $this->emitter  = $emitter ?? new SourcekinEventEmitter();
     }
 
     /**
@@ -36,16 +45,58 @@ class Renderer {
      */
     public function render(Content $content) {
 
+        if( $view = $this->getContentView($content)) return $view;
 
-        // resolve content handlers
+        $control     = $this->getControl($content);
+        $contentView = $control->withContent($content)->createView();
 
-        // call each content handler with individual content and context (Document-View?)
+        return $this->finishView($content, $contentView);
 
-        //
-
-
-        return new ContentView();
     }
 
+    /**
+     * @param Content $content
+     *
+     * @return bool|ContentView
+     */
+    protected function getContentView(Content $content) {
+        $event = new GetContentView($content);
+        $this->emitter->dispatch($event);
+        if ( $event->getView() instanceof ContentView ) {
+            return $event->getView();
+        }
+        return false;
+    }
+
+    /**
+     * @param Content $content
+     *
+     * @return ContentControl
+     */
+    protected function getControl(Content $content) {
+        $event = new GetControl($content);
+        if( $this->controls->contains($content->type()->toString())) {
+            $event->setControl($this->controls->acquire($content->type()->toString()));
+        }
+
+        $this->emitter->dispatch($event);
+        if( ! $event->getControl() instanceof ContentControl)
+            throw ControlNotFound::withType($content->type()->toString());
+
+        return $event->getControl();
+    }
+
+    /**
+     * @param Content $content
+     * @param         $contentView
+     *
+     * @return ContentView
+     */
+    protected function finishView(Content $content, $contentView): ContentView {
+        $event = new FinishView($content, $contentView);
+        $this->emitter->dispatch($event);
+
+        return $event->getView();
+    }
 
 }

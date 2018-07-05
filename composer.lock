@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66cb7b53c59ddb22114ca8f3d9a1cc0f",
+    "content-hash": "fa497eacb73fbd11be3b5b71da30a162",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -8322,7 +8322,14 @@
             "time": "2017-04-07T12:08:54+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "1.0.0",
+            "alias_normalized": "1.0.0.0",
+            "version": "9999999-dev",
+            "package": "prolic/fpp"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "symfony/lts": 20,

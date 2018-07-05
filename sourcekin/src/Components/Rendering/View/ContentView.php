@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sourcekin\Components\Rendering\Views;
+namespace Sourcekin\Components\Rendering\View;
 
 class ContentView
 {

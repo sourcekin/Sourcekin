@@ -8,7 +8,10 @@
 
 namespace Sourcekin\Components\Rendering;
 
-class RenderingEvent
+use Sourcekin\Components\Events\Event;
+
+abstract class RenderingEvent extends Event
 {
+
 
 }
