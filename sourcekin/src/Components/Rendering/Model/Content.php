@@ -7,15 +7,18 @@ declare(strict_types=1);
 
 namespace Sourcekin\Components\Rendering\Model;
 
-final class Content {
+final class Content
+{
     /**
      * @var ContentType
      */
     protected $type;
+
     /**
      * @var Field[]
      */
     protected $fields;
+
     /**
      * @var Attribute[]
      */
@@ -28,18 +31,43 @@ final class Content {
      * @param Field[]     $fields
      * @param Attribute[] $attributes
      */
-    public function __construct(ContentType $type, array $fields = [], array $attributes = []) {
+    public function __construct(ContentType $type, array $fields = [], array $attributes = [])
+    {
         $this->type       = $type;
         $this->fields     = $fields;
         $this->attributes = $attributes;
     }
 
 
-    public function type() {
+    public function type()
+    {
         return $this->type;
     }
 
-    public static function withType($type) {
+    public static function withType($type)
+    {
         return new static(ContentType::fromString($type));
+    }
+
+    public static function fromArray(array $data)
+    {
+        if (!isset($data['type']) || !\is_string($data['type'])) {
+            throw new \InvalidArgumentException("Key 'type' is missing in data array or is not a string");
+        }
+        $type = ContentType::fromString($data['type']);
+
+        $fields = [];
+        if (isset($data['fields'])) {
+            foreach ($data['fields'] as $__field) {
+                $fields[] = Field::fromArray($__field);
+            }
+        }
+        $attributes = [];
+        if (isset($data['attributes'])) {
+            foreach ($data['attributes'] as $__attr ) {
+                $attributes[] = Attribute::fromArray($__attr);
+            }
+        }
+        return new static($type, $fields, $attributes);
     }
 }

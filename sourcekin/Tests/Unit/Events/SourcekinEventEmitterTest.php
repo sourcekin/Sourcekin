@@ -4,7 +4,7 @@
  * Created by {avanzu} on 05.07.18.
  */
 
-namespace Sourcekin\Tests\Unit\Rendering\Events;
+namespace Sourcekin\Tests\Unit\Events;
 
 
 use PHPUnit\Framework\TestCase;
