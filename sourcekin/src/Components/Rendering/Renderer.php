@@ -18,6 +18,7 @@ use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
 use Sourcekin\Components\Rendering\Model\RenderingContext;
 use Sourcekin\Components\Rendering\View\ContentView;
+use Sourcekin\Components\Rendering\View\DocumentView;
 
 class Renderer {
 
@@ -50,13 +51,13 @@ class Renderer {
      */
     public function render(ContentStream $contents, RenderingContext $context) {
 
-        $contentView = new ContentView();
+        $contentView = new DocumentView();
 
         foreach ($contents->contents() as $content) {
             $contentView->append($this->buildContentView($content));
         }
 
-        return $contentView;
+        return $contentView; //->process($context);
 
     }
 
