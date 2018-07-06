@@ -3,7 +3,7 @@
 parameters:
     locale: 'en'
     app.vendor_dir    : '%kernel.project_dir%/vendor'
-    app.storage.xml   : '%env(resolve:XML_STORAGE)%'
+    app.storage.xml   : '%env(doResolve:XML_STORAGE)%'
     kernel.bin_dir    : '%kernel.project_dir%/bin'
     kernel.conf_dir   : '%kernel.project_dir%/config'
     app.elasticsearch.hosts: ['localhost:9200']
