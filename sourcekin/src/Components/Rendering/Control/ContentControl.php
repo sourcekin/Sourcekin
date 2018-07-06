@@ -7,6 +7,9 @@
 namespace Sourcekin\Components\Rendering\Control;
 
 
+use Sourcekin\Components\Events\EventEmitter;
+use Sourcekin\Components\Rendering\Model\Content;
+use Sourcekin\Components\Rendering\Model\RenderingContext;
 use Sourcekin\Components\Rendering\View\ContentView;
 
 interface ContentControl {
@@ -17,10 +20,15 @@ interface ContentControl {
     public function createView() : ContentView;
 
     /**
-     * @param $content
-     *
-     * @return $this
+     * @param Content          $content
+     * @param RenderingContext $context
      */
-    public function withContent($content);
+    public function configure(Content $content, RenderingContext $context) : void;
+
+    /**
+     * @param EventEmitter     $emitter
+     * @param RenderingContext $context
+     */
+    public function process(EventEmitter $emitter, RenderingContext $context) : void;
 
 }

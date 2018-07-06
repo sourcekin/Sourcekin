@@ -13,6 +13,7 @@ use Sourcekin\Components\Events\SourcekinEventEmitter;
 use Sourcekin\Components\Rendering\Control\ContentControl;
 use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
+use Sourcekin\Components\Rendering\Model\RenderingContext;
 use Sourcekin\Components\Rendering\View\ContentView;
 
 class Renderer {
@@ -39,18 +40,22 @@ class Renderer {
     }
 
     /**
-     * @param $content
+     * @param Content          $content
+     *
+     * @param RenderingContext $context
      *
      * @return ContentView
      */
-    public function render(Content $content) {
+    public function render(Content $content, RenderingContext $context) {
 
         if( $view = $this->getContentView($content)) return $view;
 
         $control     = $this->getControl($content);
-        $contentView = $control->withContent($content)->createView();
 
-        return $this->finishView($content, $contentView);
+        $control->configure($content, $context);
+        $control->process($this->emitter, $context);
+
+        return $this->finishView($content, $control->createView());
 
     }
 
