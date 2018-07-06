@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sourcekin\Components\Rendering;
+namespace Sourcekin\Components\Rendering\Events;
 
 class RenderingEvents
 {

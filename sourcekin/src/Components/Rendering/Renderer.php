@@ -11,6 +11,9 @@ namespace Sourcekin\Components\Rendering;
 use Sourcekin\Components\Events\EventEmitter;
 use Sourcekin\Components\Events\SourcekinEventEmitter;
 use Sourcekin\Components\Rendering\Control\ContentControl;
+use Sourcekin\Components\Rendering\Events\BuildView;
+use Sourcekin\Components\Rendering\Events\GetContentView;
+use Sourcekin\Components\Rendering\Events\GetControl;
 use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
 use Sourcekin\Components\Rendering\Model\RenderingContext;
@@ -114,10 +117,7 @@ class Renderer {
             return $view;
         }
 
-        $control = $this->getControl($content);
-        $control->configure($content);
-
-        return $this->buildView($content, $control->createView());
+        return $this->buildView($content, $this->getControl($content)->createView($content));
     }
 
 

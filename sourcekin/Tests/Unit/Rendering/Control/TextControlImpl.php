@@ -9,21 +9,17 @@ namespace Sourcekin\Tests\Unit\Rendering\Control;
 
 use Sourcekin\Components\Rendering\Control\ContentControl;
 use Sourcekin\Components\Rendering\Model\Content;
-use Sourcekin\Components\Rendering\Model\RenderingContext;
 use Sourcekin\Components\Rendering\View\ContentView;
 
 class TextControlImpl implements ContentControl {
     /**
+     * @param Content $content
+     *
      * @return ContentView
      */
-    public function createView(): ContentView {
+    public function createView(Content $content): ContentView {
         return new ContentView();
     }
 
-    /**
-     * @param Content          $content
-     */
-    public function configure(Content $content): void {
-    }
 
 }

@@ -4,7 +4,7 @@
  * Created by {avanzu} on 05.07.18.
  */
 
-namespace Sourcekin\Components\Rendering;
+namespace Sourcekin\Components\Rendering\Events;
 
 
 use Sourcekin\Components\Rendering\Model\Content;

@@ -16,9 +16,11 @@ use Sourcekin\Components\Rendering\View\ProcessableView;
 class InteractiveControlImpl implements ContentControl {
 
     /**
+     * @param Content $content
+     *
      * @return ContentView
      */
-    public function createView(): ContentView {
+    public function createView(Content $content): ContentView {
 
         return new ProcessableView('user_input', function() {
 
@@ -27,10 +29,5 @@ class InteractiveControlImpl implements ContentControl {
 
     }
 
-    /**
-     * @param Content          $content
-     */
-    public function configure(Content $content): void {
 
-    }
 }
