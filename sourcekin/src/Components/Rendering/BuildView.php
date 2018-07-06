@@ -10,7 +10,7 @@ namespace Sourcekin\Components\Rendering;
 use Sourcekin\Components\Rendering\Model\Content;
 use Sourcekin\Components\Rendering\View\ContentView;
 
-class FinishView extends RenderingEvent {
+class BuildView extends RenderingEvent {
 
     /**
      * @var Content
@@ -22,7 +22,7 @@ class FinishView extends RenderingEvent {
     protected $view;
 
     /**
-     * FinishView constructor.
+     * BuildView constructor.
      *
      * @param Content     $content
      * @param ContentView $view
@@ -59,6 +59,6 @@ class FinishView extends RenderingEvent {
     }
 
     public function getName() {
-        return RenderingEvents::FINISH;
+        return RenderingEvents::BUILD_VIEW;
     }
 }

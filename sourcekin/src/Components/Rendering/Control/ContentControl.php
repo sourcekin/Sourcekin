@@ -21,14 +21,8 @@ interface ContentControl {
 
     /**
      * @param Content          $content
-     * @param RenderingContext $context
      */
-    public function configure(Content $content, RenderingContext $context) : void;
+    public function configure(Content $content) : void;
 
-    /**
-     * @param EventEmitter     $emitter
-     * @param RenderingContext $context
-     */
-    public function process(EventEmitter $emitter, RenderingContext $context) : void;
 
 }

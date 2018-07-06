@@ -10,7 +10,7 @@ namespace Sourcekin\Components\Rendering;
 
 class RenderingEvents
 {
-    const VIEW    = 'content.view';
-    const CONTROL = 'content.control';
-    const FINISH  = 'content.finish';
+    const VIEW       = 'content.view';
+    const CONTROL    = 'content.control';
+    const BUILD_VIEW = 'content.build_view';
 }

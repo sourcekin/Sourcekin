@@ -10,5 +10,7 @@ namespace Sourcekin\Components\Rendering\View;
 
 class ContentView
 {
+    public function append(ContentView $view) {
 
+    }
 }

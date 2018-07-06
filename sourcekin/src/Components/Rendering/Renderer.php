@@ -40,22 +40,20 @@ class Renderer {
     }
 
     /**
-     * @param Content          $content
-     *
+     * @param ContentStream    $contents
      * @param RenderingContext $context
      *
      * @return ContentView
      */
-    public function render(Content $content, RenderingContext $context) {
+    public function render(ContentStream $contents, RenderingContext $context) {
 
-        if( $view = $this->getContentView($content)) return $view;
+        $contentView = new ContentView();
 
-        $control     = $this->getControl($content);
+        foreach ($contents->contents() as $content) {
+            $contentView->append($this->buildContentView($content));
+        }
 
-        $control->configure($content, $context);
-        $control->process($this->emitter, $context);
-
-        return $this->finishView($content, $control->createView());
+        return $contentView;
 
     }
 
@@ -67,10 +65,11 @@ class Renderer {
     protected function getContentView(Content $content) {
         $event = new GetContentView($content);
         $this->emitter->dispatch($event);
-        if ( $event->getView() instanceof ContentView ) {
+        if ($event->getView() instanceof ContentView) {
             return $event->getView();
         }
-        return false;
+
+        return FALSE;
     }
 
     /**
@@ -80,13 +79,14 @@ class Renderer {
      */
     protected function getControl(Content $content) {
         $event = new GetControl($content);
-        if( $this->controls->contains($content->type()->toString())) {
+        if ($this->controls->contains($content->type()->toString())) {
             $event->setControl($this->controls->acquire($content->type()->toString()));
         }
 
         $this->emitter->dispatch($event);
-        if( ! $event->getControl() instanceof ContentControl)
+        if (!$event->getControl() instanceof ContentControl) {
             throw ControlNotFound::withType($content->type()->toString());
+        }
 
         return $event->getControl();
     }
@@ -97,11 +97,28 @@ class Renderer {
      *
      * @return ContentView
      */
-    protected function finishView(Content $content, $contentView): ContentView {
-        $event = new FinishView($content, $contentView);
+    protected function buildView(Content $content, $contentView): ContentView {
+        $event = new BuildView($content, $contentView);
         $this->emitter->dispatch($event);
 
         return $event->getView();
     }
+
+    /**
+     * @param                  $content
+     *
+     * @return ContentView
+     */
+    protected function buildContentView(Content $content): ContentView {
+        if ($view = $this->getContentView($content)) {
+            return $view;
+        }
+
+        $control = $this->getControl($content);
+        $control->configure($content);
+
+        return $this->buildView($content, $control->createView());
+    }
+
 
 }
