@@ -5,10 +5,12 @@
 
 declare(strict_types=1);
 
-namespace Sourcekin\Components\Rendering\Model;
+namespace Sourcekin\Components\Rendering\View;
 
 final class ContentType
 {
+    const DEFAULT = 'text';
+
     private $value;
 
     public function __construct(string $value)
@@ -19,6 +21,10 @@ final class ContentType
     public function value(): string
     {
         return $this->value;
+    }
+
+    public static function fromDefault() {
+        return new static(static::DEFAULT);
     }
 
     public static function fromString(string $contentType): ContentType

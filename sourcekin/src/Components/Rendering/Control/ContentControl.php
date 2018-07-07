@@ -19,5 +19,12 @@ interface ContentControl {
      */
     public function createView(Content $content): ContentView;
 
+    /** @return string */
+    public function name(): string;
+
+    /**
+     * @return array
+     */
+    public function requires(): array;
 
 }

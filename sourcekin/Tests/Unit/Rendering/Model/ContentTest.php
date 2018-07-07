@@ -10,26 +10,28 @@ namespace Sourcekin\Tests\Unit\Rendering\Model;
 
 use PHPUnit\Framework\TestCase;
 use Sourcekin\Components\Rendering\Model\Content;
-use Sourcekin\Components\Rendering\Model\ContentType;
+use Sourcekin\Components\Rendering\View\ContentType;
 
 class ContentTest extends TestCase
 {
 
     public function testFromArray()
     {
-        $content = Content::fromArray(
+        $content = new Content(
             [
                 'type'       => 'text',
-                'fields'     => [
+                'fields'     => $fields = [
                     ['name' => 'field1', 'content' => 'some content']
                 ],
-                'attributes' => [
-                    ['name' => 'attr1', 'content' => 'attr-content']
+                'attributes' =>  $attribs = [
+                     ['name' => 'attr1', 'content' => 'attr-content']
                 ],
             ]
         );
 
         $this->assertInstanceOf(Content::class, $content);
-        $this->assertInstanceOf(ContentType::class, $content->type());
+        $this->assertEquals('text', $content->type());
+        $this->assertEquals($fields, $content->fields());
+        $this->assertEquals($attribs, $content->attributes());
     }
 }

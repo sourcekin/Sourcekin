@@ -7,67 +7,36 @@ declare(strict_types=1);
 
 namespace Sourcekin\Components\Rendering\Model;
 
+use Sourcekin\Components\Rendering\View\ContentType;
+
 final class Content
 {
-    /**
-     * @var ContentType
-     */
-    protected $type;
-
-    /**
-     * @var Field[]
-     */
-    protected $fields;
-
-    /**
-     * @var Attribute[]
-     */
-    protected $attributes;
+   protected $payload = [];
 
     /**
      * Content constructor.
      *
-     * @param ContentType $type
-     * @param Field[]     $fields
-     * @param Attribute[] $attributes
+     * @param array $payload
      */
-    public function __construct(ContentType $type, array $fields = [], array $attributes = [])
-    {
-        $this->type       = $type;
-        $this->fields     = $fields;
-        $this->attributes = $attributes;
+    public function __construct(array $payload) { $this->payload = $payload; }
+
+    public function id() {
+        return $this->payload['id'];
     }
 
-
-    public function type()
-    {
-        return $this->type;
+    public function type() {
+        return $this->payload['type'];
     }
 
-    public static function withType($type)
-    {
-        return new static(ContentType::fromString($type));
+    public function parent() {
+        return $this->payload['parent'];
     }
 
-    public static function fromArray(array $data)
-    {
-        if (!isset($data['type']) || !\is_string($data['type'])) {
-            throw new \InvalidArgumentException("Key 'type' is missing in data array or is not a string");
-        }
-        $type = ContentType::fromString($data['type']);
+    public function fields() {
+        return $this->payload['fields'];
+    }
 
-        $fields = [];
-        if (isset($data['fields'])) {
-            foreach ($data['fields'] as $__field) {
-                $fields[] = Field::fromArray($__field);
-            }
-        }
-        $attributes = [];
-        if (isset($data['attributes'])) {
-            foreach ($data['attributes'] as $__attr ) {
-                $attributes[] = Attribute::fromArray($__attr);
-            }
-        }
-        return new static($type, $fields, $attributes);
+    public function attributes() {
+        return $this->payload['attributes'];
     }
 }

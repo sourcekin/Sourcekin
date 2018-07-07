@@ -8,6 +8,7 @@
 
 namespace Sourcekin\Components\Rendering;
 
+use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\Events\EventEmitter;
 use Sourcekin\Components\Events\SourcekinEventEmitter;
 use Sourcekin\Components\Rendering\Control\ContentControl;
@@ -16,11 +17,10 @@ use Sourcekin\Components\Rendering\Events\GetContentView;
 use Sourcekin\Components\Rendering\Events\GetControl;
 use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
-use Sourcekin\Components\Rendering\Model\RenderingContext;
 use Sourcekin\Components\Rendering\View\ContentView;
 use Sourcekin\Components\Rendering\View\DocumentView;
 
-class Renderer {
+class ViewBuilder {
 
     /**
      * @var EventEmitter
@@ -33,7 +33,7 @@ class Renderer {
     protected $controls;
 
     /**
-     * Renderer constructor.
+     * ViewBuilder constructor.
      *
      * @param ControlCollection $controls
      * @param EventEmitter      $emitter
@@ -44,17 +44,19 @@ class Renderer {
     }
 
     /**
-     * @param ContentStream    $contents
-     * @param RenderingContext $context
+     * @param ContentStream $contents
+     * @param HashMap       $context
      *
      * @return ContentView
      */
-    public function render(ContentStream $contents, RenderingContext $context) {
+    public function render(ContentStream $contents, HashMap $context) {
 
-        $contentView = new DocumentView();
 
+        // $this->buildContentView($content);
         foreach ($contents->contents() as $content) {
-            $contentView->append($this->buildContentView($content));
+            $view = ContentView::fromArray($content);
+
+
         }
 
         return $contentView; //->process($context);

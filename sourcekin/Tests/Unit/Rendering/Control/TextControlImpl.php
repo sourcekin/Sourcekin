@@ -21,5 +21,13 @@ class TextControlImpl implements ContentControl {
         return new ContentView();
     }
 
+    public function name(): string {
+        return 'text';
+    }
+
+    public function requires(): array {
+        return [];
+    }
+
 
 }

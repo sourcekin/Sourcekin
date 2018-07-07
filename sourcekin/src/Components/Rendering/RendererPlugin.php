@@ -9,6 +9,6 @@ namespace Sourcekin\Components\Rendering;
 
 interface Plugin {
 
-    public function attachToRenderer(Renderer $renderer);
+    public function attachToRenderer(ViewBuilder $renderer);
 
 }

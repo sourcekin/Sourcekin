@@ -9,7 +9,6 @@ namespace Sourcekin\Tests\Unit\Rendering\Control;
 
 use Sourcekin\Components\Rendering\Control\ContentControl;
 use Sourcekin\Components\Rendering\Model\Content;
-use Sourcekin\Components\Rendering\Model\RenderingContext;
 use Sourcekin\Components\Rendering\View\ContentView;
 use Sourcekin\Components\Rendering\View\ProcessableView;
 
@@ -23,10 +22,16 @@ class InteractiveControlImpl implements ContentControl {
     public function createView(Content $content): ContentView {
 
         return new ProcessableView('user_input', function() {
-
         });
 
+    }
 
+    public function name(): string {
+        return 'interactive';
+    }
+
+    public function requires(): array {
+        return [];
     }
 
 

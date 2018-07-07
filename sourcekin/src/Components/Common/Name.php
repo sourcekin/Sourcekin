@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Sourcekin\Components\Rendering\Model;
+namespace Sourcekin\Components\Common;
 
 final class Name
 {
