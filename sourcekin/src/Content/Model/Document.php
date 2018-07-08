@@ -18,22 +18,21 @@ use Sourcekin\Content\Model\Event\FieldWasAdded;
 /**
  * Class Document
  */
-class Document extends AggregateRoot
-{
+class Document extends AggregateRoot {
     use  ApplyEventCapabilities;
 
     /**
-     * @var
+     * @var DocumentId
      */
     private $id;
 
     /**
-     * @var
+     * @var DocumentName
      */
     private $name;
 
     /**
-     * @var
+     * @var DocumentTitle
      */
     private $title;
 
@@ -43,7 +42,7 @@ class Document extends AggregateRoot
     private $metaData;
 
     /**
-     * @var
+     * @var DocumentText
      */
     private $text;
 
@@ -55,32 +54,28 @@ class Document extends AggregateRoot
     /**
      * @return string
      */
-    public function id()
-    {
+    public function id() {
         return $this->aggregateId();
     }
 
     /**
      * @return mixed
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
     /**
      * @return mixed
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
 
     /**
      * @return mixed
      */
-    public function getText()
-    {
+    public function getText() {
         return $this->text;
     }
 
@@ -88,38 +83,38 @@ class Document extends AggregateRoot
      * @return Content[]
      * @todo: this should be a collection of value object
      */
-    public function getElements(): array
-    {
+    public function getElements(): array {
         return $this->elements;
     }
 
 
     /**
-     * @param $identifier
+     * @param $id
+     * @param $name
      * @param $type
      * @param $index
      * @param $parent
      */
-    public function addContent($identifier, $type, $index, $parent)
-    {
+    public function addContent($id, $name, $type, $index, $parent) {
         if (!($parent === $this->aggregateId())) {
             if (!array_key_exists($parent, $this->elements)) {
                 throw new \InvalidArgumentException(sprintf('Parent %s is invalid.', $parent));
             }
         }
 
-        if (array_key_exists($identifier, $this->elements)) {
-            throw new \InvalidArgumentException(sprintf('Duplicate content #%s.', $identifier));
+        if (array_key_exists($id, $this->elements)) {
+            throw new \InvalidArgumentException(sprintf('Duplicate content #%s.', $id));
         }
 
         $this->recordThat(
             ContentWasAdded::occur(
                 $this->aggregateId(),
                 [
-                    'identifier' => $identifier,
-                    'type'       => $type,
-                    'index'      => $index,
-                    'parent'     => $parent,
+                    'id'     => $id,
+                    'type'   => $type,
+                    'index'  => $index,
+                    'parent' => $parent,
+                    'name'   => $name
                 ]
             )
         );
@@ -131,9 +126,8 @@ class Document extends AggregateRoot
      * @param $value
      * @param $type
      */
-    public function addField($contentId, $name, $value, $type)
-    {
-        if (!($content = $this->elements[$contentId] ?? null)) {
+    public function addField($contentId, $name, $value, $type, $index = null) {
+        if (!($content = $this->elements[$contentId] ?? NULL)) {
             throw new \InvalidArgumentException(sprintf('Content %s not found.', $contentId));
         }
 
@@ -149,6 +143,7 @@ class Document extends AggregateRoot
                     'name'       => $name,
                     'value'      => $value,
                     'type'       => $type,
+                    'index'      => $index
                 ]
             )
         );
@@ -162,12 +157,11 @@ class Document extends AggregateRoot
      *
      * @return Document
      */
-    public static function initialize($name, $title, $text)
-    {
+    public static function initialize($name, $title, $text) {
         $obj = new self;
         $obj->recordThat(
             DocumentWasInitialized::occur(
-                Uuid::uuid4()->toString(),
+                DocumentId::generate()->toString(),
                 ['name' => $name, 'title' => $title, 'text' => $text]
             )
         );
@@ -178,41 +172,52 @@ class Document extends AggregateRoot
     /**
      * @param DocumentWasInitialized $event
      */
-    public function onDocumentWasInitialized(DocumentWasInitialized $event)
-    {
-        $this->id    = $event->aggregateId();
-        $this->title = $event->title();
-        $this->name  = $event->name();
-        $this->text  = $event->text();
+    public function onDocumentWasInitialized(DocumentWasInitialized $event) {
+        $this->id    = DocumentId::fromString($event->aggregateId());
+        $this->title = DocumentTitle::fromString( $event->title());
+        $this->name  = DocumentName::fromString($event->name());
+        $this->text  = DocumentText::fromString($event->text());
     }
 
     /**
      * @param ContentWasAdded $event
      */
-    public function onContentWasAdded(ContentWasAdded $event)
-    {
-        $content                                   = Content::from(
-            $event->identifier(),
-            $event->type(),
-            $event->index()
+    public function onContentWasAdded(ContentWasAdded $event) {
+        $content = Content::fromArray(
+            [
+                'id'     => $event->id(),
+                'parent' => $event->parent(),
+                'index'  => $event->index(),
+                'type'   => $event->type(),
+                'owner'  => $this->aggregateId(),
+                'name'   => $event->name()
+            ]
         );
-        $this->elements[$content->getIdentifier()] = $content;
+
+        $this->elements[(string)$content->id()] = $content;
     }
 
     /**
      * @param FieldWasAdded $event
      */
-    public function onFieldWasAdded(FieldWasAdded $event)
-    {
+    public function onFieldWasAdded(FieldWasAdded $event) {
         $content = $this->elements[$event->contentId()];
-        $content->addField($event->name(), $event->value(), $event->type());
+        $content->addField(
+            Field::fromArray(
+                [
+                    'key'   => $event->name(),
+                    'value' => $event->value(),
+                    'type'  => $event->type(),
+                    'index' => $event->index() ?? count($content->fields())
+                ]
+            )
+        );
     }
 
     /**
      * @return string
      */
-    protected function aggregateId(): string
-    {
+    protected function aggregateId(): string {
         return $this->id;
     }
 }

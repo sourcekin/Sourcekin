@@ -20,4 +20,19 @@ final class DocumentTitle
     {
         return $this->value;
     }
+
+    public static function fromString(string $documentTitle): DocumentTitle
+    {
+        return new self($documentTitle);
+    }
+
+    public function toString(): string
+    {
+        return $this->value;
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
 }

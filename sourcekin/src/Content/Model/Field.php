@@ -7,93 +7,101 @@ declare(strict_types=1);
 
 namespace Sourcekin\Content\Model;
 
-final class Field
-{
+final class Field {
     private $key;
     private $value;
     private $type;
+    private $index;
 
-    public function __construct(Key $key, Value $value, ValueType $type)
-    {
-        $this->key = $key;
+    public function __construct(Key $key, Value $value, ValueType $type, Index $index) {
+        $this->key   = $key;
         $this->value = $value;
-        $this->type = $type;
+        $this->type  = $type;
+        $this->index = $index;
     }
 
-    public function key(): Key
-    {
+    public function key(): Key {
         return $this->key;
     }
 
-    public function value(): Value
-    {
+    public function value(): Value {
         return $this->value;
     }
 
-    public function type(): ValueType
-    {
+    public function type(): ValueType {
         return $this->type;
     }
 
-    public function withKey(Key $key): Field
-    {
-        return new self($key, $this->value, $this->type);
+    public function index(): Index {
+        return $this->index;
     }
 
-    public function withValue(Value $value): Field
-    {
-        return new self($this->key, $value, $this->type);
+    public function withKey(Key $key): Field {
+        return new self($key, $this->value, $this->type, $this->index);
     }
 
-    public function withType(ValueType $type): Field
-    {
-        return new self($this->key, $this->value, $type);
+    public function withValue(Value $value): Field {
+        return new self($this->key, $value, $this->type, $this->index);
     }
 
-    public static function fromArray(array $data): Field
-    {
-        if (! isset($data['key']) || ! \is_string($data['key'])) {
+    public function withType(ValueType $type): Field {
+        return new self($this->key, $this->value, $type, $this->index);
+    }
+
+    public function withIndex(Index $index): Field {
+        return new self($this->key, $this->value, $this->type, $index);
+    }
+
+    public static function fromArray(array $data): Field {
+        if (!isset($data['key']) || !\is_string($data['key'])) {
             throw new \InvalidArgumentException("Key 'key' is missing in data array or is not a string");
         }
 
         $key = Key::fromString($data['key']);
 
-        if (! isset($data['value']) || ! \is_string($data['value'])) {
+        if (!isset($data['value']) || !\is_string($data['value'])) {
             throw new \InvalidArgumentException("Key 'value' is missing in data array or is not a string");
         }
 
         $value = Value::fromString($data['value']);
 
-        if (! isset($data['type']) || ! \is_string($data['type'])) {
+        if (!isset($data['type']) || !\is_string($data['type'])) {
             throw new \InvalidArgumentException("Key 'type' is missing in data array or is not a string");
         }
 
         $type = ValueType::fromName($data['type']);
 
+        if (!isset($data['index']) || !\is_int($data['index'])) {
+            throw new \InvalidArgumentException("Key 'index' is missing in data array or is not a int");
+        }
+
+        $index = Index::fromScalar($data['index']);
+
         return new self(
             $key,
             $value,
-            $type
+            $type,
+            $index
         );
     }
 
-    public function toArray(): array
-    {
+    public function toArray(): array {
         return [
-            'key' => $this->key->toString(),
+            'key'   => $this->key->toString(),
             'value' => $this->value->toString(),
-            'type' => $this->type->name(),
+            'type'  => $this->type->name(),
+            'index' => $this->index->toScalar(),
         ];
     }
 
-    public function equals(Field $field): bool
-    {
+    public function equals(Field $field): bool {
         if (\get_class($this) !== \get_class($field)) {
-            return false;
+            return FALSE;
         }
 
         return $this->key->toString() === $field->key->toString()
-            && $this->value->toString() === $field->value->toString()
-            && $this->type->equals($field->type);
+               && $this->value->toString() === $field->value->toString()
+               && $this->type->equals($field->type)
+               && $this->index->toScalar() === $field->index->toScalar();
     }
 }

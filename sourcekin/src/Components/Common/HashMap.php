@@ -146,7 +146,7 @@ class HashMap implements \IteratorAggregate, \Countable {
      */
     public function values()
     {
-        return array_values($this->toArray());
+        return array_values($this->elements);
     }
 
     /**

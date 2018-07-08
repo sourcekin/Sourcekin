@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sourcekin\Components\Plugin;
+namespace Sourcekin\Components\PlugIn;
 
 use Sourcekin\Components\Events\ListenerHandler;
 

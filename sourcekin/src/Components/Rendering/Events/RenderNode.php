@@ -48,6 +48,6 @@ class RenderNode extends RenderingEvent
 
     public function getName()
     {
-        RenderingEvents::RENDER;
+        return RenderingEvents::RENDER;
     }
 }

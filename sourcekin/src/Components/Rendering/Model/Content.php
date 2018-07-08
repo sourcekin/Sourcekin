@@ -20,6 +20,10 @@ final class Content
      */
     public function __construct(array $payload) { $this->payload = $payload; }
 
+    public static function fromPayload(array $payload) {
+        return new self($payload);
+    }
+
     public function id() {
         return $this->payload['id'];
     }
@@ -29,14 +33,14 @@ final class Content
     }
 
     public function parent() {
-        return $this->payload['parent'];
+        return $this->payload['parent']??'';
     }
 
     public function fields() {
-        return $this->payload['fields'];
+        return $this->payload['fields']??[];
     }
 
     public function attributes() {
-        return $this->payload['attributes'];
+        return $this->payload['attributes']??[];
     }
 }

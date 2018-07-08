@@ -7,156 +7,147 @@ declare(strict_types=1);
 
 namespace Sourcekin\Content\Model;
 
-final class Content
-{
+final class Content {
+    private $id;
     private $owner;
     private $name;
     private $type;
     private $index;
-    private $fields;
-    private $children;
+    private $fields = [];
 
-    public function __construct(DocumentId $owner, ContentName $name, ContentType $type, Index $index, ?array $fields, ?array $children)
-    {
+    public function __construct(
+        ContentId $id,
+        DocumentId $owner,
+        ContentName $name,
+        ContentType $type,
+        Index $index,
+        array $fields = []
+    ) {
+        $this->id    = $id;
         $this->owner = $owner;
-        $this->name = $name;
-        $this->type = $type;
+        $this->name  = $name;
+        $this->type  = $type;
         $this->index = $index;
         foreach ($fields as $__value) {
-            if (! $__value instanceof \Sourcekin\Content\Model\Field) {
+            if (!$__value instanceof Field) {
                 throw new \InvalidArgumentException('fields expected an array of Sourcekin\Content\Model\Field');
             }
-            $this->fields[] = $__value;
+            $this->fields[(string)$__value->key()] = $__value;
         }
 
-        foreach ($children as $__value) {
-            if (! $__value instanceof \Sourcekin\Content\Model\Content) {
-                throw new \InvalidArgumentException('children expected an array of Sourcekin\Content\Model\Content');
-            }
-            $this->children[] = $__value;
-        }
     }
 
-    public function owner(): DocumentId
-    {
+    public function owner(): DocumentId {
         return $this->owner;
     }
 
-    public function name(): ContentName
-    {
+    public function name(): ContentName {
         return $this->name;
     }
 
-    public function type(): ContentType
-    {
+    public function type(): ContentType {
         return $this->type;
     }
 
-    public function index(): Index
-    {
+    public function index(): Index {
         return $this->index;
     }
 
-    public function fields(): ?array
-    {
+    public function fields(): ?array {
         return $this->fields;
     }
 
-    public function children(): ?array
-    {
-        return $this->children;
+
+    public function id() {
+        return $this->id;
     }
 
-    public function withOwner(DocumentId $owner): Content
-    {
-        return new self($owner, $this->name, $this->type, $this->index, $this->fields, $this->children);
+    public function containsField($name) {
+        return isset($this->fields[$name]);
     }
 
-    public function withName(ContentName $name): Content
-    {
-        return new self($this->owner, $name, $this->type, $this->index, $this->fields, $this->children);
+    public function withOwner(DocumentId $owner): Content {
+        return new self($this->id, $owner, $this->name, $this->type, $this->index, $this->fields);
     }
 
-    public function withType(ContentType $type): Content
-    {
-        return new self($this->owner, $this->name, $type, $this->index, $this->fields, $this->children);
+    public function withName(ContentName $name): Content {
+        return new self($this->id, $this->owner, $name, $this->type, $this->index, $this->fields);
     }
 
-    public function withIndex(Index $index): Content
-    {
-        return new self($this->owner, $this->name, $this->type, $index, $this->fields, $this->children);
+    public function withType(ContentType $type): Content {
+        return new self($this->id, $this->owner, $this->name, $type, $this->index, $this->fields);
     }
 
-    public function withFields(?array $fields): Content
-    {
-        return new self($this->owner, $this->name, $this->type, $this->index, $fields, $this->children);
+    public function withIndex(Index $index): Content {
+        return new self($this->id, $this->owner, $this->name, $this->type, $index, $this->fields);
     }
 
-    public function withChildren(?array $children): Content
-    {
-        return new self($this->owner, $this->name, $this->type, $this->index, $this->fields, $children);
+    public function withFields(?array $fields): Content {
+        return new self($this->id, $this->owner, $this->name, $this->type, $this->index, $fields);
     }
 
-    public static function fromArray(array $data): Content
-    {
-        if (! isset($data['owner']) || ! \is_string($data['owner'])) {
+    public function addField(Field $field) : Content{
+        $fields = $this->fields;
+        $fields[(string)$field->key()] = $field;
+        return new self($this->id, $this->owner, $this->name, $this->type, $this->index, $fields);
+
+    }
+
+    public static function fromArray(array $data): Content {
+        if (!isset($data['id']) || !\is_string($data['id'])) {
+            throw new \InvalidArgumentException("Key 'id' is missing in data array or is not a string");
+        }
+
+        $id = ContentId::fromString($data['id']);
+
+        if (!isset($data['owner']) || !\is_string($data['owner'])) {
             throw new \InvalidArgumentException("Key 'owner' is missing in data array or is not a string");
         }
 
         $owner = DocumentId::fromString($data['owner']);
 
-        if (! isset($data['name']) || ! \is_string($data['name'])) {
+        if (!isset($data['name']) || !\is_string($data['name'])) {
             throw new \InvalidArgumentException("Key 'name' is missing in data array or is not a string");
         }
 
         $name = ContentName::fromString($data['name']);
 
-        if (! isset($data['type']) || ! \is_string($data['type'])) {
+        if (!isset($data['type']) || !\is_string($data['type'])) {
             throw new \InvalidArgumentException("Key 'type' is missing in data array or is not a string");
         }
 
         $type = ContentType::fromString($data['type']);
 
-        if (! isset($data['index']) || ! \is_int($data['index'])) {
+        if (!isset($data['index']) || !\is_int($data['index'])) {
             throw new \InvalidArgumentException("Key 'index' is missing in data array or is not a int");
         }
 
         $index = Index::fromScalar($data['index']);
 
+        $fields = [];
         if (isset($data['fields'])) {
-            if (! \is_array($data['fields'])) {
+            if (!\is_array($data['fields'])) {
                 throw new \InvalidArgumentException("Value for 'fields' is not an array in data array");
             }
 
-            $fields = Field::fromArray($data['fields']);
-        } else {
-            $fields = null;
+            $fields = array_map(function ($field) { return Field::fromArray($field); }, $data['fields']);
         }
 
-        if (isset($data['children'])) {
-            if (! \is_array($data['children'])) {
-                throw new \InvalidArgumentException("Value for 'children' is not an array in data array");
-            }
 
-            $children = Content::fromArray($data['children']);
-        } else {
-            $children = null;
-        }
 
         return new self(
+            $id,
             $owner,
             $name,
             $type,
             $index,
-            $fields,
-            $children
+            $fields
         );
     }
 
-    public function toArray(): array
-    {
-        if (null === $this->fields) {
-            return null;
+    public function toArray(): array {
+        if (NULL === $this->fields) {
+            return NULL;
         }
 
         $fields = [];
@@ -165,55 +156,36 @@ final class Content
             $fields[] = $__value->toArray();
         }
 
-        if (null === $this->children) {
-            return null;
-        }
-
-        $children = [];
-
-        foreach ($this->children as $__value) {
-            $children[] = $__value->toArray();
-        }
 
         return [
-            'owner' => $this->owner->toString(),
-            'name' => $this->name->toString(),
-            'type' => $this->type->toString(),
-            'index' => $this->index->toScalar(),
-            'fields' => $fields,
-            'children' => $children,
+            'id'       => $this->id->toString(),
+            'owner'    => $this->owner->toString(),
+            'name'     => $this->name->toString(),
+            'type'     => $this->type->toString(),
+            'index'    => $this->index->toScalar(),
+            'fields'   => $fields,
         ];
     }
 
-    public function equals(Content $content): bool
-    {
+    public function equals(Content $content): bool {
         if (\get_class($this) !== \get_class($content)) {
-            return false;
+            return FALSE;
         }
 
         if (\count($this->fields) !== \count($content->fields)) {
-            return false;
+            return FALSE;
         }
 
         foreach ($this->fields as $__i => $__value) {
-            if (! $content->fields[$__i]->equals($__value)) {
-                return false;
+            if (!$content->fields[$__i]->equals($__value)) {
+                return FALSE;
             }
         }
 
-        if (\count($this->children) !== \count($content->children)) {
-            return false;
-        }
-
-        foreach ($this->children as $__i => $__value) {
-            if (! $content->children[$__i]->equals($__value)) {
-                return false;
-            }
-        }
-
-        return $this->owner->toString() === $content->owner->toString()
-            && $this->name->toString() === $content->name->toString()
-            && $this->type->toString() === $content->type->toString()
-            && $this->index->toScalar() === $content->index->toScalar();
+        return $this->owner->toString() === $content->owner()->toString()
+               && $this->name->toString() === $content->name()->toString()
+               && $this->type->toString() === $content->type()->toString()
+               && $this->index->toScalar() === $content->index()->toScalar()
+               && $content->id()->equals($this->id) ;
     }
 }

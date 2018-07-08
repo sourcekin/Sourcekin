@@ -11,6 +11,7 @@ namespace Sourcekin\Components\Rendering;
 use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\Events\EventEmitter;
 use Sourcekin\Components\Events\SourcekinEventEmitter;
+use Sourcekin\Components\PlugIn\SupportsPlugins;
 use Sourcekin\Components\Rendering\Control\ContentControl;
 use Sourcekin\Components\Rendering\Events\BuildView;
 use Sourcekin\Components\Rendering\Events\FinishView;
@@ -19,9 +20,11 @@ use Sourcekin\Components\Rendering\Events\GetControl;
 use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
 use Sourcekin\Components\Rendering\View\ContentView;
-use Sourcekin\Components\Plugin\PluginCapabilities;
+use Sourcekin\Components\PlugIn\PluginCapabilities;
+use Sourcekin\Components\Rendering\View\NodeList;
+use Sourcekin\Components\Rendering\View\ViewNode;
 
-class ViewBuilder
+class ViewBuilder implements SupportsPlugins
 {
     use PluginCapabilities;
 
@@ -59,6 +62,17 @@ class ViewBuilder
 
     }
 
+
+    public function buildNodeList(ContentStream $stream, HashMap $context) : NodeList {
+        $nodeList = new NodeList();
+        foreach ($stream->contents() as $content) {
+            $view = $this->build($content, $context);
+            $nodeList->set((string)$view->id(), new ViewNode($view));
+        }
+
+        return $nodeList;
+    }
+
     /**
      * @param Content $content
      *
@@ -83,13 +97,13 @@ class ViewBuilder
     protected function getControl(Content $content)
     {
         $event = new GetControl($content);
-        if ($this->controls->contains($content->type()->toString())) {
-            $event->setControl($this->controls->acquire($content->type()->toString()));
+        if ($this->controls->contains($content->type())) {
+            $event->setControl($this->controls->acquire($content->type()));
         }
 
         $this->events()->dispatch($event);
         if (!$event->getControl() instanceof ContentControl) {
-            throw ControlNotFound::withType($content->type()->toString());
+            throw ControlNotFound::withType($content->type());
         }
 
         return $event->getControl();
@@ -116,10 +130,6 @@ class ViewBuilder
      */
     protected function buildContentView(Content $content): ContentView
     {
-        if ($view = $this->getContentView($content)) {
-            return $view;
-        }
-
         return $this->buildView($content, $this->getControl($content)->createView($content));
     }
 

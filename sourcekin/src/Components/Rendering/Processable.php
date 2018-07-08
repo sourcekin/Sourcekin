@@ -10,6 +10,6 @@ namespace Sourcekin\Components\Rendering;
 interface Processable {
 
     public function name();
-    public function dependencies();
+    public function requires();
 
 }

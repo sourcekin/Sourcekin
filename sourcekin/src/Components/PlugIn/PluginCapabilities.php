@@ -6,7 +6,7 @@
  *
  */
 
-namespace Sourcekin\Components\Plugin;
+namespace Sourcekin\Components\PlugIn;
 
 use Sourcekin\Components\Events\EventEmitter;
 use Sourcekin\Components\Events\ListenerHandler;
@@ -33,5 +33,9 @@ trait PluginCapabilities
     public function detach(ListenerHandler $handler): void
     {
         $this->events()->detach($handler);
+    }
+
+    public function addPlugin(Plugin $plugin) {
+        $plugin->subscribe($this);
     }
 }

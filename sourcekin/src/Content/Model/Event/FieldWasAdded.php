@@ -38,4 +38,8 @@ class FieldWasAdded extends AggregateChanged
         return $this->payload['type'];
     }
 
+    public function index() {
+        return $this->payload['index'];
+    }
+
 }

@@ -11,8 +11,6 @@ use Prooph\EventSourcing\AggregateChanged;
 class ContentWasAdded extends AggregateChanged
 {
 
-
-
     public function index()
     {
         return $this->payload['index'];
@@ -28,9 +26,13 @@ class ContentWasAdded extends AggregateChanged
         return $this->payload['type'];
     }
 
-    public function identifier()
+    public function id()
     {
-        return $this->payload['identifier'];
+        return $this->payload['id'];
+    }
+
+    public function name() {
+        return $this->payload['name'];
     }
 
 }

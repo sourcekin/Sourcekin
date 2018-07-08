@@ -10,14 +10,15 @@ namespace Sourcekin\Components\Rendering;
 
 use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\Events\EventEmitter;
+use Sourcekin\Components\PlugIn\SupportsPlugins;
 use Sourcekin\Components\Rendering\Events\RenderNodes;
 use Sourcekin\Components\Rendering\Events\RenderNode;
 use Sourcekin\Components\Rendering\View\ContentView;
 use Sourcekin\Components\Rendering\View\NodeList;
 use Sourcekin\Components\Rendering\View\ViewNode;
-use Sourcekin\Components\Plugin\PluginCapabilities;
+use Sourcekin\Components\PlugIn\PluginCapabilities;
 
-class Renderer
+class Renderer implements SupportsPlugins
 {
     use PluginCapabilities;
     /**
@@ -40,18 +41,13 @@ class Renderer
 
     public function render(ContentStream $stream, HashMap $context) : string {
 
-        /** @var ContentView $list */
-        $nodeList = new NodeList();
-        foreach ($stream->contents() as $content) {
-            $view = $this->builder->build($content, $context);
-            $nodeList->set((string)$view->id(), new ViewNode($view));
-        }
-
+        $nodeList = $this->builder->buildNodeList($stream, $context);
         $event = RenderNodes::preRender($nodeList, $context);
         $this->events()->dispatch($event);
 
         $event->nodes()->each(function($id, ViewNode $view) use ($nodeList, $context) {
-            $this->renderNode($view, $context);
+             $this->renderNode($view, $context);
+             return true;
         });
 
         $event = RenderNodes::postRender($nodeList, $context);

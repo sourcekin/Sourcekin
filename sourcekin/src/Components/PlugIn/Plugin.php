@@ -4,10 +4,7 @@
  * Created by {avanzu} on 06.07.18.
  */
 
-namespace Sourcekin\Components\Plugin;
-
-
-use Sourcekin\Components\Plugin\SupportsPlugins;
+namespace Sourcekin\Components\PlugIn;
 
 interface Plugin {
 

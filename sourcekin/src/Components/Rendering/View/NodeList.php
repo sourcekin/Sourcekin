@@ -12,6 +12,12 @@ use Sourcekin\Components\Common\HashMap;
 
 class NodeList extends HashMap
 {
+    public function set($name, $value) {
+        if( ! $value instanceof ViewNode ) throw new \InvalidArgumentException();
+        return parent::set($name, $value);
+    }
+
+
     /**
      * @return $this
      */
@@ -33,6 +39,7 @@ class NodeList extends HashMap
                 if( $this->has((string)$node->parent())) {
                     $this->get((string)$node->parent())->addChild($node);
                 }
+                return true;
             })
             ->filter(function(ViewNode $node){ return $node->isRoot();});
     }
@@ -45,5 +52,9 @@ class NodeList extends HashMap
     public function __toString()
     {
         return $this->toString();
+    }
+
+    public function toArray() {
+        return array_map(function($node){ return $node->toArray(); }, $this->elements);
     }
 }

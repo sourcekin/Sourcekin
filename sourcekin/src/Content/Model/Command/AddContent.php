@@ -19,7 +19,7 @@ class AddContent extends Command implements PayloadConstructable {
     }
 
     public function identifier() {
-        return $this->payload['identifier'];
+        return $this->payload['id'];
     }
 
     public function index() {

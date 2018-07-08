@@ -35,7 +35,7 @@ class GetControl extends RenderingEvent {
     /**
      * @return ContentControl
      */
-    public function getControl(): ContentControl {
+    public function getControl(): ?ContentControl {
         return $this->control;
     }
 

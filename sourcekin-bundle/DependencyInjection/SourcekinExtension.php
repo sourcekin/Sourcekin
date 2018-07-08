@@ -41,7 +41,7 @@ class SourcekinExtension extends SymfonyExtension {
         $loader->load('projectors.php');
         $loader->load('service-bus-plugins.php');
         $loader->load('controllers.php');
-
+        $loader->load('rendering.php');
         $loader->load('user-module.php');
         $loader->load('content-module.php');
     }

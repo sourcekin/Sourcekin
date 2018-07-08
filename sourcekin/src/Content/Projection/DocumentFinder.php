@@ -8,6 +8,10 @@ namespace Sourcekin\Content\Projection;
 
 
 use Elasticsearch\Client;
+use Sourcekin\Components\Common\HashMap;
+use Sourcekin\Components\Rendering\ContentStream;
+use Sourcekin\Components\Rendering\Model\Content;
+use Sourcekin\Components\Rendering\ViewBuilder;
 
 class DocumentFinder {
     /**
@@ -16,17 +20,48 @@ class DocumentFinder {
     protected $client;
 
     /**
+     * @var ViewBuilder
+     */
+    protected $builder;
+
+    /**
      * DocumentFinder constructor.
      *
-     * @param Client $client
+     * @param Client      $client
+     * @param ViewBuilder $renderer
      */
-    public function __construct(Client $client) {
-        $this->client = $client;
+    public function __construct(Client $client, ViewBuilder $renderer) {
+        $this->client  = $client;
+        $this->builder = $renderer;
     }
 
     public function findById($id) {
-        $source =  $this->client->getSource(['index' => DocumentModelElasticSearch::INDEX, 'type' => 'document', 'id' => $id]);
+        $source = $this->client->getSource(
+            [
+                'index' => DocumentModelElasticSearch::INDEX,
+                'type'  => 'document',
+                'id'    => $id,
+            ]
+        );
 
-        return $source;
+        $stream = ContentStream::withContents(Content::fromPayload($source));
+
+        $matches = ($this->client->search(
+            [
+                'index' => DocumentModelElasticSearch::INDEX,
+                'type'  => 'document',
+                'body'  => [
+                    'query' => [
+                        'match' => ['owner' => $id],
+                    ],
+                ],
+            ]
+        ));
+
+        foreach ($matches['hits']['hits'] as $hit) {
+            $stream->append(Content::fromPayload($hit['_source']));
+        }
+
+        return $this->builder->buildNodeList($stream, HashMap::blank())->rootNodes()->toArray();
     }
 }

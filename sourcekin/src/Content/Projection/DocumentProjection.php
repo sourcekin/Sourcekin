@@ -31,6 +31,7 @@ class DocumentProjection implements ReadModelProjection {
                         $model->stack(
                             'insert',
                             [
+                                'type'  => 'document',
                                 'id'    => $event->aggregateId(),
                                 'name'  => $event->name(),
                                 'title' => $event->title(),
@@ -43,11 +44,11 @@ class DocumentProjection implements ReadModelProjection {
                         $model->stack(
                             'addContent',
                             [
-                                'id'         => $event->aggregateId(),
-                                'content_id' => $event->identifier(),
-                                'index'      => $event->index(),
-                                'type'       => $event->type(),
-                                'parent'     => $event->parent(),
+                                'owner'  => $event->aggregateId(),
+                                'id'     => $event->id(),
+                                'index'  => $event->index(),
+                                'type'   => $event->type(),
+                                'parent' => $event->parent(),
                             ]
                         );
                     },
@@ -56,11 +57,11 @@ class DocumentProjection implements ReadModelProjection {
                         $model->stack(
                             'addField',
                             [
-                                'id'         => $event->aggregateId(),
-                                'content_id' => $event->contentId(),
-                                'name'       => $event->name(),
-                                'type'       => $event->type(),
-                                'value'      => $event->value(),
+                                'owner'   => $event->aggregateId(),
+                                'id'      => $event->contentId(),
+                                'name'    => $event->name(),
+                                'type'    => $event->type(),
+                                'content' => $event->value(),
                             ]
                         );
                     },

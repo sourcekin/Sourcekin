@@ -44,9 +44,12 @@ class FindDocumentCommand extends Command
     {
         $io      = new SymfonyStyle($input, $output);
         $promise = $this->queryBus->dispatch(new GetDocumentById($input->getArgument('document-id')));
-        $promise->then(function($result) use ($io) {
-            $io->writeln($result);
-        });
+        $promise
+            ->then(function($result) use ($io) {
+            $io->writeln(json_encode($result, JSON_PRETTY_PRINT));
+        }, function($reason) use ($io){
+                $io->write($reason);
+            });
 
 
     }

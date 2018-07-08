@@ -50,43 +50,46 @@ class DocumentModelElasticSearch extends AbstractReadModel {
     }
 
     public function insert($data) {
+
+
         $params = [
             'index'   => static::INDEX,
             'id'      => $data['id'],
             'type'    => 'document',
             'body'    => $data,
-            'refresh' => true,
+            'refresh' => TRUE,
         ];
 
         $this->client->index($params);
     }
 
     public function addContent($data) {
-        $hit  = $this->client->getSource(['index' => static::INDEX, 'type' => 'document', 'id' => $data['id']]);
-        $hit['content'][$data['content_id']] = $data;
 
         $this->client->index(
             [
-                'index' => static::INDEX,
-                'type'  => 'document',
-                'id'    => $data['id'],
-                'body'  => $hit,
-                'refresh' => true
+                'index'   => static::INDEX,
+                'type'    => 'document',
+                'id'      => $data['id'],
+                'body'    => $data,
+                'refresh' => TRUE,
             ]
         );
     }
 
     public function addField($data) {
 
-        $hit  = $this->client->getSource(['index' => static::INDEX, 'type' => 'document', 'id' => $data['id']]);
-        $hit['content'][$data['content_id']]['fields'][$data['name']] = $data;
+        $hit             = $this->client->getSource(
+            ['index' => static::INDEX, 'type' => 'document', 'id' => $data['id']]
+        );
+        $hit['fields'][] = $data;
+
         $this->client->index(
             [
-                'index' => static::INDEX,
-                'type'  => 'document',
-                'id'    => $data['id'],
-                'body'  => $hit,
-                'refresh' => true
+                'index'   => static::INDEX,
+                'type'    => 'document',
+                'id'      => $data['id'],
+                'body'    => $hit,
+                'refresh' => TRUE,
             ]
         );
     }
@@ -97,12 +100,12 @@ class DocumentModelElasticSearch extends AbstractReadModel {
     protected function createIndex(): bool {
         $params = [
             'index' => static::INDEX,
-            'body' => [
+            'body'  => [
                 'settings' => [
-                    'number_of_shards' => 2,
-                    'number_of_replicas' => 0
-                ]
-            ]
+                    'number_of_shards'   => 2,
+                    'number_of_replicas' => 0,
+                ],
+            ],
         ];
 
         $this->client->indices()->create($params);
@@ -124,14 +127,15 @@ class DocumentModelElasticSearch extends AbstractReadModel {
      */
     protected function deleteIndex(): bool {
         $indexParams = [
-            'index'   => static::INDEX,
+            'index' => static::INDEX,
         ];
 
         try {
             $this->client->indices()->delete($indexParams);
 
-        }catch(Missing404Exception $e) {
-            return true;
+        }
+        catch (Missing404Exception $e) {
+            return TRUE;
         }
         $response = $this->client->cluster()->health(
             [
