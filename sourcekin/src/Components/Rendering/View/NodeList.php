@@ -25,4 +25,25 @@ class NodeList extends HashMap
     {
         return implode($glue, $this->toArray());
     }
+
+    public function rootNodes()
+    {
+        return $this
+            ->each(function($id, ViewNode $node){
+                if( $this->has((string)$node->parent())) {
+                    $this->get((string)$node->parent())->addChild($node);
+                }
+            })
+            ->filter(function(ViewNode $node){ return $node->isRoot();});
+    }
+
+    public function toString()
+    {
+        return $this->join();
+    }
+
+    public function __toString()
+    {
+        return $this->toString();
+    }
 }

@@ -19,14 +19,11 @@ use Sourcekin\Components\Rendering\Events\GetControl;
 use Sourcekin\Components\Rendering\Exception\ControlNotFound;
 use Sourcekin\Components\Rendering\Model\Content;
 use Sourcekin\Components\Rendering\View\ContentView;
+use Sourcekin\Components\Plugin\PluginCapabilities;
 
 class ViewBuilder
 {
-
-    /**
-     * @var EventEmitter
-     */
-    protected $emitter;
+    use PluginCapabilities;
 
     /**
      * @var ControlCollection
@@ -42,7 +39,7 @@ class ViewBuilder
     public function __construct(ControlCollection $controls, EventEmitter $emitter = null)
     {
         $this->controls = $controls;
-        $this->emitter  = $emitter ?? new SourcekinEventEmitter();
+        $this->events   = $emitter;
     }
 
     /**
@@ -70,7 +67,7 @@ class ViewBuilder
     protected function getContentView(Content $content)
     {
         $event = new GetContentView($content);
-        $this->emitter->dispatch($event);
+        $this->events()->dispatch($event);
         if ($event->getView() instanceof ContentView) {
             return $event->getView();
         }
@@ -90,7 +87,7 @@ class ViewBuilder
             $event->setControl($this->controls->acquire($content->type()->toString()));
         }
 
-        $this->emitter->dispatch($event);
+        $this->events()->dispatch($event);
         if (!$event->getControl() instanceof ContentControl) {
             throw ControlNotFound::withType($content->type()->toString());
         }
@@ -107,7 +104,7 @@ class ViewBuilder
     protected function buildView(Content $content, $contentView): ContentView
     {
         $event = new BuildView($content, $contentView);
-        $this->emitter->dispatch($event);
+        $this->events()->dispatch($event);
 
         return $event->getView();
     }
@@ -135,7 +132,7 @@ class ViewBuilder
     private function finishView(ContentView $view, HashMap $context)
     {
         $event = new FinishView($view, $context);
-        $this->emitter->dispatch($event);
+        $this->events()->dispatch($event);
 
         return $event->getView();
 
