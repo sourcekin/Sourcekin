@@ -34,11 +34,11 @@ class ProcessList {
         $this->callables[$processable->name()][] = $processable;
     }
 
-    public function execute() {
+    public function execute(... $arguments) {
         $resolved = $this->resolver->resolve($this->dependencies);
         foreach ($resolved->getResolved() as $name) {
             foreach ($this->callables[$name] as $callable) {
-                $callable();
+                call_user_func_array($callable, $arguments);
             }
         }
     }

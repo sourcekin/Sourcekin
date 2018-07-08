@@ -9,6 +9,8 @@ namespace Sourcekin\Components\Rendering\View;
 
 use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\Rendering\Model\Content;
+use Sourcekin\Components\Rendering\Model\ContentId;
+use Sourcekin\Components\Rendering\Model\ContentType;
 
 class ContentView {
 
@@ -78,6 +80,19 @@ class ContentView {
         return $this->parent;
     }
 
+    public function hasParent()
+    {
+        return ! $this->parent->isEmpty();
+    }
+
+    /**
+     * @return int
+     */
+    public function position()
+    {
+        return (int)$this->attributes()->get('position', 0);
+    }
+
     public static function fromData(ContentId $id, ContentType $type = NULL, ContentId $parent = NULL) {
         return new static($id, $type, $parent, [], []);
     }
@@ -140,6 +155,5 @@ class ContentView {
             'parent'     => $this->parent ? $this->parent->toString() : NULL,
         ];
     }
-
 
 }

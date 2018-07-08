@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Sourcekin\Components\Rendering\Model;
 
-use Sourcekin\Components\Rendering\View\ContentType;
+use Sourcekin\Components\Rendering\Model\ContentType;
 
 final class Content
 {

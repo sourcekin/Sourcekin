@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace Sourcekin\Components\Rendering\View;
+namespace Sourcekin\Components\Rendering\Model;
 
 final class ContentType
 {

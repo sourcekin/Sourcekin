@@ -10,7 +10,7 @@ namespace Sourcekin\Tests\Unit\Rendering\Model;
 
 use PHPUnit\Framework\TestCase;
 use Sourcekin\Components\Rendering\Model\Content;
-use Sourcekin\Components\Rendering\View\ContentType;
+use Sourcekin\Components\Rendering\Model\ContentType;
 
 class ContentTest extends TestCase
 {

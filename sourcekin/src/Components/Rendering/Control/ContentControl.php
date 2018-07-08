@@ -8,9 +8,10 @@ namespace Sourcekin\Components\Rendering\Control;
 
 
 use Sourcekin\Components\Rendering\Model\Content;
+use Sourcekin\Components\Rendering\Processable;
 use Sourcekin\Components\Rendering\View\ContentView;
 
-interface ContentControl {
+interface ContentControl extends Processable {
 
     /**
      * @param Content $content

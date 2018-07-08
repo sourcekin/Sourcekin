@@ -11,5 +11,5 @@ interface Processable {
 
     public function name();
     public function dependencies();
-    public function __invoke();
+
 }

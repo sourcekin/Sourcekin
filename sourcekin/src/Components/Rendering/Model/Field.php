@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Sourcekin\Components\Rendering\Model;
 
-use Sourcekin\Components\Common\Name;
-
 final class Field
 {
     private $name;

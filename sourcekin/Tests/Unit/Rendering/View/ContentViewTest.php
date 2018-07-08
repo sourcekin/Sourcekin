@@ -9,8 +9,8 @@ namespace Sourcekin\Tests\Unit\Rendering\View;
 
 use PHPUnit\Framework\TestCase;
 use Sourcekin\Components\Common\HashMap;
-use Sourcekin\Components\Rendering\View\ContentId;
-use Sourcekin\Components\Rendering\View\ContentType;
+use Sourcekin\Components\Rendering\Model\ContentId;
+use Sourcekin\Components\Rendering\Model\ContentType;
 use Sourcekin\Components\Rendering\View\ContentView;
 
 class ContentViewTest extends TestCase {

@@ -44,9 +44,12 @@ class HashMap implements \IteratorAggregate, \Countable {
     /**
      * @param $name
      * @param $value
+     *
+     * @return HashMap
      */
     public function set($name, $value) {
         $this->elements[$name] = $value;
+        return $this;
     }
 
     /**
@@ -60,19 +63,33 @@ class HashMap implements \IteratorAggregate, \Countable {
 
     /**
      * @param $name
+     *
+     * @return HashMap
      */
     public function remove($name) {
         if ($this->has($name)) {
             unset($this->elements[$name]);
         }
+        return $this;
     }
 
+    /**
+     * @param $element
+     *
+     * @return $this
+     */
     public function removeElement($element) {
         while( false !== ($key = array_search($element, $this->elements))){
             unset($this->elements[$key]);
         }
+        return $this;
     }
 
+    /**
+     * @param callable $filter
+     *
+     * @return HashMap
+     */
     public function filter(callable $filter) : HashMap {
         return new static(array_filter($this->elements, $filter));
     }
@@ -80,6 +97,31 @@ class HashMap implements \IteratorAggregate, \Countable {
     public function map(callable $map) : HashMap {
         return new static(array_map($map, $this->elements));
     }
+
+    /**
+     * @param callable $sorter
+     *
+     * @return $this
+     */
+    public function sort(callable $sorter)
+    {
+        uasort($this->elements, $sorter);
+        return $this;
+    }
+
+    /**
+     * @param callable $func
+     *
+     * @return HashMap
+     */
+    public function each(callable $func) {
+        foreach ($this->elements as $key => $element) {
+            if( ! $func($key, $element)) return $this;
+        }
+
+        return $this;
+    }
+
 
 
     public function clear() : void {
@@ -97,6 +139,14 @@ class HashMap implements \IteratorAggregate, \Countable {
 
     public function toArray() {
         return iterator_to_array($this->getIterator());
+    }
+
+    /**
+     * @return array
+     */
+    public function values()
+    {
+        return array_values($this->toArray());
     }
 
     /**
