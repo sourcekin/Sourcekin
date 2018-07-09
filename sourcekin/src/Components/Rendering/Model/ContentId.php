@@ -16,6 +16,10 @@ final class ContentId
         $this->value = $value;
     }
 
+    public function isEmpty() {
+        return empty($this->value);
+    }
+
     public function value(): string
     {
         return $this->value;

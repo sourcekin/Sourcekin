@@ -77,6 +77,10 @@ class ViewNode
         return !$this->view->hasParent();
     }
 
+    public function view() {
+        return $this->view;
+    }
+
     /**
      * @return int
      */
@@ -109,6 +113,10 @@ class ViewNode
     public function count()
     {
         return $this->children()->count();
+    }
+
+    public function type() {
+        return $this->view->type();
     }
 
     public function toArray()

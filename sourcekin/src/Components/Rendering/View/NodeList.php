@@ -29,19 +29,21 @@ class NodeList extends HashMap
 
     public function join($glue = '')
     {
-        return implode($glue, $this->toArray());
+        return implode($glue, array_map(function($n){ return $n->toString(); }, $this->elements));
+    }
+
+    public function buildTree() {
+        return $this->map(function(ViewNode $node){
+            if( $this->has((string)$node->parent())) {
+                $this->get((string)$node->parent())->addChild($node);
+            }
+            return $node;
+        });
     }
 
     public function rootNodes()
     {
-        return $this
-            ->each(function($id, ViewNode $node){
-                if( $this->has((string)$node->parent())) {
-                    $this->get((string)$node->parent())->addChild($node);
-                }
-                return true;
-            })
-            ->filter(function(ViewNode $node){ return $node->isRoot();});
+        return $this->filter(function(ViewNode $node){ return $node->isRoot();});
     }
 
     public function toString()

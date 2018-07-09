@@ -7,6 +7,7 @@
 use Sourcekin\Components\Events\EventEmitter;
 use Sourcekin\Components\Events\SourcekinEventEmitter;
 use Sourcekin\Components\Rendering\Plugins\Logger;
+use Sourcekin\Components\Rendering\Plugins\TwigRenderer;
 use Sourcekin\Components\Rendering\Renderer;
 use Sourcekin\Components\Rendering\ViewBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -22,8 +23,11 @@ return function(ContainerConfigurator $container){
         ->set(Logger::class)
         ->tag('monolog.logger', ['channel' => 'rendering'])
 
+        ->set(TwigRenderer::class)
+
         ->set(Renderer::class)
         ->call('addPlugin', [new Reference(Logger::class)])
+        ->call('addPlugin', [new Reference(TwigRenderer::class)])
 
         ->set(\SourcekinBundle\Controls\DocumentControl::class)
         ->tag('sourcekin.control', ['alias' => \SourcekinBundle\Controls\DocumentControl::NAME])

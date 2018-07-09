@@ -35,7 +35,7 @@ class DocumentFinder {
         $this->builder = $renderer;
     }
 
-    public function findById($id) {
+    public function findStreamById($id) {
         $source = $this->client->getSource(
             [
                 'index' => DocumentModelElasticSearch::INDEX,
@@ -62,6 +62,11 @@ class DocumentFinder {
             $stream->append(Content::fromPayload($hit['_source']));
         }
 
-        return $this->builder->buildNodeList($stream, HashMap::blank())->rootNodes()->toArray();
+        return $stream;
+    }
+
+    public function findById($id) {
+
+        return $this->builder->buildNodeList($this->findStreamById($id), HashMap::blank())->rootNodes()->toArray();
     }
 }

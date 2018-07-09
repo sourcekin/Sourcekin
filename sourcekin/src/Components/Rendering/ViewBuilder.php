@@ -70,7 +70,7 @@ class ViewBuilder implements SupportsPlugins
             $nodeList->set((string)$view->id(), new ViewNode($view));
         }
 
-        return $nodeList;
+        return $nodeList->buildTree();
     }
 
     /**

@@ -1,0 +1,6 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{%  for child in _children_ %}
+    {{ child.toString }}
+{% endfor %}
+{% endblock %}
