@@ -31,4 +31,5 @@ namespace Sourcekin\Content\Model {
     data ValueType = Text | Image | Video | Link | Reference deriving (Enum);
     data Field   = Field { Key $key, Value $value, ValueType $type, Index $index } deriving (FromArray, ToArray, Equals);
 
+
 }

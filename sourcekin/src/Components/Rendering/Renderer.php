@@ -13,14 +13,13 @@ use Sourcekin\Components\Events\EventEmitter;
 use Sourcekin\Components\PlugIn\SupportsPlugins;
 use Sourcekin\Components\Rendering\Events\RenderNodes;
 use Sourcekin\Components\Rendering\Events\RenderNode;
-use Sourcekin\Components\Rendering\View\ContentView;
-use Sourcekin\Components\Rendering\View\NodeList;
 use Sourcekin\Components\Rendering\View\ViewNode;
 use Sourcekin\Components\PlugIn\PluginCapabilities;
 
 class Renderer implements SupportsPlugins
 {
     use PluginCapabilities;
+
     /**
      * @var ViewBuilder
      */
@@ -36,19 +35,24 @@ class Renderer implements SupportsPlugins
     public function __construct(ViewBuilder $builder, EventEmitter $emitter = null)
     {
         $this->builder = $builder;
-        $this->events = $emitter;
+        $this->events  = $emitter;
     }
 
-    public function render(ContentStream $stream, HashMap $context) : string {
+    public function render(ContentStream $stream, HashMap $context): string
+    {
 
         $nodeList = $this->builder->buildNodeList($stream, $context);
-        $event = RenderNodes::preRender($nodeList, $context);
+        $event    = RenderNodes::preRender($nodeList, $context);
         $this->events()->dispatch($event);
 
-        $event->nodes()->each(function($id, ViewNode $view) use ($nodeList, $context) {
-             $this->renderNode($view, $context);
-             return true;
-        });
+        $event->nodes()->each(
+            function ($id, ViewNode $view) use ($nodeList, $context) {
+                $this->renderNode($view, $context);
+
+                return true;
+            }
+        )
+        ;
 
         $event = RenderNodes::postRender($nodeList, $context);
         $this->events()->dispatch($event);
@@ -66,9 +70,9 @@ class Renderer implements SupportsPlugins
     {
         $event = new RenderNode($node, $context);
         $this->events()->dispatch($event);
+
         return $event->node();
     }
-
 
 
 }

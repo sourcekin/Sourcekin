@@ -4,4 +4,5 @@ namespace Sourcekin\Components\Rendering\Model {
     data Field       = Field { Name $name, string $content } deriving (FromArray,ToArray, Equals);
     data ContentId   = String deriving (FromString, ToString, Equals);
 
+
 }

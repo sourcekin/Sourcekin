@@ -11,10 +11,6 @@ final class ContentId
 {
     private $value;
 
-    public function isEmpty() {
-        return empty($this->value);
-    }
-
     public function __construct(string $value)
     {
         $this->value = $value;
