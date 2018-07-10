@@ -15,14 +15,19 @@ class Kernel extends BaseKernel
 
     const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
+    protected function artifactDir() {
+        if( in_array($this->environment, ['dev', 'test'])) return '/dev/shm/sourcekin';
+        return $this->getProjectDir();
+    }
+
     public function getCacheDir()
     {
-        return $this->getProjectDir().'/var/cache/'.$this->environment;
+        return $this->artifactDir().'/var/cache/'.$this->environment;
     }
 
     public function getLogDir()
     {
-        return $this->getProjectDir().'/var/log';
+        return $this->artifactDir().'/var/log';
     }
 
     public function registerBundles()
