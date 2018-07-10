@@ -2,4 +2,8 @@ command::initalize-document:
     path: /api/commands/initialize-document
     defaults: { _controller: SourcekinBundle\Controller\ApiCommandController:postAction, sourcekin_command_name: Sourcekin\Content\Model\Command\InitializeDocument }
 
+command::document-by-id:
+    path: /documents/{id}/
+    defaults: { _controller: SourcekinBundle\Controller\FrontendController:documentAction }
+
 

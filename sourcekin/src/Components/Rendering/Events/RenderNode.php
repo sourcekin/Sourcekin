@@ -8,6 +8,7 @@
 
 namespace Sourcekin\Components\Rendering\Events;
 
+use Doctrine\DBAL\Schema\View;
 use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\Rendering\View\ViewNode;
 
@@ -25,15 +26,21 @@ class RenderNode extends RenderingEvent
     protected $context;
 
     /**
+     * @var string
+     */
+    protected $name = RenderingEvents::RENDER;
+
+    /**
      * RenderNode constructor.
      *
      * @param ViewNode $node
      * @param HashMap  $context
      */
-    public function __construct(ViewNode $node, HashMap $context)
+    public function __construct(ViewNode $node, HashMap $context, $name = RenderingEvents::RENDER)
     {
         $this->node    = $node;
         $this->context = $context;
+        $this->name = $name;
     }
 
     public function node()
@@ -48,6 +55,21 @@ class RenderNode extends RenderingEvent
 
     public function getName()
     {
-        return RenderingEvents::RENDER;
+        return $this->name;
+    }
+
+    public static function start(ViewNode $node, HashMap $context)
+    {
+        return new static($node, $context, RenderingEvents::START_RENDER);
+    }
+
+    public static function stop(ViewNode $node, HashMap $context)
+    {
+        return new static($node, $context, RenderingEvents::STOP_RENDER);
+    }
+
+    public static function render(ViewNode $node, HashMap $context)
+    {
+        return new static($node, $context);
     }
 }

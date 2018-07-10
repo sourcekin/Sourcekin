@@ -15,6 +15,7 @@ use Sourcekin\Components\Rendering\Events\RenderNodes;
 use Sourcekin\Components\Rendering\Events\RenderNode;
 use Sourcekin\Components\Rendering\View\ViewNode;
 use Sourcekin\Components\PlugIn\PluginCapabilities;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class Renderer implements SupportsPlugins
 {
@@ -25,6 +26,10 @@ class Renderer implements SupportsPlugins
      */
     protected $builder;
 
+    /**
+     * @var Stopwatch
+     */
+    protected $watch;
 
     /**
      * Renderer constructor.
@@ -32,16 +37,22 @@ class Renderer implements SupportsPlugins
      * @param ViewBuilder  $builder
      * @param EventEmitter $emitter
      */
-    public function __construct(ViewBuilder $builder, EventEmitter $emitter = null)
+    public function __construct(ViewBuilder $builder, EventEmitter $emitter = null, Stopwatch $watch = null)
     {
         $this->builder = $builder;
         $this->events  = $emitter;
+        $this->watch = $watch;
     }
+
+
 
     public function render(ContentStream $stream, HashMap $context): string
     {
-
+        if( $this->watch) $this->watch->start('building node list');
         $nodeList = $this->builder->buildNodeList($stream, $context);
+        if( $this->watch) $this->watch->stop('building node list');
+
+        if( $this->watch) $this->watch->start('rendering');
         $event    = RenderNodes::preRender($nodeList, $context);
         $this->events()->dispatch($event);
 
@@ -56,7 +67,7 @@ class Renderer implements SupportsPlugins
 
         $event = RenderNodes::postRender($nodeList, $context);
         $this->events()->dispatch($event);
-
+        if( $this->watch) $this->watch->stop('rendering');
         return (string)$event->nodes()->rootNodes();
     }
 
@@ -68,10 +79,12 @@ class Renderer implements SupportsPlugins
      */
     protected function renderNode(ViewNode $node, HashMap $context)
     {
-        $event = new RenderNode($node, $context);
-        $this->events()->dispatch($event);
 
-        return $event->node();
+        $this->events()->dispatch(RenderNode::start($node, $context));
+        $this->events()->dispatch(RenderNode::render($node, $context));
+        $this->events()->dispatch(RenderNode::stop($node, $context));
+
+        return $node;
     }
 
 

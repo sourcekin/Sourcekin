@@ -13,6 +13,7 @@ use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\Rendering\Renderer;
 use Sourcekin\Content\Model\Query\GetDocumentById;
 use Sourcekin\Content\Projection\DocumentFinder;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class GetDocumentByIdHandler
 {
@@ -27,6 +28,10 @@ class GetDocumentByIdHandler
     protected $renderer;
 
     /**
+     * @var Stopwatch
+     */
+    protected $watch;
+    /**
      * GetDocumentByIdHandler constructor.
      *
      * @param DocumentFinder $finder
@@ -38,6 +43,27 @@ class GetDocumentByIdHandler
     }
 
     /**
+     * @return Stopwatch
+     */
+    public function getWatch(): Stopwatch
+    {
+        return $this->watch;
+    }
+
+    /**
+     * @param Stopwatch $watch
+     *
+     * @return $this
+     */
+    public function setWatch($watch)
+    {
+        $this->watch = $watch;
+
+        return $this;
+    }
+
+
+    /**
      * @param GetDocumentById $query
      * @param Deferred|null   $deferred
      *
@@ -47,6 +73,7 @@ class GetDocumentByIdHandler
     {
         $stream   = $this->finder->findStreamById($query->documentId());
         $document = $this->renderer->render($stream, HashMap::blank());;
+
         if (!$deferred) {
             return $document;
         }

@@ -21,6 +21,8 @@ class GetHtmlDocumentByIdHandler {
      */
     protected $renderer;
 
+    protected $watch;
+
     /**
      * GetHtmlDocumentByIdHandler constructor.
      *
@@ -31,6 +33,28 @@ class GetHtmlDocumentByIdHandler {
         $this->finder   = $finder;
         $this->renderer = $renderer;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getWatch()
+    {
+        return $this->watch;
+    }
+
+    /**
+     * @param mixed $watch
+     *
+     * @return $this
+     */
+    public function setWatch($watch)
+    {
+        $this->watch = $watch;
+
+        return $this;
+    }
+
+
 
     public function __invoke(GetHtmlDocumentById $query) {
 

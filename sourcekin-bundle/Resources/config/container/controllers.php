@@ -13,6 +13,8 @@ return function (ContainerConfigurator $container) {
         ->services()->defaults()->autowire()->autoconfigure()->tag('controller.service_arguments')
         // services
         ->set(\SourcekinBundle\Controller\ApiCommandController::class)
+        ->set(\SourcekinBundle\Controller\FrontendController::class)
+        ->call("setStopwatch", [new \Symfony\Component\DependencyInjection\Reference('debug.stopwatch', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE)])
 
     ;
 };

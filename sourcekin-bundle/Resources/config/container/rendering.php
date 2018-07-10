@@ -16,7 +16,11 @@ use Symfony\Component\DependencyInjection\Reference;
 return function(ContainerConfigurator $container){
 
     $container->services()->defaults()->autowire()->autoconfigure()->private()
-        ->set(\Sourcekin\Components\Rendering\ControlCollection::class, \SourcekinBundle\Rendering\ControlCollection::class)
+        ->set(\SourcekinBundle\Rendering\ControlCollection::class)
+        ->set(\SourcekinBundle\Rendering\TimedControlCollection::class)
+        ->arg('$collection', new Reference(\SourcekinBundle\Rendering\ControlCollection::class))
+        ->alias(\Sourcekin\Components\Rendering\ControlCollection::class, \SourcekinBundle\Rendering\TimedControlCollection::class)
+
         ->set(EventEmitter::class, SourcekinEventEmitter::class)
         ->set(ViewBuilder::class)
 
@@ -24,10 +28,13 @@ return function(ContainerConfigurator $container){
         ->tag('monolog.logger', ['channel' => 'rendering'])
 
         ->set(TwigRenderer::class)
+        ->set(\SourcekinBundle\Rendering\Plugin\StopWatchPlugin::class)
+
 
         ->set(Renderer::class)
         ->call('addPlugin', [new Reference(Logger::class)])
         ->call('addPlugin', [new Reference(TwigRenderer::class)])
+        ->call('addPlugin', [new Reference(\SourcekinBundle\Rendering\Plugin\StopWatchPlugin::class)])
 
         ->set(\SourcekinBundle\Controls\DocumentControl::class)
         ->tag('sourcekin.control', ['alias' => \SourcekinBundle\Controls\DocumentControl::NAME])

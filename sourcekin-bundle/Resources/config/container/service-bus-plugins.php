@@ -4,6 +4,7 @@
  * Created by {avanzu} on 20.06.18.
  */
 
+use SourcekinBundle\DependencyInjection\Dependencies;
 use Symfony\Component\DependencyInjection\Reference;
 
 return function(\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $container){
@@ -30,5 +31,8 @@ return function(\Symfony\Component\DependencyInjection\Loader\Configurator\Conta
         ->arg('$logger', new Reference('logger', \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE))
         ->tag('monolog.logger', ['channel' => 'query_bus'])
         ->tag('sourcekin.plugin', ['type' => 'query_bus'])
+
+        ->set(\Prooph\Bundle\ServiceBus\Plugin\StopwatchPlugin::class)
+        ->tag('sourcekin.plugin', ['type' => Dependencies::TYPE_QUERY_BUS])
     ;
 };

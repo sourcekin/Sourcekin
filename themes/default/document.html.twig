@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-{%  for child in _children_ %}
-    {{ child.toString }}
-{% endfor %}
+    <div class="document" id="{{ id }}">
+        <p>{{ id }} # {{ type }}</p>
+    {%  for child in _children_ %}
+        {{ child.toString|raw }}
+    {% endfor %}
+    </div>
 {% endblock %}

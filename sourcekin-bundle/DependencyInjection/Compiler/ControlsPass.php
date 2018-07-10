@@ -19,7 +19,7 @@ class ControlsPass implements CompilerPassInterface {
      * @inheritdoc
      */
     public function process(ContainerBuilder $container) {
-        $definition = $container->findDefinition(ControlCollection::class);
+        $definition = $container->findDefinition(\SourcekinBundle\Rendering\ControlCollection::class);
         $handlers   = $definition->getArguments()[0] ?? [];
         foreach ($container->findTaggedServiceIds('sourcekin.control') as $id => $tags) {
             $name = current($tags)['alias'];

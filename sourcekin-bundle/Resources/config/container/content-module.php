@@ -21,12 +21,12 @@ return function (ContainerConfigurator $container) {
 
         ->load(App::ns('Sourcekin.Content.Model.Handler.Query.'), App::path('/Content/Model/Handler/Query'))
         ->tag('sourcekin.query_handler')
+        ->call('setWatch', [new Reference('debug.stopwatch')], \Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE)
 
         // read models
         ->set(\Sourcekin\Content\Projection\DocumentReadModelXML::class)
         ->arg('$storageUrl', new Parameter('app.storage.xml'))
         ->set(\Sourcekin\Content\Projection\DocumentModelElasticSearch::class)
-
 
         // projectors
         ->set(\Sourcekin\Content\Projection\DocumentProjection::class)

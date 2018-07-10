@@ -67,7 +67,7 @@ return function (ContainerConfigurator $container) {
         ->set(MySqlEventStore::class)
         ->tag('sourcekin.dependency', ['alias' => Dependencies::EVENT_STORE])
 
-        
+
         ->set(EventStore::class)->factory([new Reference(Application::class), 'getEventStore'])
         ->set(EventBus::class)->factory([new Reference(Application::class), 'getEventBus'])
         ->set(CommandBus::class)->factory([new Reference(Application::class), 'getCommandBus'])

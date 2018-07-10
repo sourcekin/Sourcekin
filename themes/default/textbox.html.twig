@@ -1,1 +1,14 @@
-{{ dump(vars) }}
+<div class="{{ type }}" id="{{ id }}">
+    <p>{{ type  }}#{{ id }}</p>
+    <dl>
+    {%  for content in vars %}
+        <dt>{{ content.type }}</dt>
+        <dd>{{ content.content }}</dd>
+    {% endfor %}
+    </dl>
+    
+    {% for child in _children_ %}
+        {{ child|raw }}
+    {% endfor %}
+</div>
+

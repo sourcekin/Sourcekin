@@ -23,8 +23,15 @@ class NodeList extends HashMap
      */
     public function sortByPosition()
     {
-        $this->sort(function(ViewNode $node, ViewNode $other){ return $node->position() <=> $other->position(); });
-        return $this;
+        return $this->sort(function(ViewNode $node, ViewNode $other){ return $node->position() <=> $other->position(); });
+    }
+
+    /**
+     * @return NodeList
+     */
+    public function sortByDepth()
+    {
+        return $this->sort(function(ViewNode $node, ViewNode $other){ return $other->depth() <=> $node->depth(); });
     }
 
     public function join($glue = '')

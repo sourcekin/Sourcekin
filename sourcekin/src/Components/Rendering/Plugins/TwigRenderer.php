@@ -6,15 +6,17 @@
 
 namespace Sourcekin\Components\Rendering\Plugins;
 
-
 use Sourcekin\Components\Common\HashMap;
 use Sourcekin\Components\PlugIn\AbstractPlugin;
 use Sourcekin\Components\PlugIn\SupportsPlugins;
+use Sourcekin\Components\Rendering\Events\RenderingEvent;
 use Sourcekin\Components\Rendering\Events\RenderingEvents;
 use Sourcekin\Components\Rendering\Events\RenderNode;
+use Sourcekin\Components\Rendering\Events\RenderNodes;
 use Sourcekin\Components\Rendering\View\ViewNode;
 
-class TwigRenderer extends AbstractPlugin {
+class TwigRenderer extends AbstractPlugin
+{
 
     /**
      * @var \Twig_Environment
@@ -29,7 +31,8 @@ class TwigRenderer extends AbstractPlugin {
      * @param \Twig_Environment $twig
      * @param string            $theme
      */
-    public function __construct(\Twig_Environment $twig, string $theme = 'default') {
+    public function __construct(\Twig_Environment $twig, string $theme = 'default')
+    {
         $this->twig  = $twig;
         $this->theme = $theme;
     }
@@ -38,20 +41,36 @@ class TwigRenderer extends AbstractPlugin {
     /**
      * @param SupportsPlugins $subject
      */
-    public function subscribe(SupportsPlugins $subject) {
+    public function subscribe(SupportsPlugins $subject)
+    {
         $this->listenerHandlers[] = $subject->attach(RenderingEvents::RENDER, [$this, 'renderView']);
+
+        /*
+        $this->listenerHandlers[] = $subject->attach(
+            RenderingEvents::PRE_RENDER,
+            function (RenderNodes $event) {
+                $event->nodes()->sortByDepth();
+            }
+        );
+        $this->listenerHandlers[] = $subject->attach(
+            RenderingEvents::POST_RENDER,
+            function (RenderNodes $event) {
+                $event->nodes()->sortByPosition();
+            }
+        );
+        */
     }
 
-    public function renderView(RenderNode $event) {
-        $node    = $event->node();
-        $context = $event->context();
-        try {
-            $content = $this->loadAndRenderTemplate($node, $context);
-            $node->setContent($content);
-        }
-        catch (\Throwable $throwable) {
-            $node->setContent($throwable);
-        }
+    public function renderView(RenderNode $event)
+    {
+
+        $event->node()->setContent(
+            function () use ($event) {
+                return $this->loadAndRenderTemplate($event->node(), $event->context());
+            }
+        )
+        ;
+
     }
 
     /**
@@ -64,21 +83,25 @@ class TwigRenderer extends AbstractPlugin {
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    protected function loadAndRenderTemplate(ViewNode $node, HashMap $context) {
+    protected function loadAndRenderTemplate(ViewNode $node, HashMap $context)
+    {
         return $this
             ->twig
             ->loadTemplate($this->getTemplateName($node))
             ->render(
-                [
-                    'vars'       => $node->toArray(),
-                    'context'    => $context->toArray(),
-                    '_children_' => $node->children(),
-                ]
+                array_merge(
+                    $node->selfToArray(),
+                    [
+                        '_context'   => $context->toArray(),
+                        '_children_' => $node->children(),
+                    ]
+                )
             )
             ;
     }
 
-    protected function getTemplateName(ViewNode $node) {
+    protected function getTemplateName(ViewNode $node)
+    {
         return sprintf('@%s/%s.html.twig', $this->theme, (string)$node->type());
     }
 }

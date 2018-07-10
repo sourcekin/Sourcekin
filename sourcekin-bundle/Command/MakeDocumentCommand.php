@@ -16,6 +16,7 @@ use Sourcekin\Content\Model\ValueType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MakeDocumentCommand extends Command
 {
@@ -67,6 +68,8 @@ class MakeDocumentCommand extends Command
         $document->addField($identifer1, 'my-image', 'http://example.com/some-other-image.jpg', ValueType::image()->name());
 
         $this->repository->save($document);
+
+        (new SymfonyStyle($input, $output))->writeln($document->id());
 
     }
 
