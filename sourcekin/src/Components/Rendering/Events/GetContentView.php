@@ -49,6 +49,14 @@ class GetContentView extends RenderingEvent {
         return $this;
     }
 
+    /**
+     * @return Content
+     */
+    public function getContent(): Content
+    {
+        return $this->content;
+    }
+
     public function getName() {
         return RenderingEvents::VIEW;
     }

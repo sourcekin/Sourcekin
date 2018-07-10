@@ -30,8 +30,11 @@ return function(ContainerConfigurator $container){
         ->set(TwigRenderer::class)
         ->set(\SourcekinBundle\Rendering\Plugin\StopWatchPlugin::class)
 
+        ->set(\SourcekinBundle\Rendering\Plugin\ViewCachePlugin::class)
+        ->arg('$adapter', new Reference('app.cache.document'))
 
         ->set(Renderer::class)
+        ->call('addPlugin', [new Reference(\SourcekinBundle\Rendering\Plugin\ViewCachePlugin::class)])
         ->call('addPlugin', [new Reference(Logger::class)])
         ->call('addPlugin', [new Reference(TwigRenderer::class)])
         ->call('addPlugin', [new Reference(\SourcekinBundle\Rendering\Plugin\StopWatchPlugin::class)])
